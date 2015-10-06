@@ -9,6 +9,9 @@ private:
     QGenericMatrix<bool> adjacency;
 public:
     Figure();
+    void transform(QGenericMatrix &transformMatrix);
+    void turn(char axis, double angle);
+    void draw();
     ~Figure();
 };
 

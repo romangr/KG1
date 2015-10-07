@@ -5,11 +5,11 @@
 class Figure
 {
 private:
- //   QGenericMatrix<5,5,double> coords;
- //   QGenericMatrix<5,5,bool> adjacency;
+    QGenericMatrix<8,4,double> coords;
+    QGenericMatrix<8,4,bool> adjacency;
 public:
     Figure();
-    //void transform(QGenericMatrix &transformMatrix);
+    void transform(QGenericMatrix<8,4,double> &transformMatrix);
     void turn(char axis, double angle);
     void draw();
     ~Figure();

@@ -1,18 +1,16 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 #include <QGenericMatrix>
-
+#include "matrix.h"
 class Figure
 {
 private:
-    //эта зараза должна задаваться размерами предварительно
-    //альтернатива - разбираться с неQT библиотекой lapack.
-    //или самим написать класс матриц
-    QGenericMatrix<8,4,double> coords;
-    QGenericMatrix<8,4,bool> adjacency;
+    Matrix *coords;
+    //QGenericMatrix<m,n,bool> *adjacency;
 public:
     Figure();
-    void transform(QGenericMatrix<8,4,double> &transformMatrix);
+    void addPoint(double a, ...);
+    void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
     void draw();
     ~Figure();

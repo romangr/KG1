@@ -1,5 +1,5 @@
 #include "figure.h"
-
+#include <stdlib.h>
 Figure::Figure()
 {
 
@@ -10,7 +10,7 @@ Figure::~Figure()
 
 }
 
-void Figure::transform(QGenericMatrix<8, 4, double> &transformMatrix)
+void Figure::transform(Matrix &transformMatrix)
 {
     //this->coords.*(this->coords, transformMatrix);
     //попробуй перемножь

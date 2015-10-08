@@ -9,7 +9,7 @@ private:
     //QGenericMatrix<m,n,bool> *adjacency;
 public:
     Figure();
-    void addPoint(double a, ...);
+    void addPoint(double x,double y, double z);
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
     void draw();

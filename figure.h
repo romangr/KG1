@@ -7,12 +7,16 @@ class Figure
 private:
     Matrix *coords;
     bool isFinalize;
-    //QGenericMatrix<m,n,bool> *adjacency;
+    Matrix *adjacency;
 public:
     Figure();
     Figure(Matrix& c);
     void printMatrix();
+    void printAdjacency();
     void addPoint(double x,double y, double z);
+    void editPoint(int point, double x, double y, double z);
+    void setEdge(int point1, int point2, bool state);
+    bool edgeExist(int point1, int point2);
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
     void draw();

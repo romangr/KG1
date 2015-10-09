@@ -36,7 +36,10 @@ int main(int argc, char *argv[])
     f1->finalize();
     f1->transform(c);
     f1->printMatrix();
-    f1->turn(0, 30); //y+ z-
+    f1->printAdjacency();
+    f1->turn(0, 30);
     f1->printMatrix();
+    f1->setEdge(1,1,1);
+    f1->printAdjacency();
     return a.exec();
 }

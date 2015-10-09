@@ -15,6 +15,8 @@ public:
     int getWidth();
     int getHeight();
     double getElement(int x, int y);
+    void setElement(int x, int y, double element);
+    void enlarge();
     Matrix& operator*(Matrix& a);
     ~Matrix();
 };

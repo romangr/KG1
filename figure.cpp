@@ -4,6 +4,7 @@
 Figure::Figure()
 {
     coords = new Matrix();
+    adjacency = new Matrix();
     isFinalize = false;
 }
 
@@ -24,12 +25,18 @@ Figure::Figure(Matrix &c)
     {
        isFinalize = false;
     }
+    this->adjacency = new Matrix(c.getHeight(), c.getHeight());
 
 }
 
 void Figure::printMatrix()
 {
     this->coords->print();
+}
+
+void Figure::printAdjacency()
+{
+    this->adjacency->print();
 }
 
 Figure::~Figure()
@@ -105,4 +112,31 @@ void Figure::addPoint(double x, double y, double z)
     line[3] = 0;
     this->coords->addLine(4,line);*/
     this->coords->addLine(x, y, z, 0);
+
+    //add to adjacency
+    this->adjacency->enlarge();
+}
+
+void Figure::setEdge(int point1, int point2, bool state) //number of point from {1, ..., N}
+{
+    double element;
+    switch(state)
+    {
+    case true: element = 2; break;
+    case false: element = 0; break;
+    }
+
+    this->adjacency->setElement(point1-1, point2-1, element);
+    this->adjacency->setElement(point2-1, point1-1, element);
+}
+
+bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N}
+{
+    if (this->adjacency->getElement(point1-1, point2-1)>1)
+    {
+        return true;
+    } else
+    {
+        return false;
+    }
 }

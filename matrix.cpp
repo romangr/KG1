@@ -57,6 +57,30 @@ double Matrix::getElement(int x, int y)
     return 0;
 }
 
+void Matrix::setElement(int x, int y, double element)
+{
+    if (x < this->getHeight() && y < this->getWidth())
+    {
+        (this->m[x])[y] = element;
+    }
+}
+
+void Matrix::enlarge()
+{
+    int size = this->getHeight();
+    if (size != this->getWidth()) {return;}
+    QVector<double>* buf = new QVector<double>();
+    for (int i = 0; i < size; i++)
+    {
+        buf->push_back(0);
+        this->m[i].push_back(0);
+    }
+    buf->push_back(0);
+    this->m.push_back(*buf);
+    delete(buf);
+
+}
+
 Matrix &Matrix::operator*(Matrix &a)
 {
     Matrix *newMatrix = new Matrix();
@@ -64,7 +88,7 @@ Matrix &Matrix::operator*(Matrix &a)
     {
         int m = this->getHeight();
         int n = this->getWidth();
-        int m1 = a.getHeight();
+        //int m1 = a.getHeight();
         int n1 = a.getWidth();
         QVector<double>* buf = new QVector<double>();
         for (int i = 0; i < m; i++)

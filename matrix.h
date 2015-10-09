@@ -11,6 +11,7 @@ public:
     Matrix(int m, int n);
     void print();
     void addLine(int n, double* a);
+    void addLine(double a, double b, double c, double d);
     int getWidth();
     int getHeight();
     double getElement(int x, int y);

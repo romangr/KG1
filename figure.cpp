@@ -46,7 +46,7 @@ Figure::~Figure()
 
 void Figure::transform(Matrix &transformMatrix)
 {
-    //if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
+    if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
     if (!isFinalize) {qDebug() << "Figure must be finalized to be transformed"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);

@@ -1,5 +1,6 @@
 #include "matrix.h"
 #include <qdebug.h>
+#include <iostream>
 Matrix::Matrix()
 {
 
@@ -16,6 +17,19 @@ Matrix::Matrix(int m, int n)
         }
         this->m.push_back(*buf);
         delete(buf);
+    }
+}
+
+void Matrix::print()
+{
+    std::cout << "\n";
+    for (int i = 0; i < this->getHeight(); i++)
+    {
+        for (int j = 0; j < this->getWidth(); j++)
+        {
+            /*qDebug()*/ std::cout << this->getElement(i, j) << " ";
+        }
+        std::cout << "\n";
     }
 }
 

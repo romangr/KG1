@@ -9,6 +9,7 @@ private:
 public:
     Matrix();
     Matrix(int m, int n);
+    void print();
     void addLine(int n, double* a);
     int getWidth();
     int getHeight();

@@ -29,6 +29,18 @@ Figure::Figure(Matrix &c)
 
 }
 
+Matrix Figure::getFrontView()
+{
+    Matrix frontView = *(this->coords);
+    Matrix frontViewTransform(4, 4);
+    for (int i = 1; i <= 4; i*=2)
+    {
+        frontViewTransform.setElement(i-1, i-1, 1);
+    }
+    frontView = frontView * frontViewTransform;
+    return frontView;
+}
+
 void Figure::printMatrix()
 {
     this->coords->print();
@@ -115,6 +127,17 @@ void Figure::addPoint(double x, double y, double z)
 
     //add to adjacency
     this->adjacency->enlarge();
+}
+
+void Figure::editPoint(int point, double x, double y, double z) //number of point from {1, ..., N}
+{
+    int maxPoint = isFinalize ? (adjacency->getHeight()-1) : (adjacency->getHeight());
+    if (point <= maxPoint && point > 0)
+    {
+        this->coords->setElement(point-1, 0, x);
+        this->coords->setElement(point-1, 1, y);
+        this->coords->setElement(point-1, 2, z);
+    }
 }
 
 void Figure::setEdge(int point1, int point2, bool state) //number of point from {1, ..., N}

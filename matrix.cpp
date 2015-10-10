@@ -81,9 +81,10 @@ void Matrix::enlarge()
 
 }
 
-Matrix &Matrix::operator*(Matrix &a)
+Matrix Matrix::operator*(Matrix &a)
 {
-    Matrix *newMatrix = new Matrix();
+    Matrix newMatrix0;
+    Matrix *newMatrix = &newMatrix0;
     if (this->getWidth() == a.getHeight())
     {
         int m = this->getHeight();
@@ -106,7 +107,7 @@ Matrix &Matrix::operator*(Matrix &a)
         }
         delete(buf);
     }
-    return *newMatrix;
+    return newMatrix0;
 }
 
 void Matrix::addLine(int n, double *a)

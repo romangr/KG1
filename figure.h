@@ -11,6 +11,7 @@ private:
 public:
     Figure();
     Figure(Matrix& c);
+    Matrix getFrontView();
     void printMatrix();
     void printAdjacency();
     void addPoint(double x,double y, double z);

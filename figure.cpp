@@ -58,8 +58,8 @@ Figure::~Figure()
 
 void Figure::transform(Matrix &transformMatrix)
 {
+    //а вот эту матрицу как раз надо проверять на заверш. строку, но про неё хрен забудешь. ХЗ
     if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
-    if (!isFinalize) {qDebug() << "Figure must be finalized to be transformed"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);
     delete(this->coords);
@@ -71,7 +71,7 @@ void Figure::turn(char axis, double angle)
 {
     Matrix transformMatrix;
     const double PI = acos(-1);
-    qDebug() << PI;
+    //qDebug() << PI;
     angle = angle * PI / 180;
     double sinA = sin(angle);
     double cosA = cos(angle);
@@ -116,22 +116,16 @@ void Figure::finalize()
 
 void Figure::addPoint(double x, double y, double z)
 {
-    if (this->isFinalize) {qDebug() << "Point can't be added to finilized matrix"; return;}
-    /*double line[4];
-    line[0] = x;
-    line[1] = y;
-    line[2] = z;
-    line[3] = 0;
-    this->coords->addLine(4,line);*/
     this->coords->addLine(x, y, z, 0);
-
     //add to adjacency
     this->adjacency->enlarge();
 }
 
 void Figure::editPoint(int point, double x, double y, double z) //number of point from {1, ..., N}
 {
+    // wtf и здесь финалайз
     int maxPoint = isFinalize ? (adjacency->getHeight()-1) : (adjacency->getHeight());
+
     if (point <= maxPoint && point > 0)
     {
         this->coords->setElement(point-1, 0, x);

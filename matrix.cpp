@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include <qdebug.h>
 #include <iostream>
+#include <cmath>
 Matrix::Matrix()
 {
 
@@ -83,6 +84,7 @@ void Matrix::enlarge()
 
 Matrix Matrix::operator*(Matrix &a)
 {
+    const double EPSILON = 0.000000000001;
     Matrix newMatrix0;
     Matrix *newMatrix = &newMatrix0;
     if (this->getWidth() == a.getHeight())
@@ -97,12 +99,19 @@ Matrix Matrix::operator*(Matrix &a)
             newMatrix->m.push_back(*buf);
             for (int j = 0; j < n1; j++)
             {
-                int element = 0;
+                double element = 0;
                 for (int k = 0; k < n; k++)
                 {
+                    if (fabs(this->getElement(i, k)) > EPSILON && fabs(a.getElement(k, j)) > EPSILON)
                     element += this->getElement(i, k) * a.getElement(k, j);
                 }
-                newMatrix->m[i].push_back(element);
+                if (fabs(element) > EPSILON)
+                {
+                    newMatrix->m[i].push_back(element);
+                } else
+                {
+                    newMatrix->m[i].push_back(0);
+                }
             }
         }
         delete(buf);

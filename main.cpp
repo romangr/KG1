@@ -3,6 +3,7 @@
 #include "matrix.h"
 #include <qdebug.h>
 #include "figure.h"
+#include <math.h>
 using namespace std;
 int main(int argc, char *argv[])
 {

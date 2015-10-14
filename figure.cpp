@@ -69,35 +69,38 @@ void Figure::transform(Matrix &transformMatrix)
 
 void Figure::turn(char axis, double angle)
 {
+    const double EPSILON = 0.000000000001;
     Matrix transformMatrix;
     const double PI = acos(-1);
     //qDebug() << PI;
     angle = angle * PI / 180;
     double sinA = sin(angle);
     double cosA = cos(angle);
+    if (sinA < EPSILON) sinA = 0;
+    if (cosA < EPSILON) cosA = 0;
 
     if (axis == 0) //x
     {
-        transformMatrix.addLine(1,    0,     0, 0);
+        transformMatrix.addLine(1.0,    0,     0, 0);
         transformMatrix.addLine(0, cosA, -sinA, 0);
         transformMatrix.addLine(0, sinA,  cosA, 0);
-        transformMatrix.addLine(0,    0,     0, 1);
+        transformMatrix.addLine(0,    0,     0, 1.0);
     }
 
     if (axis == 1) //y
     {
         transformMatrix.addLine( cosA, 0, sinA, 0);
-        transformMatrix.addLine(    0, 1,    0, 0);
+        transformMatrix.addLine(    0, 1.0,    0, 0);
         transformMatrix.addLine(-sinA, 0, cosA, 0);
-        transformMatrix.addLine(    0, 0,    0, 1);
+        transformMatrix.addLine(    0, 0,    0, 1.0);
     }
 
     if (axis == 2) //z
     {
         transformMatrix.addLine(cosA, -sinA, 0, 0);
         transformMatrix.addLine(sinA,  cosA, 0, 0);
-        transformMatrix.addLine(0,        0, 1, 0);
-        transformMatrix.addLine(0,        0, 0, 1);
+        transformMatrix.addLine(0,        0, 1.0, 0);
+        transformMatrix.addLine(0,        0, 0, 1.0);
     }
 
     this->transform(transformMatrix);
@@ -166,7 +169,6 @@ void Figure::draw(QPaintDevice *device)
     pen.setColor(color);
     painter.setPen(pen);
     Matrix m = this->getFrontView();
-
     int h = this->adjacency->getHeight();
     int QWHeight = device->height();
     //вообще надо бегать выше диагонали, т.к. i^j=j^i

@@ -157,3 +157,24 @@ bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N
         return false;
     }
 }
+
+void Figure::draw(QPaintDevice *device)
+{
+    QPainter painter(device);
+    QPen pen;
+    QColor color;
+    pen.setColor(color);
+    painter.setPen(pen);
+    Matrix m = this->getFrontView();
+
+    int h = this->adjacency->getHeight();
+    //вообще надо бегать выше диагонали, т.к. i^j=j^i
+    for (int i=0; i<h; i++)
+    {
+        for (int j=0; j<h; j++)
+        {
+            if (this->adjacency->getElement(i,j) > 1)
+                { painter.drawLine(m.getElement(i,0),m.getElement(i,1),m.getElement(j,0),m.getElement(j,1)); }
+        }
+    }
+}

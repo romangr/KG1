@@ -1,6 +1,7 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 #include <QGenericMatrix>
+#include <QPainter>
 #include "matrix.h"
 class Figure
 {
@@ -20,7 +21,7 @@ public:
     bool edgeExist(int point1, int point2);
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
-    void draw();
+    void draw(QPaintDevice *device);
     void finalize();
     ~Figure();
 };

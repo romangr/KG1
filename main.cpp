@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-
+/*
     Matrix b;
     double line1[4] = {1, 0, 0, 0};
     double line2[4] = {0, 1, 0, 0};
@@ -41,5 +41,6 @@ int main(int argc, char *argv[])
     f1->printMatrix();
     f1->setEdge(1,1,1);
     f1->printAdjacency();
+*/
     return a.exec();
 }

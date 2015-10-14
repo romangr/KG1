@@ -2,6 +2,10 @@
 #define SHOWWINDOW_H
 
 #include <QWidget>
+#include <QMainWindow>
+#include <QPainter>
+
+#include "figure.h"
 
 namespace Ui {
 class TShowWindow;
@@ -10,10 +14,15 @@ class TShowWindow;
 class TShowWindow : public QWidget
 {
     Q_OBJECT
+    Figure *f;
 
 public:
-    explicit TShowWindow(QWidget *parent = 0);
+    explicit TShowWindow(QWidget *parent = 0,Figure *figure = 0);
     ~TShowWindow();
+
+protected:
+    void paintEvent(QPaintEvent*);
+
 
 private:
     Ui::TShowWindow *ui;

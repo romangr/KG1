@@ -168,13 +168,15 @@ void Figure::draw(QPaintDevice *device)
     Matrix m = this->getFrontView();
 
     int h = this->adjacency->getHeight();
+    int QWHeight = device->height();
     //вообще надо бегать выше диагонали, т.к. i^j=j^i
     for (int i=0; i<h; i++)
     {
         for (int j=0; j<h; j++)
         {
             if (this->adjacency->getElement(i,j) > 1)
-                { painter.drawLine(m.getElement(i,0),m.getElement(i,1),m.getElement(j,0),m.getElement(j,1)); }
+                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+
         }
     }
 }

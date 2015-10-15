@@ -28,9 +28,9 @@ void Matrix::print()
     {
         for (int j = 0; j < this->getWidth(); j++)
         {
-            qDebug() << this->getElement(i, j) << " ";
+            /*qDebug()*/std::cout << this->getElement(i, j) << " ";
         }
-        //std::cout << "\n";
+        std::cout << "\n";
     }
 }
 
@@ -118,25 +118,7 @@ Matrix Matrix::operator*(Matrix &a)
     }
     return newMatrix0;
 }
-/*
-Matrix Matrix::operator =(Matrix &a)
-{
-    int m,n;
-    m = a.getHeight();
-    n = a.getWidth();
-    Matrix newMatrix0(m,n);
-    Matrix *newMatrix = &newMatrix0;
 
-    for (int i=0;i<m;i++)
-    {
-        for (int j=0;j>n;j++)
-        {
-            newMatrix->setElement(i,j,a.getElement(i,j));
-        }
-    }
-    return newMatrix0;
-}
-*/
 void Matrix::addLine(int n, double *a)
 {
     if (!(n == this->getWidth() || this->getWidth() == 0)) return;

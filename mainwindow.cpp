@@ -77,7 +77,7 @@ void MainWindow::set_coord_clicked()
     fig1->setEdge(7,8,true);
     fig1->setEdge(5,8,true);
 
-    fig1->finalize();
+    fig1->finalize(); //не надо? Попробуй покрутить фигуру, а потом задай новые координаты.
 
     //WTF?
     showWindow1->activateWindow();

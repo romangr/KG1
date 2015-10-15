@@ -18,6 +18,7 @@ public:
     void setElement(int x, int y, double element);
     void enlarge();
     Matrix operator*(Matrix& a);
+//    Matrix operator=(Matrix& m);
     ~Matrix();
 };
 

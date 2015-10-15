@@ -7,12 +7,22 @@ class Figure
 {
 private:
     Matrix *coords;
-    bool isFinalize;
+//    bool isFinalize;
     Matrix *adjacency;
+
+    //храним предыдущие состояния
+    Matrix *coords_last;
+    Matrix *coords_before_last;
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // не забываем запустить finalize после ввода ккординат в первый раз!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!
+
 public:
     Figure();
     Figure(Matrix& c);
-    Matrix getFrontView();
+    //1=last, 2=before_last, default=current
+    Matrix getFrontView(int time);
     void printMatrix();
     void printAdjacency();
     void addPoint(double x,double y, double z);

@@ -4,8 +4,9 @@
 Figure::Figure()
 {
     coords = new Matrix();
+    coords_last = new Matrix();
+    coords_before_last = new Matrix();
     adjacency = new Matrix();
-    isFinalize = false;
 }
 
 Figure::Figure(Matrix &c)
@@ -14,30 +15,37 @@ Figure::Figure(Matrix &c)
     {
         qDebug() << "Figure matrix must have 4 columns";
         this->coords = new Matrix();
-        isFinalize = false;
         return;
     }
     this->coords = new Matrix(c);
-    if (c.getElement(c.getHeight()-1, c.getWidth()-1) != 0)
-    {
-        isFinalize = true;
-    } else
-    {
-       isFinalize = false;
-    }
+    coords_before_last = new Matrix();
+    adjacency = new Matrix();
     this->adjacency = new Matrix(c.getHeight(), c.getHeight());
 
 }
 
-Matrix Figure::getFrontView()
+Matrix Figure::getFrontView(int time)
 {
-    Matrix frontView = *(this->coords);
+    Matrix frontView;
+    switch (time) {
+   case 1:
+        frontView = *(this->coords_last);
+        break;
+    case 2:
+        frontView = *(this->coords_before_last);
+        break;
+    default:
+        frontView = *(this->coords);
+        break;
+    }
+
     Matrix frontViewTransform(4, 4);
     for (int i = 1; i <= 4; i*=2)
     {
         frontViewTransform.setElement(i-1, i-1, 1);
     }
-    frontView = frontView * frontViewTransform;
+
+    frontView = frontView * frontViewTransform;    
     return frontView;
 }
 
@@ -58,12 +66,18 @@ Figure::~Figure()
 
 void Figure::transform(Matrix &transformMatrix)
 {
+
+    delete(this->coords_before_last);
+    this->coords_before_last = this->coords_last;
+    this->coords_last = this->coords;
+
     //а вот эту матрицу как раз надо проверять на заверш. строку, но про неё хрен забудешь. ХЗ
     if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);
-    delete(this->coords);
+
     *newCoords = *newCoords*transformMatrix;
+
     this->coords = newCoords;
 }
 
@@ -106,17 +120,6 @@ void Figure::turn(char axis, double angle)
     this->transform(transformMatrix);
 }
 
-void Figure::finalize()
-{
-    double line[4];
-    line[0] = 0;
-    line[1] = 0;
-    line[2] = 0;
-    line[3] = 1;
-    this->coords->addLine(4, line);
-    this->isFinalize = true;
-}
-
 void Figure::addPoint(double x, double y, double z)
 {
     this->coords->addLine(x, y, z, 0);
@@ -126,15 +129,9 @@ void Figure::addPoint(double x, double y, double z)
 
 void Figure::editPoint(int point, double x, double y, double z) //number of point from {1, ..., N}
 {
-    // wtf и здесь финалайз
-    int maxPoint = isFinalize ? (adjacency->getHeight()-1) : (adjacency->getHeight());
-
-    if (point <= maxPoint && point > 0)
-    {
         this->coords->setElement(point-1, 0, x);
         this->coords->setElement(point-1, 1, y);
         this->coords->setElement(point-1, 2, z);
-    }
 }
 
 void Figure::setEdge(int point1, int point2, bool state) //number of point from {1, ..., N}
@@ -146,13 +143,20 @@ void Figure::setEdge(int point1, int point2, bool state) //number of point from 
     case false: element = 0; break;
     }
 
+    if (point1 > point2)
+    {
+        int c = point1;
+        point1 = point2;
+        point2 = c;
+    }
+
     this->adjacency->setElement(point1-1, point2-1, element);
     this->adjacency->setElement(point2-1, point1-1, element);
 }
 
 bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N}
 {
-    if (this->adjacency->getElement(point1-1, point2-1)>1)
+    if (this->adjacency->getElement(point1, point2)>1)
     {
         return true;
     } else
@@ -166,19 +170,68 @@ void Figure::draw(QPaintDevice *device)
     QPainter painter(device);
     QPen pen;
     QColor color;
-    pen.setColor(color);
-    painter.setPen(pen);
-    Matrix m = this->getFrontView();
+    Matrix m; //store frontView
+
     int h = this->adjacency->getHeight();
     int QWHeight = device->height();
-    //вообще надо бегать выше диагонали, т.к. i^j=j^i
+    int QWWidth = device->width();
+
+    pen.setColor(Qt::gray);
+    painter.setPen(pen);
+    painter.drawLine(100,QWHeight-100+1,100,100);
+    painter.drawLine(100,QWHeight-100+1,QWWidth-100,QWHeight-100+1);
+
+
+    m = this->getFrontView(2);
+    pen.setColor(Qt::red);
+    painter.setPen(pen);
     for (int i=0; i<h; i++)
     {
         for (int j=0; j<h; j++)
         {
-            if (this->adjacency->getElement(i,j) > 1)
+            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            if (j>i) continue;
+
+            if (this->edgeExist(i,j))
                 { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
 
         }
     }
+    m = this->getFrontView(1);
+    pen.setColor(Qt::yellow);
+    painter.setPen(pen);
+    for (int i=0; i<h; i++)
+    {
+        for (int j=0; j<h; j++)
+        {
+            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            if (j>i) continue;
+
+            if (this->edgeExist(i,j))
+                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+
+        }
+    }
+
+    m = this->getFrontView(0);
+    pen.setColor(Qt::green);
+    painter.setPen(pen);
+    for (int i=0; i<h; i++)
+    {
+        for (int j=0; j<h; j++)
+        {
+            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            if (j>i) continue;
+
+            if (this->edgeExist(i,j))
+                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+
+        }
+    }
+}
+
+void Figure::finalize()
+{
+    *this->coords_before_last = *coords;
+    *this->coords_last = *coords;
 }

@@ -90,8 +90,8 @@ void Figure::turn(char axis, double angle)
     angle = angle * PI / 180;
     double sinA = sin(angle);
     double cosA = cos(angle);
-    if (sinA < EPSILON) sinA = 0;
-    if (cosA < EPSILON) cosA = 0;
+    if (fabs(sinA) < EPSILON) sinA = 0;
+    if (fabs(cosA) < EPSILON) cosA = 0;
 
     if (axis == 0) //x
     {

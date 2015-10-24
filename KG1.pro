@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     parabola.cpp \
     ruledparabols.cpp \
     ruledsurface.cpp
+#test
 
 HEADERS  += mainwindow.h \
     figure.h \

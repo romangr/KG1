@@ -36,18 +36,18 @@ Figure RuledParabols::getFigure(double k)
     double step = 1.0/k;
     int i0 = 0;
     int j0 = 0;
-    Figure f = new Figure();
+    Figure *f = new Figure();
     for (double i = 0; i <= 1; i += step)
     {
         j0 = 0;
         for (double j = 0; j <= 1; j += step)
         {
-            f.addPoint(getX(i, j), getY(i, j), getZ(i, j));
+            f->addPoint(getX(i, j), getY(i, j), getZ(i, j));
             if (j0 > 0) {
-                f.setEdge((k+1)*i0 + j0, (k+1)*i0 + j0 + 1, true);
+                f->setEdge((k+1)*i0 + j0, (k+1)*i0 + j0 + 1, true);
             }
             if (i0 > 0) {
-                f.setEdge((k+1)*i0 + j0 + 1, (k+1)*(i0-1) + j0 + 1, true);
+                f->setEdge((k+1)*i0 + j0 + 1, (k+1)*(i0-1) + j0 + 1, true);
             }
             j0++;
         }

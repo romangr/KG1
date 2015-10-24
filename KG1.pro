@@ -17,18 +17,11 @@ SOURCES += main.cpp\
     figure.cpp \
     matrix.cpp \
     showwindow.cpp \
-    parabola.cpp \
-    ruledparabols.cpp \
-    ruledsurface.cpp
-#test
 
 HEADERS  += mainwindow.h \
     figure.h \
     matrix.h \
     showwindow.h \
-    parabola.h \
-    ruledparabols.h \
-    ruledsurface.h
 
 FORMS    += mainwindow.ui \
     showwindow.ui

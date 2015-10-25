@@ -13,10 +13,6 @@ private:
     //храним предыдущие состояния
     Matrix *coords_last;
     Matrix *coords_before_last;
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // не забываем запустить finalize после ввода ккординат в первый раз!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!
 
 public:
     Figure();
@@ -32,7 +28,7 @@ public:
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
     void draw(QPaintDevice *device);
-    void finalize();
+    void resetLastCoord();
     ~Figure();
 };
 

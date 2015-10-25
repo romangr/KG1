@@ -19,6 +19,7 @@ class TShowWindow : public QWidget
 public:
     explicit TShowWindow(QWidget *parent = 0,Figure *figure = 0);
     ~TShowWindow();
+    void setFigure(Figure *figure);
 
 protected:
     void paintEvent(QPaintEvent*);

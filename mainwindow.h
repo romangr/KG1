@@ -6,6 +6,7 @@
 #include <QPainter>
 
 #include "figure.h"
+#include "ruledparabols.h"
 #include "showwindow.h"
 
 namespace Ui {

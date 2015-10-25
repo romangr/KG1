@@ -18,3 +18,8 @@ void TShowWindow::paintEvent(QPaintEvent *)
 {
     this->f->draw(this);
 }
+
+void TShowWindow::setFigure(Figure *figure)
+{
+    f = figure;
+}

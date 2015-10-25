@@ -230,7 +230,7 @@ void Figure::draw(QPaintDevice *device)
     }
 }
 
-void Figure::finalize()
+void Figure::resetLastCoord()
 {
     *this->coords_before_last = *coords;
     *this->coords_last = *coords;

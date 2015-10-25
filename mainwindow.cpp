@@ -7,10 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fig1 = new Figure();
-    for (int i=0; i<8; i++)
-        { fig1->addPoint(0,0,0);}
-
-    showWindow1 = new TShowWindow(0,this->fig1);
+    showWindow1 = new TShowWindow(0,fig1); //чтоб не вылетало при попытке показа вхолостую
     //wtf, надо координаты mainwindow
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
 }
@@ -24,62 +21,41 @@ MainWindow::~MainWindow()
 
 void MainWindow::set_coord_clicked()
 {
-    double x,y,z;
-    x = this->ui->lineEdit->text().toDouble();
-    y = this->ui->lineEdit_2->text().toDouble();
-    z = this->ui->lineEdit_3->text().toDouble();
-    fig1->editPoint(1,x,y,z);
+    double x1,y1,z1,x2,y2,z2,x3,y3,z3;
+    double k;
+    x1 = this->ui->lineEdit->text().toDouble();
+    y1 = this->ui->lineEdit_2->text().toDouble();
+    z1 = this->ui->lineEdit_3->text().toDouble();
 
-    x = this->ui->lineEdit_4->text().toDouble();
-    y = this->ui->lineEdit_5->text().toDouble();
-    z = this->ui->lineEdit_6->text().toDouble();
-    fig1->editPoint(2,x,y,z);
-    fig1->setEdge(1,2,true);
+    x2 = this->ui->lineEdit_4->text().toDouble();
+    y2 = this->ui->lineEdit_5->text().toDouble();
+    z2 = this->ui->lineEdit_6->text().toDouble();
 
-    x = this->ui->lineEdit_7->text().toDouble();
-    y = this->ui->lineEdit_8->text().toDouble();
-    z = this->ui->lineEdit_9->text().toDouble();
-    fig1->editPoint(3,x,y,z);
-    fig1->setEdge(2,3,true);
+    x3 = this->ui->lineEdit_7->text().toDouble();
+    y3 = this->ui->lineEdit_8->text().toDouble();
+    z3 = this->ui->lineEdit_9->text().toDouble();
+    Parabola p1(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
-    x = this->ui->lineEdit_10->text().toDouble();
-    y = this->ui->lineEdit_11->text().toDouble();
-    z = this->ui->lineEdit_12->text().toDouble();
-    fig1->editPoint(4,x,y,z);
-    fig1->setEdge(3,4,true);
-    fig1->setEdge(1,4,true);
+    x1 = this->ui->lineEdit_10->text().toDouble();
+    y1 = this->ui->lineEdit_11->text().toDouble();
+    z1 = this->ui->lineEdit_12->text().toDouble();
 
-    x = this->ui->lineEdit_13->text().toDouble();
-    y = this->ui->lineEdit_14->text().toDouble();
-    z = this->ui->lineEdit_15->text().toDouble();
-    fig1->editPoint(5,x,y,z);
-    fig1->setEdge(1,5,true);
+    x2 = this->ui->lineEdit_13->text().toDouble();
+    y2 = this->ui->lineEdit_14->text().toDouble();
+    z2 = this->ui->lineEdit_15->text().toDouble();
 
-    x = this->ui->lineEdit_16->text().toDouble();
-    y = this->ui->lineEdit_17->text().toDouble();
-    z = this->ui->lineEdit_18->text().toDouble();
-    fig1->editPoint(6,x,y,z);
-    fig1->setEdge(2,6,true);
-    fig1->setEdge(5,6,true);
+    x3 = this->ui->lineEdit_16->text().toDouble();
+    y3 = this->ui->lineEdit_17->text().toDouble();
+    z3 = this->ui->lineEdit_18->text().toDouble();
+    Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
-    x = this->ui->lineEdit_19->text().toDouble();
-    y = this->ui->lineEdit_20->text().toDouble();
-    z = this->ui->lineEdit_21->text().toDouble();
-    fig1->editPoint(7,x,y,z);
-    fig1->setEdge(3,7,true);
-    fig1->setEdge(6,7,true);
+    k = this->ui->lineEdit_19->text().toDouble();
 
-    x = this->ui->lineEdit_22->text().toDouble();
-    y = this->ui->lineEdit_23->text().toDouble();
-    z = this->ui->lineEdit_24->text().toDouble();
-    fig1->editPoint(8,x,y,z);
-    fig1->setEdge(4,8,true);
-    fig1->setEdge(7,8,true);
-    fig1->setEdge(5,8,true);
+    fig1 = RuledParabols(p1,p2).getFigure(k);
+    showWindow1->setFigure(fig1);
 
-    fig1->finalize(); //не надо? Попробуй покрутить фигуру, а потом задай новые координаты.
-
-    //WTF?
+    //думал, что надоело мигать, но нет - без этого при холодном запуске
+    //сначала show, затем set coord ничего не отображает
     showWindow1->activateWindow();
 }
 

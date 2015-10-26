@@ -180,8 +180,12 @@ void Figure::autoscale(QPaintDevice *device)
     this->coords->findMaxXYZ(x,y,z);
 
     double k1 = CentX/x;
-    double k2 = CentY/y;
+    double k2 = CentX/y;
+    double k3 = CentY/x;
+    double k4 = CentY/y;
 
+    frontViewScale =  std::min(std::min(k1,k2),std::min(k3,k4));
+/*
     if (k1<k2)
     {
         frontViewScale = k1;
@@ -190,6 +194,7 @@ void Figure::autoscale(QPaintDevice *device)
     {
         frontViewScale = k2;
     }
+*/
     //запас 5%
     frontViewScale *= 0.95;
 }

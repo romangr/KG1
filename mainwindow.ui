@@ -442,6 +442,19 @@
      <string>k</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>150</y>
+      <width>88</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>autoscale</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -473,8 +486,8 @@
    <slot>turn_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>339</x>
-     <y>78</y>
+     <x>340</x>
+     <y>98</y>
     </hint>
     <hint type="destinationlabel">
      <x>340</x>
@@ -505,12 +518,28 @@
    <slot>set_coord_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>256</y>
+     <x>270</x>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
      <x>231</x>
      <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>autoscale_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>193</y>
     </hint>
    </hints>
   </connection>
@@ -519,5 +548,6 @@
   <slot>turn_button_clicked()</slot>
   <slot>show_button_clicked()</slot>
   <slot>set_coord_clicked()</slot>
+  <slot>autoscale_clicked()</slot>
  </slots>
 </ui>

@@ -75,3 +75,8 @@ void MainWindow::show_button_clicked()
         { showWindow1->show();}
 
 }
+
+void MainWindow::autoscale_clicked()
+{
+    this->fig1->autoscale(showWindow1);
+}

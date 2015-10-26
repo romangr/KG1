@@ -34,6 +34,7 @@ public slots:
     void set_coord_clicked();
     void turn_button_clicked();
     void show_button_clicked();
+    void autoscale_clicked();
 };
 
 #endif // MAINWINDOW_H

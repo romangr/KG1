@@ -17,6 +17,8 @@ public:
     double getElement(int x, int y);
     void setElement(int x, int y, double element);
     void enlarge();
+    void mult_scalar(double d);
+    void findMaxXYZ(double& x, double& y, double& z);
     Matrix operator*(Matrix& a);
     ~Matrix();
 };

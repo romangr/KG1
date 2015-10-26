@@ -1,12 +1,14 @@
 #include "figure.h"
 #include <stdlib.h>
 #include <math.h>
+
 Figure::Figure()
 {
     coords = new Matrix();
     coords_last = new Matrix();
     coords_before_last = new Matrix();
     adjacency = new Matrix();
+    frontViewScale = 1;
 }
 
 Figure::Figure(Matrix &c)
@@ -21,13 +23,13 @@ Figure::Figure(Matrix &c)
     coords_before_last = new Matrix();
     adjacency = new Matrix();
     this->adjacency = new Matrix(c.getHeight(), c.getHeight());
-
+    frontViewScale = 1;
 }
 
-Matrix Figure::getFrontView(int time)
+Matrix Figure::getFrontView(int state)
 {
     Matrix frontView;
-    switch (time) {
+    switch (state) {
    case 1:
         frontView = *(this->coords_last);
         break;
@@ -45,7 +47,11 @@ Matrix Figure::getFrontView(int time)
         frontViewTransform.setElement(i-1, i-1, 1);
     }
 
-    frontView = frontView * frontViewTransform;    
+    frontView = frontView * frontViewTransform;
+    if (fabs(frontViewScale-1) > 0.00001)
+    {
+        frontView.mult_scalar(frontViewScale);
+    }
     return frontView;
 }
 
@@ -71,7 +77,6 @@ void Figure::transform(Matrix &transformMatrix)
     this->coords_before_last = this->coords_last;
     this->coords_last = this->coords;
 
-    //а вот эту матрицу как раз надо проверять на заверш. строку, но про неё хрен забудешь. ХЗ
     if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);
@@ -86,7 +91,6 @@ void Figure::turn(char axis, double angle)
     const double EPSILON = 0.000000000001;
     Matrix transformMatrix;
     const double PI = acos(-1);
-    //qDebug() << PI;
     angle = angle * PI / 180;
     double sinA = sin(angle);
     double cosA = cos(angle);
@@ -165,6 +169,31 @@ bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N
     }
 }
 
+void Figure::autoscale(QPaintDevice *device)
+{
+    int width =  device->width();
+    int height = device->height();
+    int CentX = width/2;
+    int CentY = height/2;
+
+    double x,y,z;
+    this->coords->findMaxXYZ(x,y,z);
+
+    double k1 = CentX/x;
+    double k2 = CentY/y;
+
+    if (k1<k2)
+    {
+        frontViewScale = k1;
+    }
+    else
+    {
+        frontViewScale = k2;
+    }
+    //запас 5%
+    frontViewScale *= 0.95;
+}
+
 void Figure::draw(QPaintDevice *device)
 {
     QPainter painter(device);
@@ -175,11 +204,14 @@ void Figure::draw(QPaintDevice *device)
     int h = this->adjacency->getHeight();
     int QWHeight = device->height();
     int QWWidth = device->width();
+    int CentX = QWWidth/2;
+    int CentY = QWHeight/2;
 
     pen.setColor(Qt::gray);
     painter.setPen(pen);
-    painter.drawLine(100,QWHeight-100+1,100,100);
-    painter.drawLine(100,QWHeight-100+1,QWWidth-100,QWHeight-100+1);
+
+    painter.drawLine(0,CentY,QWWidth,CentY);
+    painter.drawLine(CentX,0,CentX,QWHeight);
 
 
     m = this->getFrontView(2);
@@ -193,7 +225,7 @@ void Figure::draw(QPaintDevice *device)
             if (j>i) continue;
 
             if (this->edgeExist(i,j))
-                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+                { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
     }
@@ -208,7 +240,7 @@ void Figure::draw(QPaintDevice *device)
             if (j>i) continue;
 
             if (this->edgeExist(i,j))
-                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+                { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
     }
@@ -224,7 +256,7 @@ void Figure::draw(QPaintDevice *device)
             if (j>i) continue;
 
             if (this->edgeExist(i,j))
-                { painter.drawLine(m.getElement(i,0)+100,QWHeight - m.getElement(i,1)+1-100,m.getElement(j,0)+100,QWHeight - m.getElement(j,1)+1-100); }
+                { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
     }

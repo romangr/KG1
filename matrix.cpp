@@ -79,7 +79,6 @@ void Matrix::enlarge()
     buf->push_back(0);
     this->m.push_back(*buf);
     delete(buf);
-
 }
 
 Matrix Matrix::operator*(Matrix &a)
@@ -144,6 +143,45 @@ void Matrix::addLine(double a, double b, double c, double d)
     buf->push_back(d);
     this->m.push_back(*buf);
     delete(buf);
+}
+
+void Matrix::mult_scalar(double d)
+{
+    int m = this->getHeight();
+    int n = this->getWidth();
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            this->setElement(i, j, d * this->getElement(i,j));
+        }
+    }
+}
+
+//ой как нехорошо
+void Matrix::findMaxXYZ(double& x,double& y, double& z)
+{
+    double xmax = abs(this->getElement(0,0));
+    double ymax = abs(this->getElement(0,1));
+    double zmax = abs(this->getElement(0,2));
+
+    double m;
+
+    for (int i=1; i< this->getHeight(); i++)
+    {
+        m=abs(this->getElement(i,0));
+        if (m>xmax) {xmax = m;}
+
+        m=abs(this->getElement(i,1));
+        if (m>ymax) {ymax = m;}
+
+        m=abs(this->getElement(i,2));
+        if (m>zmax) {zmax = m;}
+    }
+    x = xmax;
+    y = ymax;
+    z = zmax;
 }
 
 Matrix::~Matrix()

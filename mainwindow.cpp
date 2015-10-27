@@ -79,4 +79,5 @@ void MainWindow::show_button_clicked()
 void MainWindow::autoscale_clicked()
 {
     this->fig1->autoscale_parabols(showWindow1,k);
+    this->showWindow1->activateWindow();
 }

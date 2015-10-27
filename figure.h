@@ -25,7 +25,8 @@ public:
     bool edgeExist(int point1, int point2);
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
-    void autoscale(QPaintDevice *device);
+    void autoscale_basicXY(QPaintDevice *device);
+    void autoscale_parabols(QPaintDevice *device,int k);
     void draw(QPaintDevice *device);
     void resetLastCoord();
     ~Figure();

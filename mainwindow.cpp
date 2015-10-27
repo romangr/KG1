@@ -22,7 +22,7 @@ MainWindow::~MainWindow()
 void MainWindow::set_coord_clicked()
 {
     double x1,y1,z1,x2,y2,z2,x3,y3,z3;
-    double k;
+
     x1 = this->ui->lineEdit->text().toDouble();
     y1 = this->ui->lineEdit_2->text().toDouble();
     z1 = this->ui->lineEdit_3->text().toDouble();
@@ -49,7 +49,7 @@ void MainWindow::set_coord_clicked()
     z3 = this->ui->lineEdit_18->text().toDouble();
     Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
-    k = this->ui->lineEdit_19->text().toDouble();
+    k = this->ui->lineEdit_19->text().toInt();
 
     fig1 = RuledParabols(p1,p2).getFigure(k);
     showWindow1->setFigure(fig1);
@@ -69,7 +69,7 @@ void MainWindow::turn_button_clicked()
 
 void MainWindow::show_button_clicked()
 {
-    if (this->showWindow1->isVisible())
+    if (showWindow1->isVisible())
         { showWindow1->hide();}
     else
         { showWindow1->show();}
@@ -78,5 +78,5 @@ void MainWindow::show_button_clicked()
 
 void MainWindow::autoscale_clicked()
 {
-    this->fig1->autoscale(showWindow1);
+    this->fig1->autoscale_parabols(showWindow1,k);
 }

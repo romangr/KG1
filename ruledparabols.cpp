@@ -31,7 +31,7 @@ double *RuledParabols::getPoint(double u, double w)
     return point;
 }
 
-Figure* RuledParabols::getFigure(double k)
+Figure* RuledParabols::getFigure(int k)
 {
     double step = 1.0/k;
     double i0 = 0;

@@ -15,7 +15,7 @@ public:
     double getY(double u, double w);
     double getZ(double u, double w);
     double *getPoint(double u, double w);
-    Figure* getFigure(double k);
+    Figure* getFigure(int k);
     ~RuledParabols();
 };
 

@@ -1,6 +1,7 @@
 #include "figure.h"
 #include <stdlib.h>
 #include <math.h>
+#include <QtMath>
 
 Figure::Figure()
 {
@@ -169,12 +170,10 @@ bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N
     }
 }
 
-void Figure::autoscale(QPaintDevice *device)
+void Figure::autoscale_basicXY(QPaintDevice *device)
 {
-    int width =  device->width();
-    int height = device->height();
-    int CentX = width/2;
-    int CentY = height/2;
+    int CentX = device->width()/2;
+    int CentY = device->height()/2;
 
     double x,y,z;
     this->coords->findMaxXYZ(x,y,z);
@@ -185,17 +184,76 @@ void Figure::autoscale(QPaintDevice *device)
     double k4 = CentY/y;
 
     frontViewScale =  std::min(std::min(k1,k2),std::min(k3,k4));
-/*
-    if (k1<k2)
-    {
-        frontViewScale = k1;
-    }
-    else
-    {
-        frontViewScale = k2;
-    }
-*/
+
     //запас 5%
+    frontViewScale *= 0.95;
+}
+
+void Figure::autoscale_parabols(QPaintDevice *device, int k)
+{
+    int width = device->width();
+    int height = device->height();
+    int CentX = width/2;
+    int CentY = height/2;
+
+    double x,y,z;
+    double d,dMax = 0;   
+
+    int i=0;
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+        d = sqrt(x*x+y*y+z*z);
+        if (d>dMax) dMax = d;
+    }
+
+    i=(k+1)*(k/2);
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+        d = sqrt(x*x+y*y+z*z);
+        if (d>dMax) dMax = d;
+    }
+
+    i=(k+1)*k;
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+        d = sqrt(x*x+y*y+z*z);
+        if (d>dMax) dMax = d;
+    }
+
+    i=k;
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+        d = sqrt(x*x+y*y+z*z);
+        if (d>dMax) dMax = d;
+    }
+
+    i=(k+1)+(k+1)*(k/2)-1;
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+        d = sqrt(x*x+y*y+z*z);
+        if (d>dMax) dMax = d;
+    }
+
+    i=(k+1)*(k+1)-1;
+    {
+        x = this->coords->getElement(i,0);
+        y = this->coords->getElement(i,1);
+        z = this->coords->getElement(i,2);
+    }
+
+    double k1 = CentX/d;
+    double k2 = CentY/d;
+    frontViewScale = std::min(k1,k2);
     frontViewScale *= 0.95;
 }
 

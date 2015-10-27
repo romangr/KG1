@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
     Figure *fig1;
+    int k;
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 

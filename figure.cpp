@@ -284,7 +284,7 @@ void Figure::draw(QPaintDevice *device)
     {
         for (int j=0; j<h; j++)
         {
-            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            // i^j=j^i
             if (j>i) continue;
 
             if (this->edgeExist(i,j))
@@ -299,7 +299,7 @@ void Figure::draw(QPaintDevice *device)
     {
         for (int j=0; j<h; j++)
         {
-            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            // i^j=j^i
             if (j>i) continue;
 
             if (this->edgeExist(i,j))
@@ -315,7 +315,7 @@ void Figure::draw(QPaintDevice *device)
     {
         for (int j=0; j<h; j++)
         {
-            //вообще надо бегать выше диагонали, т.к. i^j=j^i, а информацию о связях мы записывали в виде i-j, где i<j
+            // i^j=j^i
             if (j>i) continue;
 
             if (this->edgeExist(i,j))

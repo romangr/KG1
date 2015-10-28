@@ -159,7 +159,7 @@ void Matrix::mult_scalar(double d)
     }
 }
 
-//ой как нехорошо
+//make me better (find max for every column)
 void Matrix::findMaxXYZ(double& x,double& y, double& z)
 {
     double xmax = abs(this->getElement(0,0));

@@ -7,8 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fig1 = new Figure();
-    showWindow1 = new TShowWindow(0,fig1); //чтоб не вылетало при попытке показа вхолостую
-    //wtf, надо координаты mainwindow
+    showWindow1 = new TShowWindow(0,fig1);
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
 }
 
@@ -53,9 +52,6 @@ void MainWindow::set_coord_clicked()
 
     fig1 = RuledParabols(p1,p2).getFigure(k);
     showWindow1->setFigure(fig1);
-
-    //думал, что надоело мигать, но нет - без этого при холодном запуске
-    //сначала show, затем set coord ничего не отображает
     showWindow1->activateWindow();
 }
 

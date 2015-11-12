@@ -7,7 +7,7 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
     N = 16;
     this->surface = &r;
 
-    this->figure = this->surface->getFigure((N));
+    this->figure = this->surface->getFigure(N);
 
 
     for (int i = 0; i < N; i++)
@@ -73,9 +73,9 @@ void TriangleSurface::turn(char axis, double angle)
     }
 
 
-    for (int i = 0; i < (N+1); i++)
+    for (int i = 0; i < (N); i++)
     {
-        for (int j = 0; j < (N+1); j++)
+        for (int j = 0; j < (N); j++)
         {
             Matrix abc;
             double ax = figure->getCoord(i*(N+1) + j, 0);

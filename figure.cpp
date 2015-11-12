@@ -331,8 +331,8 @@ void Figure::draw(QPaintDevice *device)
         {
             // i^j=j^i
             if (j>i) continue;
-            if (i == 55) {pen.setColor(Qt::black); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
-            if (i == 186) {pen.setColor(Qt::red); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
+            //if (i == 55) {pen.setColor(Qt::black); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
+            //if (i == 186) {pen.setColor(Qt::red); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
             if (this->edgeExist(i,j))
                 { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 

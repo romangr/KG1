@@ -131,11 +131,10 @@ Figure *TriangleSurface::getVisibleFigure()
 
         for (int j = 0; j < N*N*2; j++)
         {
-            if (triangles.at(j)->isApex(i)) {continue;}
+            if (triangles.at(j)->isApex(i)) {/*qDebug() << "continued";*/  continue;}
             if (triangles.at(j)->isUnderTriangle(x, y, z))
             {
                 f->cutPoint(i);
-                //qDebug() << "cutted";
                 count++;
                 break;
             }

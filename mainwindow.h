@@ -8,6 +8,7 @@
 #include "figure.h"
 #include "ruledparabols.h"
 #include "showwindow.h"
+#include "trianglesurface.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
     Figure *fig1;
+    TriangleSurface *ts;
     int k;
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

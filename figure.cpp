@@ -136,7 +136,12 @@ void Figure::editPoint(int point, double x, double y, double z) //number of poin
 {
         this->coords->setElement(point-1, 0, x);
         this->coords->setElement(point-1, 1, y);
-        this->coords->setElement(point-1, 2, z);
+    this->coords->setElement(point-1, 2, z);
+}
+
+double Figure::getCoord(int point, int coord)
+{
+    return this->coords->getElement(point, coord);
 }
 
 void Figure::setEdge(int point1, int point2, bool state) //number of point from {1, ..., N}
@@ -157,6 +162,15 @@ void Figure::setEdge(int point1, int point2, bool state) //number of point from 
 
     this->adjacency->setElement(point1-1, point2-1, element);
     this->adjacency->setElement(point2-1, point1-1, element);
+}
+
+void Figure::cutPoint(int point)
+{
+    for (int i = 0; i < adjacency->getWidth(); i++)
+    {
+        adjacency->setElement(i, point, 0);
+        adjacency->setElement(point, i, 0);
+    }
 }
 
 bool Figure::edgeExist(int point1, int point2) //number of point from {1, ..., N}
@@ -277,7 +291,7 @@ void Figure::draw(QPaintDevice *device)
     painter.drawLine(CentX,0,CentX,QWHeight);
 
 
-    m = this->getFrontView(2);
+   /* m = this->getFrontView(2);
     pen.setColor(Qt::red);
     painter.setPen(pen);
     for (int i=0; i<h; i++)
@@ -291,8 +305,8 @@ void Figure::draw(QPaintDevice *device)
                 { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
-    }
-    m = this->getFrontView(1);
+    }*/
+    /*m = this->getFrontView(1);
     pen.setColor(Qt::yellow);
     painter.setPen(pen);
     for (int i=0; i<h; i++)
@@ -306,7 +320,7 @@ void Figure::draw(QPaintDevice *device)
                 { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
-    }
+    }*/
 
     m = this->getFrontView(0);
     pen.setColor(Qt::green);
@@ -329,4 +343,12 @@ void Figure::resetLastCoord()
 {
     *this->coords_before_last = *coords;
     *this->coords_last = *coords;
+}
+
+Figure *Figure::getCopy()
+{
+    Figure *f = new Figure();
+    *(f->coords)=*(this->coords);
+    *(f->adjacency)=*(this->adjacency);
+    return f;
 }

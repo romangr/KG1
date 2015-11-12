@@ -1,0 +1,78 @@
+#include "triangle.h"
+
+Triangle::Triangle(Matrix &m, double a, double b, double c)
+{
+    this->points = new Matrix(m);
+    this->pointNumbers.addLine(a, b, c, 0);
+}
+
+bool Triangle::isUnderTriangle(double a, double b, double c)
+{
+    const double EPSILON = 0.01;
+    if (!((c < points->getElement(0,2)) && (c < points->getElement(1,2)) && (c < points->getElement(2,2)))) {
+        return false;
+    }
+    double s1;
+    double s;
+
+    double x1 = points->getElement(0,0); double x2 = points->getElement(1,0); double x3 = points->getElement(2, 0);
+    double y1 = points->getElement(0,1); double y2 = points->getElement(1,1); double y3 = points->getElement(2, 1);
+    double z1 = points->getElement(0,2); double z2 = points->getElement(1,2); double z3 = points->getElement(2, 2);
+    //уравнение плоскости треугольника
+    /*A = y1 (z2 - z3) + y2 (z3 - z1) + y3 (z1 - z2)
+    B = z1 (x2 - x3) + z2 (x3 - x1) + z3 (x1 - x2)
+    C = x1 (y2 - y3) + x2 (y3 - y1) + x3 (y1 - y2)
+    - D = x1 (y2 z3 - y3 z2) + x2 (y3 z1 - y1 z3) + x3 (y1 z2 - y2 z1)*/
+   /* double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);
+    double B = z1*(x2 - x3) + z2*(x3 - x1) + z3*(x1 - x2);
+    double C = x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2);
+    double D = x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1);
+    D = -D;
+
+    s = A*a + B*b + C*c + D;
+    if (s < EPSILON*0.01) {return false;};
+    s1 = C*1000000 + D;
+
+    if (s * s1 > 0) {return false;}*/
+
+    Matrix *vectors = new Matrix();
+    vectors->addLine(points->getElement(0,0) - a, points->getElement(0,1) - b, 0/*points->getElement(0,2)*/, 0);
+    vectors->addLine(points->getElement(1,0) - a, points->getElement(1,1) - b, 0/*points->getElement(1,2)*/, 0);
+    vectors->addLine(points->getElement(2,0) - a, points->getElement(2,1) - b, 0/*points->getElement(2,2)*/, 0);
+    vectors->addLine(0, 0, 0, 0);
+
+    for (int i = 0; i < 3; i++)
+    {
+        double ab = vectors->getElement(i,0) * vectors->getElement(((i+1)%3),0) + vectors->getElement(i,1) * vectors->getElement(((i+1)%3),1) + vectors->getElement(i,2) * vectors->getElement(((i+1)%3),2);
+        double modul1 = sqrt(vectors->getElement(i,0)*vectors->getElement(i,0) + vectors->getElement(i,1)*vectors->getElement(i,1) + vectors->getElement(i,2)*vectors->getElement(i,2));
+        double modul2 = sqrt(vectors->getElement(((i+1)%3),0)*vectors->getElement(((i+1)%3),0) + vectors->getElement(((i+1)%3),1)*vectors->getElement(((i+1)%3),1) + vectors->getElement(((i+1)%3),2)*vectors->getElement(((i+1)%3),2));
+        vectors->setElement(3, i, 57.2958*acos(ab/(modul1*modul2)));
+    }
+    //qDebug() << vectors->getElement(3, 0) << " " << vectors->getElement(3, 1) << " " << vectors->getElement(3, 2);
+    //qDebug() << vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2);
+
+    if (fabs(( vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2)) - 360.0) < EPSILON)
+    {
+            //qDebug() << "s = " << s << " s1 = " << s1;
+        //qDebug() << "true";
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Triangle::isApex(int pointNumber)
+{
+    if (pointNumber == pointNumbers.getElement(0,0)) {return true;}
+    if (pointNumber == pointNumbers.getElement(0,1)) {return true;}
+    if (pointNumber == pointNumbers.getElement(0,2)) {return true;}
+    return false;
+}
+
+Triangle::~Triangle()
+{
+
+}
+

@@ -50,16 +50,24 @@ void MainWindow::set_coord_clicked()
 
     k = this->ui->lineEdit_19->text().toInt();
 
-    fig1 = RuledParabols(p1,p2).getFigure(k);
+    RuledParabols *rp = new RuledParabols(p1,p2);
+    ts = new TriangleSurface(*rp);
+    //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
+    fig1 = ts->getVisibleFigure();
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
+    delete(rp);
 }
 
 void MainWindow::turn_button_clicked()
 {
     int axis = this->ui->comboBox->currentIndex();
     double angle = this->ui->lineEdit_25->text().toDouble();
-    fig1->turn(axis,angle);
+    //fig1->turn(axis,angle);
+    this->ts->turn(axis, angle);
+    delete(fig1);
+    fig1 = ts->getVisibleFigure();
+    showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
 }
 

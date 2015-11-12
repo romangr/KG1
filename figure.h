@@ -21,7 +21,9 @@ public:
     void printAdjacency();
     void addPoint(double x,double y, double z);
     void editPoint(int point, double x, double y, double z);
+    double getCoord(int point, int coord);
     void setEdge(int point1, int point2, bool state);
+    void cutPoint(int point);
     bool edgeExist(int point1, int point2);
     void transform(Matrix &transformMatrix);
     void turn(char axis, double angle);
@@ -29,6 +31,7 @@ public:
     void autoscale_parabols(QPaintDevice *device,int k);
     void draw(QPaintDevice *device);
     void resetLastCoord();
+    Figure *getCopy();
     ~Figure();
 };
 

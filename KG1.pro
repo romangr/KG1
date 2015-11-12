@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     showwindow.cpp \
     parabola.cpp \
     ruledparabols.cpp \
-    ruledsurface.cpp
+    ruledsurface.cpp \
+    curve.cpp
 
 HEADERS  += mainwindow.h \
     figure.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     showwindow.h \
     parabola.h \
     ruledparabols.h \
-    ruledsurface.h
+    ruledsurface.h \
+    curve.h
 
 FORMS    += mainwindow.ui \
     showwindow.ui

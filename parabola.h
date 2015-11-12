@@ -1,8 +1,9 @@
 #ifndef PARABOLA_H
 #define PARABOLA_H
 #include "matrix.h"
+#include "curve.h"
 
-class Parabola
+class Parabola : public Curve
 {
 private:
     Matrix *points;

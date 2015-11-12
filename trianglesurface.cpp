@@ -7,7 +7,8 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
     N = 16;
     this->surface = &r;
 
-    this->figure = this->surface->getFigure((N+1));
+    this->figure = this->surface->getFigure((N));
+
 
     for (int i = 0; i < N; i++)
     {
@@ -25,7 +26,9 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
             double cx = figure->getCoord(i*(N+1) + j + 1, 0);
             double cy = figure->getCoord(i*(N+1) + j + 1, 1);
             double cz = figure->getCoord(i*(N+1) + j + 1, 2);
-
+            qDebug() << "ax = " << ax << "ay = " << ay << "az = " << az;
+            qDebug() << "bx = " << bx << "by = " << by << "bz = " << bz;
+            qDebug() << "cx = " << cx << "cy = " << cy << "cz = " << cz;
             abc.addLine(ax, ay, az, 0);
             abc.addLine(bx, by, bz, 0);
             abc.addLine(cx, cy, cz, 0);
@@ -136,6 +139,8 @@ Figure *TriangleSurface::getVisibleFigure()
             {
                 f->cutPoint(i);
                 count++;
+                qDebug() << "apex #" << i << " triangle:" << triangles[j]->pointNumbers.getElement(0,0);// << " " << triangles[j]->pointNumbers.getElement(0,1)<< " " << triangles[j].getElement(0,2);
+                qDebug() << "#" << count;
                 break;
             }
         }

@@ -30,10 +30,10 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     D = -D;
 
     s = A*a + B*b + C*c + D;
-    if (s < EPSILON*0.01) {return false;};
-    s1 = C*1000000 + D;
+    if (fabs(s) < EPSILON*0.01) {/*qDebug() << "s < EPSILON*0.01";*/ return false;};
+    s1 = C*10000 + D;
 
-    if (s * s1 > 0) {return false;}
+    if (s * s1 > 0) {/*qDebug() << "s*s1 > 0";*/ return false;}
 
     Matrix *vectors = new Matrix();
     vectors->addLine(points->getElement(0,0) - a, points->getElement(0,1) - b, 0/*points->getElement(0,2)*/, 0);
@@ -51,14 +51,15 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     //qDebug() << vectors->getElement(3, 0) << " " << vectors->getElement(3, 1) << " " << vectors->getElement(3, 2);
     //qDebug() << vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2);
 
-    /*if (fabs(( vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2)) - 360.0) < EPSILON)
+    if (fabs(( vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2)) - 360.0) < EPSILON)
     {
-        return true;
+        qDebug() << (vectors->getElement(3, 0) + vectors->getElement(3, 1) + vectors->getElement(3, 2));
+        //return true;
     }
     else
     {
         return false;
-    }*/
+    }
     s = (y1-y2)*a + (x2-x1)*b + (x1*y2 - x2*y1);
     if (fabs(s) < EPSILON) {s = 0;}
     double p = (y1-y2)*x3 + (x2-x1)*y3 + (x1*y2 - x2*y1);
@@ -73,11 +74,15 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
 
     if (s*p > EPSILON*0.01 && s1*p1 > EPSILON*0.01 && s2*p2 > EPSILON*0.01)
     {
-        qDebug() << " s = " << s << " s1 = " << s1 << " s2 = " << s2;
+       /* qDebug() << " s = " << s << " s1 = " << s1 << " s2 = " << s2;*/
+        qDebug() << "a = " << a << "b = " << b << "c = " << c;
+        qDebug() << "x1 = " << x1 << "y1 = " << y1 << "z1 = " << z1;
+        qDebug() << "x2 = " << x2 << "y2 = " << y2 << "z2 = " << z2;
+        qDebug() << "x3 = " << x3 << "y3 = " << y3 << "z3 = " << z3;
         return true;
     }
     else
-    { return false;}
+    {/*qDebug() << "last false";*/ return false;}
 }
 
 bool Triangle::isApex(int pointNumber)

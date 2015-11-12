@@ -8,11 +8,12 @@ class Triangle
 {
 private:
     Matrix *points;
-    Matrix pointNumbers;
+
 public:
     Triangle(Matrix &m, double a, double b, double c);
     bool isUnderTriangle(double a, double b, double c);
     bool isApex(int pointNumber);
+    Matrix pointNumbers;
     ~Triangle();
 };
 

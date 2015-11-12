@@ -179,7 +179,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>10</string>
+     <string>-10</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_2">
@@ -231,7 +231,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>50</string>
+     <string>-50</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_6">
@@ -283,7 +283,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>40</string>
+     <string>-40</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_10">
@@ -462,7 +462,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

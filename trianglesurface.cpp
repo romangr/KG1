@@ -155,5 +155,6 @@ TriangleSurface::~TriangleSurface()
     {
         delete(triangles[j]);
     }
+    delete(figure);
 }
 

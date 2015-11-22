@@ -95,6 +95,6 @@ bool Triangle::isApex(int pointNumber)
 
 Triangle::~Triangle()
 {
-
+    delete(points);
 }
 

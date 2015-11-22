@@ -8,6 +8,7 @@ RuledParabols::RuledParabols(Parabola &p1, Parabola &p2)
 
 RuledParabols::~RuledParabols()
 {
-
+    /*delete(this->p1);
+    delete(this->p2);*/
 }
 

@@ -69,6 +69,9 @@ void Figure::printAdjacency()
 Figure::~Figure()
 {
     delete(coords);
+    delete(adjacency);
+    delete(coords_last);
+    delete(coords_before_last);
 }
 
 void Figure::transform(Matrix &transformMatrix)
@@ -342,6 +345,7 @@ void Figure::draw(QPaintDevice *device)
 
 void Figure::resetLastCoord()
 {
+    delete(coords_before_last);
     *this->coords_before_last = *coords;
     *this->coords_last = *coords;
 }

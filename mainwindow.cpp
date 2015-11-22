@@ -51,6 +51,7 @@ void MainWindow::set_coord_clicked()
     k = this->ui->lineEdit_19->text().toInt();
 
     RuledParabols *rp = new RuledParabols(p1,p2);
+    delete(ts);
     ts = new TriangleSurface(*rp);
     //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
     fig1 = ts->getVisibleFigure();

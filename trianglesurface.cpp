@@ -310,6 +310,10 @@ Figure *TriangleSurface::getVisibleFigure()
                         }
 
                     }
+                } else 
+                {
+                    //нет точек пересечения с проекцией
+                    continue;
                 }
             }
         }

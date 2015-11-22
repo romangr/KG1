@@ -12,7 +12,11 @@ private:
 public:
     Triangle(Matrix &m, double a, double b, double c);
     bool isUnderTriangle(double a, double b, double c);
+    bool isBehindTriangle(double z);
+    bool isInFrontOfTriangle(double z);
+    bool isInProjection(double a, double b);
     bool isApex(int pointNumber);
+    double getCoord(int x, int y);
     Matrix pointNumbers;
     ~Triangle();
 };

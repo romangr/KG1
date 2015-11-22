@@ -145,6 +145,11 @@ void Matrix::addLine(double a, double b, double c, double d)
     delete(buf);
 }
 
+void Matrix::deleteLine(int index)
+{
+    if (this->getHeight() > 0) this->m.removeAt(index);
+}
+
 void Matrix::mult_scalar(double d)
 {
     int m = this->getHeight();

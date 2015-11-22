@@ -3,6 +3,7 @@
 #include "ruledsurface.h"
 #include <QVector>
 #include "triangle.h"
+#include "linesegment.h"
 
 class TriangleSurface
 {
@@ -11,6 +12,7 @@ private:
     Figure *figure;
     Figure oldF;
     QVector<Triangle*> triangles;
+    QVector<LineSegment*> lineSegments;
     int N;
 public:
     TriangleSurface(RuledSurface &r);

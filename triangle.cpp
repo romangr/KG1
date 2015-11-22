@@ -85,12 +85,56 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     {/*qDebug() << "last false";*/ return false;}
 }
 
+bool Triangle::isBehindTriangle(double z)
+{
+    if (z > this->points->getElement(0,2)) {return false;}
+    if (z > this->points->getElement(1,2)) {return false;}
+    if (z > this->points->getElement(2,2)) {return false;}
+}
+
+bool Triangle::isInFrontOfTriangle(double z)
+{
+    if (z < this->points->getElement(0,2)) {return false;}
+    if (z < this->points->getElement(1,2)) {return false;}
+    if (z < this->points->getElement(2,2)) {return false;}
+}
+
+bool Triangle::isInProjection(double a, double b)
+{
+    double x1 = points->getElement(0,0); double x2 = points->getElement(1,0); double x3 = points->getElement(2, 0);
+    double y1 = points->getElement(0,1); double y2 = points->getElement(1,1); double y3 = points->getElement(2, 1);
+    //double z1 = points->getElement(0,2); double z2 = points->getElement(1,2); double z3 = points->getElement(2, 2);
+    double s;
+    double EPSILON = 0.01;
+    s = (y1-y2)*a + (x2-x1)*b + (x1*y2 - x2*y1);
+    if (fabs(s) < EPSILON) {s = 0;}
+    double p = (y1-y2)*x3 + (x2-x1)*y3 + (x1*y2 - x2*y1);
+
+    s1 = (y1-y3)*a + (x3-x1)*b + (x1*y3 - x3*y1);
+    if (fabs(s1) < EPSILON) {s1 = 0;}
+    double p1 =  (y1-y3)*x2 + (x3-x1)*y2 + (x1*y3 - x3*y1);
+
+    double s2 =  (y2-y3)*a + (x3-x2)*b + (x2*y3 - x3*y2);
+    if (fabs(s2) < EPSILON) {s2 = 0;}
+    double p2 = (y2-y3)*x1 + (x3-x2)*y1 + (x2*y3 - x3*y2);
+
+    if (s*p > EPSILON*0.01 && s1*p1 > EPSILON*0.01 && s2*p2 > EPSILON*0.01)
+    {
+        return true;
+    }
+}
+
 bool Triangle::isApex(int pointNumber)
 {
     if (pointNumber == pointNumbers.getElement(0,0)) {return true;}
     if (pointNumber == pointNumbers.getElement(0,1)) {return true;}
     if (pointNumber == pointNumbers.getElement(0,2)) {return true;}
     return false;
+}
+
+double Triangle::getCoord(int x, int y)
+{
+    return this->points->getElement(x, y);
 }
 
 Triangle::~Triangle()

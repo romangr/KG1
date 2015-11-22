@@ -22,6 +22,7 @@ public:
     void addPoint(double x,double y, double z);
     void editPoint(int point, double x, double y, double z);
     double getCoord(int point, int coord);
+    int getSize();
     void setEdge(int point1, int point2, bool state);
     void cutPoint(int point);
     bool edgeExist(int point1, int point2);

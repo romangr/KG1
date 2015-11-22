@@ -10,7 +10,7 @@ public:
     virtual double getY(double t) = 0;
     virtual double getZ(double t) = 0;
     virtual double *getPoint(double t) = 0;
-    ~Curve();
+    virtual ~Curve();
 };
 
 #endif // CURVE_H

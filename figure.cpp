@@ -147,6 +147,11 @@ double Figure::getCoord(int point, int coord)
     return this->coords->getElement(point, coord);
 }
 
+int Figure::getSize()
+{
+    return this->coords->getHeight();
+}
+
 void Figure::setEdge(int point1, int point2, bool state) //number of point from {1, ..., N}
 {
     double element;

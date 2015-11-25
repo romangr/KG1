@@ -9,7 +9,7 @@ TriangleSurface::TriangleSurface(int n)
     trMatrix.addLine(0, 4, 0, 0);
     Triangle *triangle = new Triangle(trMatrix,0,0,0);
     this->triangles.push_back(triangle);
-    LineSegment *lnSegment = new LineSegment(-3, 3, -1, 3, 3, -1);
+    LineSegment *lnSegment = new LineSegment(0, -1, -3, 0, 3, 3);
     this->lineSegments.push_back(lnSegment);
 }
 
@@ -282,8 +282,9 @@ Figure *TriangleSurface::getVisibleFigure()
                     {
                          qDebug() << "отрезок пересекает плоскость треугольника";
                         //таки пересекает, надо искать точку пересечения
-                        double t_intresect = (A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D)/
+                        double t_intresect = -(A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D)/
                                 (A*currentLS->getCoord(2,0) + B*currentLS->getCoord(2,1) + C*currentLS->getCoord(2,2));
+                        qDebug() << "t_intresect = " << t_intresect;
                         if (t_intresect < 0 || t_intresect > 1) {qDebug() << "It's impossible!";}
                         //находится ли точка внутри треугольника? (в его проекции на плоскость визуализации)
                         if (currentTr->isInProjection(currentLS->getX(t_intresect), currentLS->getY(t_intresect)))
@@ -306,6 +307,7 @@ Figure *TriangleSurface::getVisibleFigure()
                                 double z_tr = side->getZ(side->getTbyX(x_p)); //координата стороны в точке пересечения с отрезком
                                 if (z_tr < z_p)
                                 {
+                                    qDebug() << "z_tr < z_p";
                                     if (t_intresect > t_intersections[0])
                                     {
                                         currentLS->addIntersection(t_intresect, 1);
@@ -315,6 +317,7 @@ Figure *TriangleSurface::getVisibleFigure()
                                     }
                               } else
                                 {
+                                    qDebug() << "z_tr >= z_p";
                                     if (t_intersections[0] > t_intresect)
                                     {
                                         currentLS->addIntersection(t_intresect, t_intersections[0]);
@@ -416,6 +419,10 @@ Figure *TriangleSurface::getVisibleFigure()
             double ex = currentLS->getX(edgeParts.getElement(j+1,0));
             double ey = currentLS->getY(edgeParts.getElement(j+1,0));
             double ez = currentLS->getZ(edgeParts.getElement(j+1,0));
+            if (bx == ex && by == ey && ez == ez)
+            {
+                continue;
+            }
             int figureSize = f->getSize();
             f->addPoint(bx, by, bz);
             f->addPoint(ex, ey, ez);

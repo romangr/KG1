@@ -12,6 +12,7 @@ public:
     void print();
     void addLine(int n, double* a);
     void addLine(double a, double b, double c, double d);
+    void addFirstLine(double a, double b, double c, double d);
     void deleteLine(int index);
     int getWidth();
     int getHeight();

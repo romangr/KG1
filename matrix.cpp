@@ -145,6 +145,18 @@ void Matrix::addLine(double a, double b, double c, double d)
     delete(buf);
 }
 
+void Matrix::addFirstLine(double a, double b, double c, double d)
+{
+    if (this->getWidth() != 4 && this->getWidth() != 0) {return;}
+    QVector<double>* buf = new QVector<double>();
+    buf->push_back(a);
+    buf->push_back(b);
+    buf->push_back(c);
+    buf->push_back(d);
+    this->m.push_front(*buf);
+    delete(buf);
+}
+
 void Matrix::deleteLine(int index)
 {
     if (this->getHeight() > 0) this->m.removeAt(index);

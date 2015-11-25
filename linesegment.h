@@ -2,12 +2,14 @@
 #define LINESEGMENT_H
 #include "matrix.h"
 #include "curve.h"
+#include <QVector>
 
 class LineSegment : Curve
 {
 private:
     Matrix coords;
     Matrix *intersections;
+    int isInSegments(QVector<double> &begin, QVector<double> &end, double x);
 public:
     LineSegment(Matrix& m);
     LineSegment(double x1, double y1, double z1, double x2, double y2, double z2);
@@ -18,7 +20,7 @@ public:
     double getCoord(int x, int y);
     double getTbyX(double x);
     void addIntersection(double t1, double t2);
-    double *calculateIntersections(); //заменить на объединение, должен посчитать объединение вырезаемых отрезков
+    Matrix calculateIntersections(); //заменить на объединение, должен посчитать объединение вырезаемых отрезков
     ~LineSegment();
 };
 

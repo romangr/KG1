@@ -90,6 +90,7 @@ bool Triangle::isBehindTriangle(double z)
     if (z > this->points->getElement(0,2)) {return false;}
     if (z > this->points->getElement(1,2)) {return false;}
     if (z > this->points->getElement(2,2)) {return false;}
+    return true;
 }
 
 bool Triangle::isInFrontOfTriangle(double z)
@@ -97,6 +98,7 @@ bool Triangle::isInFrontOfTriangle(double z)
     if (z < this->points->getElement(0,2)) {return false;}
     if (z < this->points->getElement(1,2)) {return false;}
     if (z < this->points->getElement(2,2)) {return false;}
+    return true;
 }
 
 bool Triangle::isInProjection(double a, double b)
@@ -104,7 +106,7 @@ bool Triangle::isInProjection(double a, double b)
     double x1 = points->getElement(0,0); double x2 = points->getElement(1,0); double x3 = points->getElement(2, 0);
     double y1 = points->getElement(0,1); double y2 = points->getElement(1,1); double y3 = points->getElement(2, 1);
     //double z1 = points->getElement(0,2); double z2 = points->getElement(1,2); double z3 = points->getElement(2, 2);
-    double s;
+    double s, s1;
     double EPSILON = 0.01;
     s = (y1-y2)*a + (x2-x1)*b + (x1*y2 - x2*y1);
     if (fabs(s) < EPSILON) {s = 0;}
@@ -122,6 +124,7 @@ bool Triangle::isInProjection(double a, double b)
     {
         return true;
     }
+    return false;
 }
 
 bool Triangle::isApex(int pointNumber)

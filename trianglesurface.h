@@ -15,6 +15,7 @@ private:
     QVector<LineSegment*> lineSegments;
     int N;
 public:
+    TriangleSurface(int n);
     TriangleSurface(RuledSurface &r);
     void turn(char axis, double angle);
     Figure *getVisibleFigure();

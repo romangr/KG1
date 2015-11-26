@@ -32,6 +32,7 @@ void Matrix::print()
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
 }
 
 

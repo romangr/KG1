@@ -50,18 +50,16 @@ void MainWindow::set_coord_clicked()
     Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     k = this->ui->lineEdit_19->text().toInt();
-    qDebug() <<"Oh,no! magic!";
     RuledParabols *rp = new RuledParabols(p1,p2);
-    qDebug() <<"stop!";
 
-    qDebug() <<"no magic!";
     ts = new TriangleSurface(*rp);
-    qDebug() <<"magic!";
+    delete(rp);
     //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
     fig1 = ts->getVisibleFigure();
+
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
-    delete(rp);
+
 }
 
 void MainWindow::turn_button_clicked()
@@ -70,9 +68,12 @@ void MainWindow::turn_button_clicked()
     double angle = this->ui->lineEdit_25->text().toDouble();
     //fig1->turn(axis,angle);
     this->ts->turn(axis, angle);
-    delete(fig1);
+    //delete(fig1); //какого чёрта это здесь вообще делает?!!
+    qDebug() <<"newshi1";
     fig1 = ts->getVisibleFigure();
+    qDebug() <<"newshi2";
     showWindow1->setFigure(fig1);
+    qDebug() <<"newshi3";
     showWindow1->activateWindow();
 }
 

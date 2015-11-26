@@ -93,11 +93,12 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
             }
         }
     }
-    qDebug() << "edges count = " << this->lineSegments.size();
+    //qDebug() << "edges count = " << this->lineSegments.size();
 }
 
 void TriangleSurface::turn(char axis, double angle)
 {
+    qDebug() <<"shit!";
     this->figure->turn(axis, angle);
 
     for (int j = 0; j < N*N*2; j++)
@@ -107,11 +108,11 @@ void TriangleSurface::turn(char axis, double angle)
         delete(tr);
     }
 
-
-    for (int i = 0; i < (N); i++)
+     for (int i = 0; i < (N); i++)
     {
         for (int j = 0; j < (N); j++)
         {
+            //qDebug() <<"i=" <<i <<" j= " <<j;
             Matrix abc;
             double ax = figure->getCoord(i*(N+1) + j, 0);
             double ay = figure->getCoord(i*(N+1) + j, 1);
@@ -155,18 +156,22 @@ void TriangleSurface::turn(char axis, double angle)
             triangles.push_back(tr);
         }
     }
+
+    qDebug() <<"turnNN is all";
 }
 
 Figure *TriangleSurface::getVisibleFigure()
 {
+    qDebug() <<"trsize " <<this->triangles.size();
     Figure *f = new Figure();
     for (int i = 0; i < this->lineSegments.size(); i++)
     {
-        //qDebug() << "i = " << i;
+ //       qDebug() << "i = " << i;
+         qDebug() <<"OK0.0";
         LineSegment *currentLS = lineSegments[i];
         for (int j = 0; j < this->triangles.size(); j++)
-        {
-            //qDebug() << "j = " << j;
+        { qDebug() <<"OK0";
+   //         qDebug() << "j = " << j;
             Triangle *currentTr = triangles[j];
             //if (currentTr->isEdge(currentLS)) { continue;}
             if (currentTr->isApex(currentLS->getFigurePoint(0)))
@@ -177,6 +182,7 @@ Figure *TriangleSurface::getVisibleFigure()
                     continue;
                 }
             }
+             qDebug() <<"OK0.1";
             //лежат ли все точки отрезка за точками треугольника?
             if (false)//(this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(0)) && this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(1)))
             {
@@ -184,16 +190,21 @@ Figure *TriangleSurface::getVisibleFigure()
             } else
             {
                 //qDebug() << "always goes";
+                 qDebug() <<"OK0.1b";
                 //лежат ли все точки отрезка перед точками треугольника?
                 if (currentTr->isInFrontOfTriangle(currentLS->getCoord(0,2)) && currentTr->isInFrontOfTriangle(currentLS->getCoord(1,2)))
                 {
                     //отрезок перед треугольником, можно рисовать
-
+ qDebug() <<"OK0.1uahahahaha";
+  qDebug() <<triangles.size();
+  qDebug() <<"OK0.1uahahahaha1";
                     continue;
                 }
                 //пересекает ли отрезок проекцию треугольника?
+                 qDebug() <<"OK0.2";
                 QVector<double> t_intersections;
                 QVector<int> n_intersections;
+                 qDebug() <<"OK0.3";
                 double x1 = currentTr->getCoord(0,0); double x2 = currentTr->getCoord(1,0); double x3 = currentTr->getCoord(2, 0);
                 double y1 = currentTr->getCoord(0,1); double y2 = currentTr->getCoord(1,1); double y3 = currentTr->getCoord(2, 1);
                 double z1 = currentTr->getCoord(0,2); double z2 = currentTr->getCoord(1,2); double z3 = currentTr->getCoord(2, 2);
@@ -232,6 +243,7 @@ Figure *TriangleSurface::getVisibleFigure()
                 }*/
                 if (t_intersections.size() > 0)
                 {
+
                     //qDebug() << "t_intersections.size() > 0";
                     //пересекает проекцию, знаем точки
                     //проверить точки пересечения на положение относительно плоскости треугольника
@@ -241,6 +253,7 @@ Figure *TriangleSurface::getVisibleFigure()
                     bool flag[2] = {false, false};
                     if (t_intersections.size() > 1)
                     {
+
                         //qDebug() << "t_intersections.size() == 2";
                         //имеем две точки пересечения
                         for (int k1 = 0; k1 < 2; k1++)
@@ -257,29 +270,35 @@ Figure *TriangleSurface::getVisibleFigure()
                             delete(side);
                             if (z_tr < z_p) {flag[k1] = true;}
                         }
+                        qDebug() <<"OK1.1";
                         if (flag[0] && flag[1])
                         {
                             //qDebug() << "треугольник за отрезком, можно рисовать";
                             //треугольник за отрезком, можно рисовать
                             continue;
                         }
+                        qDebug() <<"OK2";
                         if (!flag[0] && !flag[1])
                         {
+                            qDebug() <<"OK3";
                             //qDebug() << "кусок отрезка за треугольником, надо вырезать";
                             //кусок отрезка за треугольником, надо вырезать
                             if (t_intersections[0] < t_intersections[1])
-                            {
+                            {qDebug() <<"OK4";
                                 //qDebug() << "addIntersection(t_intersections[0], t_intersections[1]);";
                                 currentLS->addIntersection(t_intersections[0], t_intersections[1]);
                             } else
-                            {
+                            {qDebug() <<"OK5";
                                 //qDebug() << "addIntersection(t_intersections[1], t_intersections[0]);";
                                 currentLS->addIntersection(t_intersections[1], t_intersections[0]);
                             }
                             //qDebug() << "continue";
+                            qDebug() <<"OK5.1";
                             continue;
                         }
+                        qDebug() <<"OK6";
                     }
+                    qDebug() <<"OK7";
                     //qDebug() << "одно пересечение или неопределенность с двумя";
                     //одно пересечение или неопределенность с двумя
                     double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);
@@ -417,6 +436,7 @@ Figure *TriangleSurface::getVisibleFigure()
                     }
                 }
             }//if !false
+             qDebug() <<"OK0.1e";
         }//for j=0..triangles size
         Matrix edgeParts = currentLS->calculateIntersections(false);
         edgeParts.addFirstLine(0,0,0,0);

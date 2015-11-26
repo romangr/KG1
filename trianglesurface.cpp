@@ -6,11 +6,11 @@ TriangleSurface::TriangleSurface(int n)
     Matrix trMatrix;
     trMatrix.addLine(-3, 0, 0, 0);
     trMatrix.addLine(3, 0, 0, 0);
-    trMatrix.addLine(0, 4, 0, 0);
+    trMatrix.addLine(0, 5, -2, 0);
     Triangle *triangle = new Triangle(trMatrix,0,1,2);
     this->triangles.push_back(triangle);
-    LineSegment *lnSegment = new LineSegment(0, -1, -3, 0, 3, 3);
-    lnSegment->setFigurePoints(0,1);
+    LineSegment *lnSegment = new LineSegment(0, 1, -1.8, 0, 2, 0);
+    lnSegment->setFigurePoints(0,5);
     this->lineSegments.push_back(lnSegment);
 }
 
@@ -21,7 +21,7 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
     this->surface = &r;
 
     this->figure = this->surface->getFigure(N);
-
+    //this->figure->turn(2,30);
 
     for (int i = 0; i < N; i++)
     {
@@ -166,6 +166,7 @@ Figure *TriangleSurface::getVisibleFigure()
         LineSegment *currentLS = lineSegments[i];
         for (int j = 0; j < this->triangles.size(); j++)
         {
+            //qDebug() << "tr.size" << triangles.size();
             //qDebug() << "j = " << j;
             Triangle *currentTr = triangles[j];
             //if (currentTr->isEdge(currentLS)) { continue;}
@@ -296,7 +297,15 @@ Figure *TriangleSurface::getVisibleFigure()
                         double t_intresect = -(A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D)/
                                 (A*currentLS->getCoord(2,0) + B*currentLS->getCoord(2,1) + C*currentLS->getCoord(2,2));
                         //qDebug() << "t_intresect = " << t_intresect;
-                        if (t_intresect < 0 || t_intresect > 1) {qDebug() << "It's impossible!";}
+                        if (t_intresect < 0 || t_intresect > 1)
+                        {
+                            qDebug() << "It's impossible!";
+                            /*qDebug() << "A = " << x1 << " B = " << y1 << " C = " << z1;
+                            qDebug() << "A = " << x2 << " B = " << y2 << " C = " << z2;
+                            qDebug() << "A = " << x3 << " B = " << y3 << " C = " << z3;
+                            qDebug() << "x1 = " << currentLS->getCoord(0, 0) << " y1 = " << currentLS->getCoord(0, 1) << " z1 = " << currentLS->getCoord(0, 2);
+                            qDebug() << "x2 = " << currentLS->getCoord(1, 0) << " y2 = " << currentLS->getCoord(1, 1) << " z2 = " << currentLS->getCoord(1, 2);*/
+                        }
                         //находится ли точка внутри треугольника? (в его проекции на плоскость визуализации)
                         if (currentTr->isInProjection(currentLS->getX(t_intresect), currentLS->getY(t_intresect)))
                         {
@@ -415,10 +424,40 @@ Figure *TriangleSurface::getVisibleFigure()
                         }
 
                     }
+                } else
+                {
+                    //проверить пересечение с плоскостью
+                    double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);
+                    double B = z1*(x2 - x3) + z2*(x3 - x1) + z3*(x1 - x2);
+                    double C = x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2);
+                    double D = x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1);
+                    D = -D;
+                    double testFunctionBeginning = A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D;
+                    double testFunctionEnd = A*currentLS->getCoord(1,0) + B*currentLS->getCoord(1,1) + C*currentLS->getCoord(1,2) + D;
+                    if (testFunctionBeginning * testFunctionEnd < 0)
+                    {
+                        double t_intresect = -(A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D)/
+                                (A*currentLS->getCoord(2,0) + B*currentLS->getCoord(2,1) + C*currentLS->getCoord(2,2));
+                        //qDebug() << "пересекает " << t_intresect << " " << triangles.size();
+                        if (currentTr->isInProjection(currentLS->getX(t_intresect), currentLS->getY(t_intresect)))
+                        {
+                            double z_int = currentLS->getZ(t_intresect);
+                            if (z_int < currentLS->getCoord(0,2))
+                            {
+                                currentLS->addIntersection(t_intresect, 1);
+                            } else
+                            {
+                                currentLS->addIntersection(0, t_intresect);
+                            }
+                        }
+                    }
                 }
             }//if !false
         }//for j=0..triangles size
-        Matrix edgeParts = currentLS->calculateIntersections(false);
+
+        Matrix edgeParts;
+        if (i == 353) edgeParts = currentLS->calculateIntersections(false);
+                else edgeParts = currentLS->calculateIntersections(false);
         edgeParts.addFirstLine(0,0,0,0);
         edgeParts.addLine(1,1,0,0);
         for (int j = 0; j < edgeParts.getHeight()-1; j++)

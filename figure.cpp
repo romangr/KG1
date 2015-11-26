@@ -77,7 +77,7 @@ Figure::~Figure()
 void Figure::transform(Matrix &transformMatrix)
 {
 
-    delete(this->coords_before_last);
+    //delete(this->coords_before_last);
     this->coords_before_last = this->coords_last;
     this->coords_last = this->coords;
 

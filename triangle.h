@@ -11,8 +11,8 @@ private:
 
 public:
     Triangle(Matrix &m, double a, double b, double c);
-    bool isUnderTriangle(double a, double b, double c);
-    bool isBehindTriangle(double z);
+    bool isUnderTriangle(double a, double b, double c); //за плоскостью
+    bool isBehindTriangle(double z); //за треугольником, дальше вершин. НЕНАДО
     bool isInFrontOfTriangle(double z);
     bool isInProjection(double a, double b);
     bool isApex(int pointNumber);

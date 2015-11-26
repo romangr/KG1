@@ -172,45 +172,23 @@ Matrix LineSegment::calculateIntersections()
         }
     }
     Matrix result;
-    for (int i = 0; i < begin.size(); i++)
+    result.addLine(begin.at(0), end.at(0), 0, 0);
+    for (int i = 1; i < begin.size(); i++)
     {
-        result.addLine(begin.at(i), end.at(i), 0, 0);
+        for (int j=0; j<result.getHeight(); j++)
+        {
+            if (result.getElement(j,0)>result.getElement(i,0))
+            {
+                result.addFirstLine(begin.at(i), end.at(i), 0, 0);
+                break;
+            }else
+            {
+                if (j==result.getHeight()-1)
+                {result.addLine(begin.at(i), end.at(i), 0, 0);}
+            }
+        }
     }
     return result;
-
-    /*while (this->intersections->getHeight() > 1)
-    {
-        double t1b = this->intersections->getElement(0,0);
-        double t1e = this->intersections->getElement(0,1);
-        double t2b = this->intersections->getElement(1,0);
-        double t2e = this->intersections->getElement(1,1);
-        if (t1b > t2b) {
-            double buf = t1b;
-            double buf2 = t1e;
-            t1b = t2b;
-            t1e = t2e;
-            t2b = buf;
-            t2e = buf2;
-        }
-        if (t1e < t2b) {return NULL;}
-        if (t2e > t1e)
-        {
-            //qDebug() << "t2e > t1e";
-            this->intersections->deleteLine(0);
-            this->intersections->setElement(0,0,t2b);
-            this->intersections->setElement(0,1,t1e);
-        } else
-        {
-            //qDebug() << "!(t2e > t1e)";
-            this->intersections->deleteLine(0);
-            this->intersections->setElement(0,0,t2b);
-            this->intersections->setElement(0,1,t2e);
-        }
-    }
-    double *result = new double[2];
-    result[0] = this->intersections->getElement(0,0);
-    result[1] = this->intersections->getElement(0,1);
-    return result;*/
 }
 
 LineSegment::~LineSegment()

@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete fig1;
+    delete ts;
     delete showWindow1;
 }
 
@@ -49,10 +50,13 @@ void MainWindow::set_coord_clicked()
     Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     k = this->ui->lineEdit_19->text().toInt();
-
+    qDebug() <<"Oh,no! magic!";
     RuledParabols *rp = new RuledParabols(p1,p2);
-    delete(ts);
+    qDebug() <<"stop!";
+
+    qDebug() <<"no magic!";
     ts = new TriangleSurface(*rp);
+    qDebug() <<"magic!";
     //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
     fig1 = ts->getVisibleFigure();
     showWindow1->setFigure(fig1);

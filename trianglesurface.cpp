@@ -405,8 +405,8 @@ Figure *TriangleSurface::getVisibleFigure()
 
                     }
                 }
-            }
-        }
+            }//if !false
+        }//for j=0..triangles size
         Matrix edgeParts = currentLS->calculateIntersections();
         edgeParts.addFirstLine(0,0,0,0);
         edgeParts.addLine(1,1,0,0);

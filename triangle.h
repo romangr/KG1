@@ -3,6 +3,7 @@
 #include "matrix.h"
 #include <cmath>
 #include <qdebug.h>
+#include "linesegment.h"
 
 class Triangle
 {
@@ -16,6 +17,7 @@ public:
     bool isInFrontOfTriangle(double z);
     bool isInProjection(double a, double b);
     bool isApex(int pointNumber);
+    bool isEdge(LineSegment *ls);
     double getCoord(int x, int y);
     Matrix pointNumbers;
     ~Triangle();

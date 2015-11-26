@@ -66,6 +66,18 @@ double LineSegment::getTbyX(double x)
     return (x - coords.getElement(0,0)) / coords.getElement(2,0);
 }
 
+void LineSegment::setFigurePoints(int x, int y)
+{
+    this->fPoints[0] = x;
+    this->fPoints[1] = y;
+}
+
+int LineSegment::getFigurePoint(int i)
+{
+    if (i < 2) return fPoints[i];
+    return -1;
+}
+
 void LineSegment::addIntersection(double t1, double t2)
 {
     this->intersections->addLine(t1, t2, 0, 0);
@@ -79,6 +91,10 @@ Matrix LineSegment::calculateIntersections()
     {
         begin.push_back(this->intersections->getElement(0,0));
         end.push_back(this->intersections->getElement(0,1));
+    } else
+    {
+        Matrix res;
+        return res;
     }
 
     /*  begin.push_back(this->intersections->getElement(i,0));
@@ -89,6 +105,7 @@ Matrix LineSegment::calculateIntersections()
         QVector<int> toDelete;
         double b = this->intersections->getElement(i,0);
         double e = this->intersections->getElement(i,1);
+        if (!(b != e && e >= 0 && b >= 0)) continue;
         int beginInN = isInSegments(begin, end, b);
         int endInN = isInSegments(begin, end, e);
         //проверка, не накроет ли этот отрезок другой целиком

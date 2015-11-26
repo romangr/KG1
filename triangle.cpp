@@ -135,6 +135,23 @@ bool Triangle::isApex(int pointNumber)
     return false;
 }
 
+bool Triangle::isEdge(LineSegment *ls)
+{
+    /*int count = 0;
+    for (int i = 0; i < 3; i++)
+    {
+       qDebug() << "1";
+       int currentNumber = pointNumbers.getElement(0,i);
+       qDebug() << "2";
+       if (currentNumber == ls->getFigurePoint(0)) {count++;}
+       qDebug() << "3";
+       if (currentNumber == ls->getFigurePoint(1)) {count++;}
+    }
+    if (count == 2) {return true;}
+    return false;*/
+    return true;
+}
+
 double Triangle::getCoord(int x, int y)
 {
     return this->points->getElement(x, y);

@@ -24,7 +24,7 @@ public:
     void setFigurePoints(int x, int y);
     int getFigurePoint(int i);
     void addIntersection(double t1, double t2);
-    Matrix calculateIntersections(); //заменить на объединение, должен посчитать объединение вырезаемых отрезков
+    Matrix calculateIntersections(bool debug); //заменить на объединение, должен посчитать объединение вырезаемых отрезков
     ~LineSegment();
 };
 

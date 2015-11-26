@@ -83,16 +83,20 @@ void LineSegment::addIntersection(double t1, double t2)
     this->intersections->addLine(t1, t2, 0, 0);
 }
 
-Matrix LineSegment::calculateIntersections()
+Matrix LineSegment::calculateIntersections(bool debug)
 {
+    if (debug) qDebug() << "begin";
     QVector<double> begin;
     QVector<double> end;
     if (this->intersections->getHeight() > 0)
     {
-        begin.push_back(this->intersections->getElement(0,0));
-        end.push_back(this->intersections->getElement(0,1));
+        /*double b = this->intersections->getElement(0,0);
+        begin.push_back();
+        end.push_back(this->intersections->getElement(0,1));*/
+        if (debug) qDebug() << "this->intersections->getHeight() > 0";
     } else
     {
+        if (debug) qDebug() << "return1";
         Matrix res;
         return res;
     }
@@ -102,10 +106,15 @@ Matrix LineSegment::calculateIntersections()
      */
     for (int i = 0; i < this->intersections->getHeight(); i++)
     {
+        if (debug) qDebug() << "i\' = " << i;
         QVector<int> toDelete;
-        double b = this->intersections->getElement(i,0);
+        double b = this->intersections->getElement(i,0);     
         double e = this->intersections->getElement(i,1);
-        if (!(b != e && e >= 0 && b >= 0)) continue;
+        if (debug) {qDebug() << "b = " << b << "e = " << e;}
+        if (b == -0) {b = 0; if (debug) {qDebug() << "b == -0";}}
+        if (e == -0) {e = 0;}
+        if (e - b < 0.000001) {continue; if (debug) qDebug() << "continue0;";}
+        if (!(b != e && e >= 0 && b >= 0)) {if (debug) {qDebug() << "continue;";}  continue;}
         int beginInN = isInSegments(begin, end, b);
         int endInN = isInSegments(begin, end, e);
         //проверка, не накроет ли этот отрезок другой целиком
@@ -122,6 +131,7 @@ Matrix LineSegment::calculateIntersections()
                         {
                             toDelete.push_front(j);
                             added = true;
+                            break;
                         }
                     }
                     if (!added) { toDelete.push_back(j); }
@@ -131,11 +141,13 @@ Matrix LineSegment::calculateIntersections()
                 }
             }
         }
+        if (debug) qDebug() << "deleteCheck";
         for (int j = toDelete.size()-1; j > -1 ; j--)
         {
             begin.removeAt(toDelete.at(j));
             end.removeAt(toDelete.at(j));
         }
+        if (debug) qDebug() << "deleting";
         if (beginInN > -1)
         {
             if (endInN > -1)
@@ -143,6 +155,7 @@ Matrix LineSegment::calculateIntersections()
                 if (beginInN == endInN)
                 {
                     //отрезок полностью внутри другого, значит не нужен
+                    if (debug) qDebug() << "отрезок полностью внутри другого, значит не нужен";
                     continue;
                 } else
                 {
@@ -161,11 +174,13 @@ Matrix LineSegment::calculateIntersections()
                         begin.removeAt(endInN);
                         end.removeAt(endInN);
                     }
+                    if (debug) qDebug() << "начало и конец в отрезках";
                     begin.push_back(b);
                     end.push_back(e);
                 }
             } else
             {
+                if (debug) qDebug() << "начало в отрезке";
                 b = begin.at(beginInN);
                 begin.removeAt(beginInN);
                 end.removeAt(beginInN);
@@ -176,7 +191,8 @@ Matrix LineSegment::calculateIntersections()
         {
             if (endInN > -1)
             {
-                e = begin.at(endInN);
+                if (debug) qDebug() << "конец в отрезке";
+                e = end.at(endInN);
                 begin.removeAt(endInN);
                 end.removeAt(endInN);
                 begin.push_back(b);
@@ -189,22 +205,41 @@ Matrix LineSegment::calculateIntersections()
         }
     }
     Matrix result;
-    result.addLine(begin.at(0), end.at(0), 0, 0);
-    for (int i = 1; i < begin.size(); i++)
-    {
-        for (int j=0; j<result.getHeight(); j++)
+    if (debug) qDebug() << "results";
+    /*for (int i = 0; i < begin.size(); i++)
         {
-            if (result.getElement(j,0)>result.getElement(i,0))
+           result.addLine(begin.at(i), end.at(i), 0, 0);
+        }*/
+
+    if (debug)
+    {
+        for (int i = 0; i < begin.size(); i++)
             {
+               qDebug() << "begin = " << begin.at(i) << " end = " << end.at(i);
+            }
+    }
+
+    if (begin.size() > 0)
+    {
+        result.addLine(begin.at(0), end.at(0), 0, 0);
+        for (int i = 1; i < begin.size(); i++)
+        {
+            for (int j=0; j<result.getHeight(); j++)
+            {
+                if (result.getElement(j,0)>begin.at(i))
+                {
                 result.addFirstLine(begin.at(i), end.at(i), 0, 0);
+                if (debug) qDebug() << "added in middle";
                 break;
-            }else
-            {
+                }else
+                {
                 if (j==result.getHeight()-1)
-                {result.addLine(begin.at(i), end.at(i), 0, 0);}
+                {result.addLine(begin.at(i), end.at(i), 0, 0); if (debug) qDebug() << "added as last" << j; break;}
+                }
             }
         }
     }
+    if (debug) qDebug() << "return";
     return result;
 }
 

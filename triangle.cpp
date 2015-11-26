@@ -75,10 +75,10 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     if (s*p > EPSILON*0.01 && s1*p1 > EPSILON*0.01 && s2*p2 > EPSILON*0.01)
     {
        /* qDebug() << " s = " << s << " s1 = " << s1 << " s2 = " << s2;*/
-        qDebug() << "a = " << a << "b = " << b << "c = " << c;
+        /*qDebug() << "a = " << a << "b = " << b << "c = " << c;
         qDebug() << "x1 = " << x1 << "y1 = " << y1 << "z1 = " << z1;
         qDebug() << "x2 = " << x2 << "y2 = " << y2 << "z2 = " << z2;
-        qDebug() << "x3 = " << x3 << "y3 = " << y3 << "z3 = " << z3;
+        qDebug() << "x3 = " << x3 << "y3 = " << y3 << "z3 = " << z3;*/
         return true;
     }
     else
@@ -137,19 +137,12 @@ bool Triangle::isApex(int pointNumber)
 
 bool Triangle::isEdge(LineSegment *ls)
 {
-    /*int count = 0;
-    for (int i = 0; i < 3; i++)
+    if (this->isApex(ls->getFigurePoint(0)) && this->isApex(ls->getFigurePoint(1)))
     {
-       qDebug() << "1";
-       int currentNumber = pointNumbers.getElement(0,i);
-       qDebug() << "2";
-       if (currentNumber == ls->getFigurePoint(0)) {count++;}
-       qDebug() << "3";
-       if (currentNumber == ls->getFigurePoint(1)) {count++;}
+        return true;
     }
-    if (count == 2) {return true;}
-    return false;*/
-    return true;
+    return false;
+    //return true;
 }
 
 double Triangle::getCoord(int x, int y)

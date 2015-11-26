@@ -39,9 +39,9 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
             double cx = figure->getCoord(i*(N+1) + j + 1, 0);
             double cy = figure->getCoord(i*(N+1) + j + 1, 1);
             double cz = figure->getCoord(i*(N+1) + j + 1, 2);
-            qDebug() << "ax = " << ax << "ay = " << ay << "az = " << az;
+            /*qDebug() << "ax = " << ax << "ay = " << ay << "az = " << az;
             qDebug() << "bx = " << bx << "by = " << by << "bz = " << bz;
-            qDebug() << "cx = " << cx << "cy = " << cy << "cz = " << cz;
+            qDebug() << "cx = " << cx << "cy = " << cy << "cz = " << cz;*/
             abc.addLine(ax, ay, az, 0);
             abc.addLine(bx, by, bz, 0);
             abc.addLine(cx, cy, cz, 0);
@@ -168,7 +168,15 @@ Figure *TriangleSurface::getVisibleFigure()
         {
             //qDebug() << "j = " << j;
             Triangle *currentTr = triangles[j];
-            if (currentTr->isEdge(currentLS)) { continue;}
+            //if (currentTr->isEdge(currentLS)) { continue;}
+            if (currentTr->isApex(currentLS->getFigurePoint(0)))
+            {
+                if (currentTr->isApex(currentLS->getFigurePoint(1)))
+                {
+                    //qDebug() << "apex";
+                    continue;
+                }
+            }
             //лежат ли все точки отрезка за точками треугольника?
             if (false)//(this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(0)) && this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(1)))
             {
@@ -410,9 +418,7 @@ Figure *TriangleSurface::getVisibleFigure()
                 }
             }//if !false
         }//for j=0..triangles size
-        //if (i == 0) currentLS->intersections->print();
-        //if (i == 0) {qDebug() << "IIIII" << currentLS->intersections->getHeight();}
-        Matrix edgeParts = currentLS->calculateIntersections();
+        Matrix edgeParts = currentLS->calculateIntersections(false);
         edgeParts.addFirstLine(0,0,0,0);
         edgeParts.addLine(1,1,0,0);
         for (int j = 0; j < edgeParts.getHeight()-1; j++)

@@ -332,12 +332,15 @@ void Figure::draw(QPaintDevice *device)
 
     m = this->getFrontView(0);
     pen.setColor(Qt::green);
+    pen.setWidth(3);
     painter.setPen(pen);
     for (int i=0; i<h; i++)
     {
         for (int j=0; j<h; j++)
         {
             // i^j=j^i
+            //if (this->getSize() - i >= 4 || this->getSize() - j >= 4) {pen.setColor(Qt::red);} else {pen.setColor(Qt::green);}
+           // painter.setPen(pen);
             if (j>i) continue;
             //if (i == 55) {pen.setColor(Qt::black); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
             //if (i == 186) {pen.setColor(Qt::red); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}

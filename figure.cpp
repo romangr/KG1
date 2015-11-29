@@ -332,7 +332,7 @@ void Figure::draw(QPaintDevice *device)
 
     m = this->getFrontView(0);
     pen.setColor(Qt::green);
-    pen.setWidth(3);
+    //pen.setWidth(3);
     painter.setPen(pen);
     for (int i=0; i<h; i++)
     {

@@ -14,6 +14,7 @@ private:
     QVector<Triangle*> triangles;
     QVector<LineSegment*> lineSegments;
     int N;
+    bool debug;
 public:
     TriangleSurface(int n);
     TriangleSurface(RuledSurface &r);

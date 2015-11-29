@@ -20,7 +20,7 @@ TriangleSurface::TriangleSurface(int n)
 TriangleSurface::TriangleSurface(RuledSurface &r)
 {
     debug = false;
-    N = 8;
+    N = 16;
     this->surface = &r;
     this->figure = this->surface->getFigure(N);
     //this->figure->turn(2,30);
@@ -162,6 +162,7 @@ void TriangleSurface::turn(char axis, double angle)
 Figure *TriangleSurface::getVisibleFigure()
 {
     Figure *f = new Figure();
+    int count = 0;
     for (int i = 0; i < this->lineSegments.size(); i++)
     {
         //qDebug() << "i = " << i;
@@ -480,7 +481,7 @@ Figure *TriangleSurface::getVisibleFigure()
                                     currentLS->addIntersection(0,t_intersections[0]);
                                 } else
                                 {
-                                    qDebug() << "конец отрезка за треугольником";
+                                    if (debug) qDebug() << "конец отрезка за треугольником";
                                     currentLS->addIntersection(t_intersections[0],1);
                                 }
                             }
@@ -540,8 +541,9 @@ Figure *TriangleSurface::getVisibleFigure()
         }//for j=0..triangles size
 
         Matrix edgeParts;
-        if (i == 353) edgeParts = currentLS->calculateIntersections(false);
-                else edgeParts = currentLS->calculateIntersections(false);
+        //if (i == 353) edgeParts = currentLS->calculateIntersections(false);
+                /*else*/ edgeParts = currentLS->calculateIntersections(false);
+        if (edgeParts.getHeight() > 0) {count++;}
         edgeParts.addFirstLine(0,0,0,0);
         edgeParts.addLine(1,1,0,0);
         for (int j = 0; j < edgeParts.getHeight()-1; j++)
@@ -563,6 +565,7 @@ Figure *TriangleSurface::getVisibleFigure()
             f->setEdge(figureSize+1, figureSize+2, true);
         }
     }
+    qDebug() << "Изменено " << count << "ребер";
     return f;
 }
 

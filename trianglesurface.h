@@ -13,11 +13,14 @@ private:
     Figure oldF;
     QVector<Triangle*> triangles;
     QVector<LineSegment*> lineSegments;
+    void fillTriangles();
+    void fillLineSegments();
     int N;
     bool debug;
 public:
     TriangleSurface(int n);
     TriangleSurface(RuledSurface &r);
+    TriangleSurface(RuledSurface &r, int N);
     void turn(char axis, double angle);
     Figure *getVisibleFigure();
     ~TriangleSurface();

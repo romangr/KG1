@@ -32,6 +32,7 @@ public:
     void autoscale_parabols(QPaintDevice *device,int k);
     void draw(QPaintDevice *device);
     void resetLastCoord();
+    void roundCoords();
     Figure *getCopy();
     ~Figure();
 };

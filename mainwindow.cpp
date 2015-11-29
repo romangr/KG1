@@ -34,7 +34,7 @@ void MainWindow::set_coord_clicked()
     x3 = this->ui->lineEdit_7->text().toDouble();
     y3 = this->ui->lineEdit_8->text().toDouble();
     z3 = this->ui->lineEdit_9->text().toDouble();
-    Parabola p1(x1,y1,z1,x2,y2,z2,x3,y3,z3);
+    Parabola *p1 = new Parabola(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     x1 = this->ui->lineEdit_10->text().toDouble();
     y1 = this->ui->lineEdit_11->text().toDouble();
@@ -47,11 +47,11 @@ void MainWindow::set_coord_clicked()
     x3 = this->ui->lineEdit_16->text().toDouble();
     y3 = this->ui->lineEdit_17->text().toDouble();
     z3 = this->ui->lineEdit_18->text().toDouble();
-    Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
+    Parabola *p2 = new Parabola(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     k = this->ui->lineEdit_19->text().toInt();
     qDebug() <<"Oh,no! magic!";
-    RuledParabols *rp = new RuledParabols(p1,p2);
+    RuledParabols *rp = new RuledParabols(*p1,*p2);
     qDebug() <<"stop!";
 
     qDebug() <<"no magic!";
@@ -81,9 +81,12 @@ void MainWindow::turn_button_clicked()
     int axis = this->ui->comboBox->currentIndex();
     double angle = this->ui->lineEdit_25->text().toDouble();
     //fig1->turn(axis,angle);
+    qDebug() << "1";
     this->ts->turn(axis, angle);
-    delete(fig1);
+    //if (fig1 != NULL) delete fig1;
+    qDebug() << "2";
     fig1 = ts->getVisibleFigure();
+    qDebug() << "3";
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
 }

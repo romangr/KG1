@@ -1,30 +1,13 @@
 #include "trianglesurface.h"
 #include <QDebug>
 
-TriangleSurface::TriangleSurface(int n)
+void TriangleSurface::fillTriangles()
 {
-    Matrix trMatrix;
-    trMatrix.addLine(-50, 0, 0, 0);
-    trMatrix.addLine(50, 0, 0, 0);
-    trMatrix.addLine(0, 50, -20, 0);
-    Triangle *triangle = new Triangle(trMatrix,0,1,2);
-    this->triangles.push_back(triangle);
-    //LineSegment *lnSegment = new LineSegment(0, -20, -50, 0, 70, 60); //протыкает
-    //LineSegment *lnSegment = new LineSegment(-20, -20, -50, 20, 70, 60);
-    LineSegment *lnSegment = new LineSegment(5, 10, -20, 5, 70, -30);
-    lnSegment->setFigurePoints(0,5);
-    this->lineSegments.push_back(lnSegment);
-    debug = true;
-}
-
-TriangleSurface::TriangleSurface(RuledSurface &r)
-{
-    debug = false;
-    N = 16;
-    this->surface = &r;
-    this->figure = this->surface->getFigure(N);
-    //this->figure->turn(2,30);
-
+    while (triangles.size() > 0)
+    {
+        delete triangles[0];
+        triangles.removeFirst();
+    }
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -74,6 +57,15 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
             triangles.push_back(tr);
         }
     }
+}
+
+void TriangleSurface::fillLineSegments()
+{
+    while (lineSegments.size() > 0)
+    {
+        delete lineSegments[0];
+        lineSegments.removeFirst();
+    }
     //creating list of edges
     for (int i = 0; i < this->figure->getSize(); i++)
     {
@@ -95,68 +87,62 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
             }
         }
     }
+}
+
+TriangleSurface::TriangleSurface(int n)
+{
+    Matrix trMatrix;
+    trMatrix.addLine(-50, 0, 0, 0);
+    trMatrix.addLine(50, 0, 0, 0);
+    trMatrix.addLine(0, 50, -20, 0);
+    Triangle *triangle = new Triangle(trMatrix,0,1,2);
+    this->triangles.push_back(triangle);
+    //LineSegment *lnSegment = new LineSegment(0, -20, -50, 0, 70, 60); //протыкает
+    //LineSegment *lnSegment = new LineSegment(-20, -20, -50, 20, 70, 60);
+    LineSegment *lnSegment = new LineSegment(5, 10, -20, 5, 70, -30);
+    lnSegment->setFigurePoints(0,5);
+    this->lineSegments.push_back(lnSegment);
+    debug = true;
+}
+
+TriangleSurface::TriangleSurface(RuledSurface &r)
+{
+    debug = false;
+    N = 16;
+    this->surface = &r;
+    if (this->surface == NULL)
+    {
+        qDebug() << "Ошибка задания поверхности, указатель на нее нулевой";
+    }
+    this->figure = this->surface->getFigure(N);
+    this->figure->turn(0,30);
+    this->figure->roundCoords();
+    this->fillTriangles();
+    this->fillLineSegments();
+    qDebug() << "edges count = " << this->lineSegments.size();
+}
+
+TriangleSurface::TriangleSurface(RuledSurface &r, int N)
+{
+    debug = false;
+    this->N = N;
+    this->surface = &r;
+    if (this->surface == NULL)
+    {
+        qDebug() << "Ошибка задания поверхности, указатель на нее нулевой";
+    }
+    this->figure = this->surface->getFigure(N);
+    this->fillTriangles();
+    this->fillLineSegments();
     qDebug() << "edges count = " << this->lineSegments.size();
 }
 
 void TriangleSurface::turn(char axis, double angle)
 {
     this->figure->turn(axis, angle);
-
-    for (int j = 0; j < N*N*2; j++)
-    {
-        Triangle *tr = triangles[0];
-        triangles.removeAt(0);
-        delete(tr);
-    }
-
-
-    for (int i = 0; i < (N); i++)
-    {
-        for (int j = 0; j < (N); j++)
-        {
-            Matrix abc;
-            double ax = figure->getCoord(i*(N+1) + j, 0);
-            double ay = figure->getCoord(i*(N+1) + j, 1);
-            double az = figure->getCoord(i*(N+1) + j, 2);
-
-            double bx = figure->getCoord((i+1)*(N+1) + j, 0);
-            double by = figure->getCoord((i+1)*(N+1) + j, 1);
-            double bz = figure->getCoord((i+1)*(N+1) + j, 2);
-
-            double cx = figure->getCoord(i*(N+1) + j + 1, 0);
-            double cy = figure->getCoord(i*(N+1) + j + 1, 1);
-            double cz = figure->getCoord(i*(N+1) + j + 1, 2);
-
-            abc.addLine(ax, ay, az, 0);
-            abc.addLine(bx, by, bz, 0);
-            abc.addLine(cx, cy, cz, 0);
-
-            Triangle *tr = new Triangle(abc, i*(N+1) + j, (i+1)*(N+1) + j, i*(N+1) + j + 1);
-
-            triangles.push_back(tr);
-
-            Matrix def;
-            double dx = figure->getCoord(i*(N+1) + j + 1, 0);
-            double dy = figure->getCoord(i*(N+1) + j + 1, 1);
-            double dz = figure->getCoord(i*(N+1) + j + 1, 2);
-
-            double ex = figure->getCoord((i+1)*(N+1) + j + 1, 0);
-            double ey = figure->getCoord((i+1)*(N+1) + j + 1, 1);
-            double ez = figure->getCoord((i+1)*(N+1) + j + 1, 2);
-
-            double fx = figure->getCoord((i+1)*(N+1) + j, 0);
-            double fy = figure->getCoord((i+1)*(N+1) + j, 1);
-            double fz = figure->getCoord((i+1)*(N+1) + j, 2);
-
-            def.addLine(dx, dy, dz, 0);
-            def.addLine(ex, ey, ez, 0);
-            def.addLine(fx, fy, fz, 0);
-
-            tr = new Triangle(def, i*(N+1) + j + 1, (i+1)*(N+1) + j + 1, (i+1)*(N+1) + j);
-
-            triangles.push_back(tr);
-        }
-    }
+    this->fillTriangles();
+    this->fillLineSegments();
+    qDebug() << "edges count = " << this->lineSegments.size();
 }
 
 Figure *TriangleSurface::getVisibleFigure()
@@ -289,7 +275,7 @@ Figure *TriangleSurface::getVisibleFigure()
                             case 2: side = new LineSegment(x1, y1, z1, x3, y3, z3); break;
                             }
                             double z_tr = side->getZ(side->getTbyX(x_p));
-                            delete(side);
+                            delete side;
                             if (z_tr < z_p) {flag[k1] = true;}
                         }
                         if (flag[0] && flag[1])
@@ -359,6 +345,7 @@ Figure *TriangleSurface::getVisibleFigure()
                                 case 2: side = new LineSegment(x1, y1, z1, x3, y3, z3); break;
                                 }
                                 double z_tr = side->getZ(side->getTbyX(x_p)); //координата стороны в точке пересечения с отрезком
+                                delete side;
                                 if (z_tr < z_p)
                                 {
                                     //qDebug() << "z_tr < z_p";
@@ -380,7 +367,7 @@ Figure *TriangleSurface::getVisibleFigure()
                                         currentLS->addIntersection(t_intersections[0], t_intresect);
                                     }
                                 }
-                                delete(side);
+                                //delete(side);
                                 continue;
                             } else //неопределенность с двумя точками
                             {
@@ -421,6 +408,7 @@ Figure *TriangleSurface::getVisibleFigure()
                             case 2: side1 = new LineSegment(x1, y1, z1, x3, y3, z3); break;
                             }
                             double z_tr1 = side1->getZ(side1->getTbyX(x_p1)); //координата стороны в точке пересечения с отрезком
+                            delete side1;
                             if (z_tr1 > z_p1)
                             {
                                 if (t_intresect > t_intersections[0])
@@ -472,6 +460,7 @@ Figure *TriangleSurface::getVisibleFigure()
                             case 2: side = new LineSegment(x1, y1, z1, x3, y3, z3); break;
                             }
                             double z_tr = side->getZ(side->getTbyX(x_p));
+                            delete side;
                             if (z_tr > z_p)
                             {
                                 if (debug) qDebug() << "отрезок частично за треугольником, режем";
@@ -573,8 +562,12 @@ TriangleSurface::~TriangleSurface()
 {
     for (int j = 0; j < triangles.size(); j++)
     {
-        delete(triangles[j]);
+        delete triangles[j];
     }
-    delete(figure);
+    for (int j = 0; j< lineSegments.size(); j++)
+    {
+        delete lineSegments[j];
+    }
+    delete figure;
 }
 

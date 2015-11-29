@@ -358,6 +358,21 @@ void Figure::resetLastCoord()
     *this->coords_last = *coords;
 }
 
+void Figure::roundCoords()
+{
+    for (int i = 0; i < this->coords->getHeight(); i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            double currentCoord = this->coords->getElement(i,j);
+            int currentRoundCoord = currentCoord;
+            double difference = currentCoord - currentRoundCoord;
+            if (difference >= 0.5) {currentRoundCoord++;}
+            this->coords->setElement(i,j,currentRoundCoord);
+        }
+    }
+}
+
 Figure *Figure::getCopy()
 {
     Figure *f = new Figure();

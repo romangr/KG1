@@ -51,12 +51,12 @@ void MainWindow::set_coord_clicked()
 
     k = this->ui->lineEdit_19->text().toInt();
     qDebug() <<"Oh,no! magic!";
-    //RuledParabols *rp = new RuledParabols(p1,p2);
+    RuledParabols *rp = new RuledParabols(p1,p2);
     qDebug() <<"stop!";
 
     qDebug() <<"no magic!";
-    //ts = new TriangleSurface(*rp);
-    ts = new TriangleSurface(0);
+    ts = new TriangleSurface(*rp);
+    //ts = new TriangleSurface(0);
     qDebug() <<"magic!";
     //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
     fig1 = ts->getVisibleFigure();
@@ -64,13 +64,13 @@ void MainWindow::set_coord_clicked()
     trMatrix.addLine(50, 0, 0, 0);
     trMatrix.addLine(0, 50, -20, 0);*/
 
-    fig1->addPoint(-50,0,0);
+    /*fig1->addPoint(-50,0,0);
     fig1->addPoint(50,0,0);
     fig1->addPoint(0,50,-20);
     int fig1Size = fig1->getSize();
     fig1->setEdge(fig1Size, fig1Size - 1, true);
     fig1->setEdge(fig1Size, fig1Size - 2, true);
-    fig1->setEdge(fig1Size - 1, fig1Size - 2, true);
+    fig1->setEdge(fig1Size - 1, fig1Size - 2, true);*/
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
     //delete(rp);

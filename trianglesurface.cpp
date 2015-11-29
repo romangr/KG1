@@ -19,7 +19,7 @@ TriangleSurface::TriangleSurface(int n)
 TriangleSurface::TriangleSurface(RuledSurface &r)
 {
 
-    N = 16;
+    N = 8;
     this->surface = &r;
 
     this->figure = this->surface->getFigure(N);
@@ -477,11 +477,11 @@ Figure *TriangleSurface::getVisibleFigure()
                                 if (currentTr->isInProjection(currentLS->getCoord(0,0), currentLS->getCoord(0,1)))
                                 {
                                     qDebug() << "начало отрезка за треугольником";
-                                    currentLS->addIntersection(0,t_intersections[i]);
+                                    currentLS->addIntersection(0,t_intersections[0]);
                                 } else
                                 {
                                     qDebug() << "конец отрезка за треугольником";
-                                    currentLS->addIntersection(t_intersections[i],1);
+                                    currentLS->addIntersection(t_intersections[0],1);
                                 }
                             }
                         } else
@@ -491,6 +491,15 @@ Figure *TriangleSurface::getVisibleFigure()
                     }
                 } else
                 {
+                    //концы отрезка за плоскостью
+                    if (!currentTr->isInProjection(currentLS->getCoord(0,0), currentLS->getCoord(0,1)))
+                    {
+                        if (!currentTr->isInProjection(currentLS->getCoord(1,0), currentLS->getCoord(1,1)))
+                        {
+                            qDebug() << "начало и конец отрезка за плоскостью";
+                            continue;
+                        }
+                    }
                     //проверить пересечение с плоскостью
                     qDebug() << "проверка пересечения с плоскостью, когда нет пересечения с проекцией";
                     double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);

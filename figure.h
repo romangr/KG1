@@ -8,15 +8,11 @@ class Figure
 private:
     Matrix *adjacency;
     Matrix *coords;
-    Matrix *coords_last;
-    Matrix *coords_before_last;
-
     double frontViewScale;
 public:
     Figure();
-    Figure(Matrix& c);
-    //state 1=last, 2=before_last, default=current
-    Matrix getFrontView(int state);
+    Figure(Matrix& c);    
+    Matrix getFrontView();
     void printMatrix();
     void printAdjacency();
     void addPoint(double x,double y, double z);
@@ -33,7 +29,6 @@ public:
     void autoscale_basicXY(QPaintDevice *device);
     void autoscale_parabols(QPaintDevice *device,int k);
     void draw(QPaintDevice *device);
-    void resetLastCoord();
     void roundCoords();
     Figure *getCopy();
     ~Figure();

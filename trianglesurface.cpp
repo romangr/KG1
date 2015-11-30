@@ -24,9 +24,7 @@ void TriangleSurface::fillTriangles()
             double cx = figure->getCoord(i*(N+1) + j + 1, 0);
             double cy = figure->getCoord(i*(N+1) + j + 1, 1);
             double cz = figure->getCoord(i*(N+1) + j + 1, 2);
-            /*qDebug() << "ax = " << ax << "ay = " << ay << "az = " << az;
-            qDebug() << "bx = " << bx << "by = " << by << "bz = " << bz;
-            qDebug() << "cx = " << cx << "cy = " << cy << "cz = " << cz;*/
+
             abc.addLine(ax, ay, az, 0);
             abc.addLine(bx, by, bz, 0);
             abc.addLine(cx, cy, cz, 0);
@@ -89,7 +87,7 @@ void TriangleSurface::fillLineSegments()
     }
 }
 
-TriangleSurface::TriangleSurface(int n)
+TriangleSurface::TriangleSurface()
 {
     Matrix trMatrix;
     trMatrix.addLine(-50, 0, 0, 0);
@@ -115,7 +113,7 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
         qDebug() << "Ошибка задания поверхности, указатель на нее нулевой";
     }
     this->figure = this->surface->getFigure(N);
-    this->figure->turn(0,30);
+  //  this->figure->turn(0,30);
     this->figure->roundCoords();
     this->fillTriangles();
     this->fillLineSegments();
@@ -158,8 +156,7 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
         {
             //qDebug() << "tr.size" << triangles.size();
             //qDebug() << "j = " << j;
-            Triangle *currentTr = triangles[j];
-            //if (currentTr->isEdge(currentLS)) { continue;}
+            Triangle *currentTr = triangles[j];            
             if (currentTr->isApex(currentLS->getFigurePoint(0)))
             {
                 if (currentTr->isApex(currentLS->getFigurePoint(1)))
@@ -169,17 +166,16 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
                 }
             }
             //лежат ли все точки отрезка за точками треугольника?
-            if (false)//(this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(0)) && this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(1)))
+ /*           if (false)//(this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(0)) && this->triangles.at(j)->isBehindTriangle(this->lineSegments.at(i)->getZ(1)))
             {
                 //алгоритм отсечения отрезка выпуклым окном наоборот
             } else
-            {
+   */         {
                 if (debug) qDebug() << "always goes";
                 //лежат ли все точки отрезка перед точками треугольника?
                 if (currentTr->isInFrontOfTriangle(currentLS->getCoord(0,2)) && currentTr->isInFrontOfTriangle(currentLS->getCoord(1,2)))
                 {
                     //отрезок перед треугольником, можно рисовать
-
                     continue;
                 }
                 //пересекает ли отрезок проекцию треугольника?
@@ -551,8 +547,6 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
             }
             int figureSize = f->getSize();
 
-            // !!!!!!!!!!1
-            //похоже тут нужен frontviewscale, который сначала надо вытащить из старой фигуры
             f->addPoint(bx, by, bz);
             f->addPoint(ex, ey, ez);
             f->setEdge(figureSize+1, figureSize+2, true);

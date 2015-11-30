@@ -6,8 +6,6 @@
 Figure::Figure()
 {
     coords = new Matrix();
-    coords_last = new Matrix();
-    coords_before_last = new Matrix();
     adjacency = new Matrix();
     frontViewScale = 1;
 }
@@ -21,26 +19,14 @@ Figure::Figure(Matrix &c)
         return;
     }
     this->coords = new Matrix(c);
-    coords_before_last = new Matrix();
     adjacency = new Matrix();
     this->adjacency = new Matrix(c.getHeight(), c.getHeight());
     frontViewScale = 1;
 }
 
-Matrix Figure::getFrontView(int state)
+Matrix Figure::getFrontView()
 {
-    Matrix frontView;
-    switch (state) {
-   case 1:
-        frontView = *(this->coords_last);
-        break;
-    case 2:
-        frontView = *(this->coords_before_last);
-        break;
-    default:
-        frontView = *(this->coords);
-        break;
-    }
+    Matrix frontView= *(this->coords);
 
     Matrix frontViewTransform(4, 4);
     for (int i = 1; i <= 4; i*=2)
@@ -70,17 +56,10 @@ Figure::~Figure()
 {
     delete(coords);
     delete(adjacency);
-    delete(coords_last);
-    delete(coords_before_last);
 }
 
 void Figure::transform(Matrix &transformMatrix)
 {
-
-    //delete(this->coords_before_last);
-    this->coords_before_last = this->coords_last;
-    this->coords_last = this->coords;
-
     if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);
@@ -141,7 +120,6 @@ void Figure::turn(char axis, double angle)
 void Figure::addPoint(double x, double y, double z)
 {
     this->coords->addLine(x, y, z, 0);
-    //add to adjacency
     this->adjacency->enlarge();
 }
 
@@ -308,64 +286,18 @@ void Figure::draw(QPaintDevice *device)
     painter.drawLine(0,CentY,QWWidth,CentY);
     painter.drawLine(CentX,0,CentX,QWHeight);
 
-
-   /* m = this->getFrontView(2);
-    pen.setColor(Qt::red);
-    painter.setPen(pen);
-    for (int i=0; i<h; i++)
-    {
-        for (int j=0; j<h; j++)
-        {
-            // i^j=j^i
-            if (j>i) continue;
-
-            if (this->edgeExist(i,j))
-                { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
-
-        }
-    }*/
-    /*m = this->getFrontView(1);
-    pen.setColor(Qt::yellow);
-    painter.setPen(pen);
-    for (int i=0; i<h; i++)
-    {
-        for (int j=0; j<h; j++)
-        {
-            // i^j=j^i
-            if (j>i) continue;
-
-            if (this->edgeExist(i,j))
-                { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
-
-        }
-    }*/
-
-    m = this->getFrontView(0);
+    m = this->getFrontView();
     pen.setColor(Qt::green);
-    //pen.setWidth(3);
     painter.setPen(pen);
     for (int i=0; i<h; i++)
     {
-        for (int j=0; j<h; j++)
-        {
-            // i^j=j^i
-            //if (this->getSize() - i >= 4 || this->getSize() - j >= 4) {pen.setColor(Qt::red);} else {pen.setColor(Qt::green);}
-           // painter.setPen(pen);
-            if (j>i) continue;
-            //if (i == 55) {pen.setColor(Qt::black); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
-            //if (i == 186) {pen.setColor(Qt::red); painter.setPen(pen);} else {pen.setColor(Qt::green); painter.setPen(pen);}
+        for (int j=0; j<i; j++)
+        {          
             if (this->edgeExist(i,j))
                 { painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY); }
 
         }
     }
-}
-
-void Figure::resetLastCoord()
-{
-    delete(coords_before_last);
-    *this->coords_before_last = *coords;
-    *this->coords_last = *coords;
 }
 
 void Figure::roundCoords()

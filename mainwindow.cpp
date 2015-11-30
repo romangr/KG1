@@ -50,14 +50,12 @@ void MainWindow::set_coord_clicked()
     Parabola *p2 = new Parabola(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     k = this->ui->lineEdit_19->text().toInt();
-    qDebug() <<"Oh,no! magic!";
-    RuledParabols *rp = new RuledParabols(*p1,*p2);
-    qDebug() <<"stop!";
 
-    qDebug() <<"no magic!";
+    RuledParabols *rp = new RuledParabols(*p1,*p2);
+
     ts = new TriangleSurface(*rp);
     //ts = new TriangleSurface(0);
-    qDebug() <<"magic!";
+
     //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
     fig1 = ts->getVisibleFigure();
     /*trMatrix.addLine(-50, 0, 0, 0);
@@ -83,9 +81,15 @@ void MainWindow::turn_button_clicked()
     //fig1->turn(axis,angle);
     qDebug() << "1";
     this->ts->turn(axis, angle);
-    //if (fig1 != NULL) delete fig1;
+
+    double scale;
+    if (fig1 != NULL)
+    {
+        scale = fig1->getScale();
+        delete fig1;
+    }
     qDebug() << "2";    
-    fig1 = ts->getVisibleFigure(fig1->getScale());
+    fig1 = ts->getVisibleFigure(scale);
     qDebug() << "3";
 
     showWindow1->setFigure(fig1);

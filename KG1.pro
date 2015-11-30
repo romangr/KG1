@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     curve.cpp \
     trianglesurface.cpp \
     triangle.cpp \
-    linesegment.cpp
+    linesegment.cpp \
+    sidedfigure.cpp
 
 HEADERS  += mainwindow.h \
     figure.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     curve.h \
     trianglesurface.h \
     triangle.h \
-    linesegment.h
+    linesegment.h \
+    sidedfigure.h
 
 FORMS    += mainwindow.ui \
     showwindow.ui

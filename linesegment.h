@@ -11,6 +11,7 @@ private:
 
     int isInSegments(QVector<double> &begin, QVector<double> &end, double x);
     int fPoints[2];
+    //int planeSide;
 public:
     Matrix *intersections;
     LineSegment(Matrix& m);
@@ -24,6 +25,8 @@ public:
     void setFigurePoints(int x, int y);
     int getFigurePoint(int i);
     void addIntersection(double t1, double t2);
+    //void setPlaneSide(int side);
+    //int getPlaneSide();
     Matrix calculateIntersections(bool debug); //заменить на объединение, должен посчитать объединение вырезаемых отрезков
     ~LineSegment();
 };

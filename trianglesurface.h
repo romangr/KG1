@@ -15,6 +15,7 @@ private:
     QVector<LineSegment*> lineSegments;
     void fillTriangles();
     void fillLineSegments();
+    int getPlaneSide(Triangle *triangle);
     int N;
     bool debug;
 public:

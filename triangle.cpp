@@ -150,8 +150,31 @@ double Triangle::getCoord(int x, int y)
     return this->points->getElement(x, y);
 }
 
+void Triangle::setNormal(int point1, int point2, int point3, int point4)
+{
+    if (point1 > 2 || point2 > 2 || point3 > 2 || point4 > 2) {qDebug() << "Points must be from [0,2]"; return;}
+    //if (normal != NULL) { delete normal;} проверка не работает!
+    this->normal = new double[3];
+    double Ax = (points->getElement(point2,0) - points->getElement(point1,0));
+    double Ay = (points->getElement(point2,1) - points->getElement(point1,1));
+    double Az = (points->getElement(point2,2) - points->getElement(point1,2));
+    double Bx = (points->getElement(point4,0) - points->getElement(point3,0));
+    double By = (points->getElement(point4,1) - points->getElement(point3,1));
+    double Bz = (points->getElement(point4,2) - points->getElement(point3,2));
+    this->normal[0] = Ay*Bz - Az*By;
+    this->normal[1] = Az*Bx - Ax*Bz;
+    this->normal[2] = Ax*By - Ay*Bx;
+}
+
+double Triangle::getNormal(int i)
+{
+    if (i > 2) { qDebug() << "Index must be from [0,2]"; return 0;}
+    return this->normal[i];
+}
+
 Triangle::~Triangle()
 {
-    delete(points);
+    delete points;
+    delete normal;
 }
 

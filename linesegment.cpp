@@ -18,6 +18,7 @@ LineSegment::LineSegment(Matrix &m)
     this->coords = m;
     this->coords.addLine(m.getElement(1,0)-m.getElement(0,0), m.getElement(1,1)-m.getElement(0,1), m.getElement(1,2)-m.getElement(0,2), 0);
     this->intersections = new Matrix();
+    //this->planeSide = 0;
     //this->intersections->addLine(0, 1, 0, 0);
 }
 
@@ -27,6 +28,7 @@ LineSegment::LineSegment(double x1, double y1, double z1, double x2, double y2, 
     this->coords.addLine(x2, y2, z2, 0);
     this->coords.addLine(x2-x1, y2-y1, z2-z1, 0);
     this->intersections = new Matrix();
+    //this->planeSide = 0;
     //this->intersections->addLine(0, 1, 0, 0);
 }
 
@@ -88,6 +90,17 @@ void LineSegment::addIntersection(double t1, double t2)
 {
     this->intersections->addLine(t1, t2, 0, 0);
 }
+
+/*void LineSegment::setPlaneSide(int side)
+{
+    if (this->planeSide == 0)
+        this->planeSide = side;
+}*/
+
+/*int LineSegment::getPlaneSide()
+{
+    return this->planeSide;
+}*/
 
 Matrix LineSegment::calculateIntersections(bool debug)
 {

@@ -30,6 +30,7 @@ void TriangleSurface::fillTriangles()
             abc.addLine(cx, cy, cz, 0);
 
             Triangle *tr = new Triangle(abc, i*(N+1) + j, (i+1)*(N+1) + j, i*(N+1) + j + 1);
+            tr->setNormal(2, 0, 1, 0);
 
             triangles.push_back(tr);
 
@@ -51,6 +52,7 @@ void TriangleSurface::fillTriangles()
             def.addLine(fx, fy, fz, 0);
 
             tr = new Triangle(def, i*(N+1) + j + 1, (i+1)*(N+1) + j + 1, (i+1)*(N+1) + j);
+            tr->setNormal(1, 0, 2, 0);
 
             triangles.push_back(tr);
         }
@@ -84,6 +86,23 @@ void TriangleSurface::fillLineSegments()
                 this->lineSegments.append(ls);
             }
         }
+    }
+}
+
+int TriangleSurface::getPlaneSide(Triangle *triangle)
+{
+    //нормаль к OXY Nx = 0; Ny = 0;
+    double Nz = -10;
+    double norma = sqrt(triangle->getNormal(0)*triangle->getNormal(0) + triangle->getNormal(1)*triangle->getNormal(1)+
+                        triangle->getNormal(2)*triangle->getNormal(2));
+    double cosA = (triangle->getNormal(2) * Nz) / (norma * 10.0);
+    if (fabs(cosA) < 0.00000001) return 1;
+    if (cosA < 0)
+    {
+        return 2;
+    } else
+    {
+        return 1;
     }
 }
 
@@ -157,6 +176,7 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
     {
         //qDebug() << "i = " << i;
         LineSegment *currentLS = lineSegments[i];
+        int planeSide;
         for (int j = 0; j < this->triangles.size(); j++)
         {
             //qDebug() << "tr.size" << triangles.size();
@@ -167,6 +187,7 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
                 if (currentTr->isApex(currentLS->getFigurePoint(1)))
                 {
                     if (debug) qDebug() << "apex";
+                    planeSide = this->getPlaneSide(currentTr);
                     continue;
                 }
             }
@@ -551,10 +572,10 @@ Figure *TriangleSurface::getVisibleFigure(double scale)
                 continue;
             }
             int figureSize = f->getSize();
-
             f->addPoint(bx, by, bz);
             f->addPoint(ex, ey, ez);
             f->setEdge(figureSize+1, figureSize+2, true);
+            f->setEdge(figureSize+1, figureSize+2, planeSide);
         }
     }
     qDebug() << "Изменено " << count << "ребер";

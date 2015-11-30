@@ -5,7 +5,7 @@
 #include "matrix.h"
 class Figure
 {
-private:
+protected:
     Matrix *adjacency;
     Matrix *coords;
     double frontViewScale;
@@ -32,6 +32,11 @@ public:
     void roundCoords();
     Figure *getCopy();
     ~Figure();
+
+    //отдельный класс?
+    void setEdge(int point1, int point2, int side);
+    int getEdge(int point1, int point2);
+
 };
 
 #endif // FIGURE_H

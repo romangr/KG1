@@ -9,6 +9,7 @@ class Triangle
 {
 private:
     Matrix *points;
+    double *normal;
 
 public:
     Triangle(Matrix &m, double a, double b, double c);
@@ -19,6 +20,8 @@ public:
     bool isApex(int pointNumber);
     bool isEdge(LineSegment *ls);
     double getCoord(int x, int y);
+    void setNormal(int point1, int point2, int point3, int point4);
+    double getNormal(int i);
     Matrix pointNumbers;
     ~Triangle();
 };

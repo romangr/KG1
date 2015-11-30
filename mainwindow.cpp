@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fig1 = new Figure();
+    ts = NULL;
     showWindow1 = new TShowWindow(0,fig1);
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
 }
@@ -34,7 +35,7 @@ void MainWindow::set_coord_clicked()
     x3 = this->ui->lineEdit_7->text().toDouble();
     y3 = this->ui->lineEdit_8->text().toDouble();
     z3 = this->ui->lineEdit_9->text().toDouble();
-    Parabola p1(x1,y1,z1,x2,y2,z2,x3,y3,z3);
+    Parabola *p1 = new Parabola(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     x1 = this->ui->lineEdit_10->text().toDouble();
     y1 = this->ui->lineEdit_11->text().toDouble();
@@ -47,19 +48,24 @@ void MainWindow::set_coord_clicked()
     x3 = this->ui->lineEdit_16->text().toDouble();
     y3 = this->ui->lineEdit_17->text().toDouble();
     z3 = this->ui->lineEdit_18->text().toDouble();
-    Parabola p2(x1,y1,z1,x2,y2,z2,x3,y3,z3);
+    Parabola *p2 = new Parabola(x1,y1,z1,x2,y2,z2,x3,y3,z3);
 
     k = this->ui->lineEdit_19->text().toInt();
-    RuledParabols *rp = new RuledParabols(p1,p2);
 
-    ts = new TriangleSurface(*rp);
-    delete(rp);
-    //fig1 = rp->getFigure(k);//RuledParabols(p1,p2).getFigure(k);
+    RuledParabols *rp = new RuledParabols(*p1,*p2);
+
+    if (ts) {delete ts;} //re-entrance
+
+    ts = new TriangleSurface(*rp,k);
+    delete fig1;
+    delete rp;
+    delete p1;
+    delete p2;
+
     fig1 = ts->getVisibleFigure();
 
     showWindow1->setFigure(fig1);
-    showWindow1->activateWindow();
-
+    showWindow1->activateWindow();   
 }
 
 void MainWindow::turn_button_clicked()
@@ -67,13 +73,20 @@ void MainWindow::turn_button_clicked()
     int axis = this->ui->comboBox->currentIndex();
     double angle = this->ui->lineEdit_25->text().toDouble();
     //fig1->turn(axis,angle);
+    qDebug() << "1";
     this->ts->turn(axis, angle);
-    //delete(fig1); //какого чёрта это здесь вообще делает?!!
-    qDebug() <<"newshi1";
-    fig1 = ts->getVisibleFigure();
-    qDebug() <<"newshi2";
+
+    double scale;
+    if (fig1 != NULL)
+    {
+        scale = fig1->getScale();
+        delete fig1;
+    }
+    qDebug() << "2";    
+    fig1 = ts->getVisibleFigure(scale);
+    qDebug() << "3";
+
     showWindow1->setFigure(fig1);
-    qDebug() <<"newshi3";
     showWindow1->activateWindow();
 }
 
@@ -88,6 +101,7 @@ void MainWindow::show_button_clicked()
 
 void MainWindow::autoscale_clicked()
 {
-    this->fig1->autoscale_parabols(showWindow1,k);
+    //this->fig1->autoscale_parabols(showWindow1,k);
+    this->fig1->autoscale_basicXY(showWindow1);
     this->showWindow1->activateWindow();
 }

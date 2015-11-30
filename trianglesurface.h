@@ -10,15 +10,19 @@ class TriangleSurface
 private:
     RuledSurface *surface;
     Figure *figure;
-    Figure oldF;
+    Figure *originalFigure;
     QVector<Triangle*> triangles;
     QVector<LineSegment*> lineSegments;
+    void fillTriangles();
+    void fillLineSegments();
     int N;
+    bool debug;
 public:
-    TriangleSurface(int n);
+    TriangleSurface();
     TriangleSurface(RuledSurface &r);
+    TriangleSurface(RuledSurface &r, int N);
     void turn(char axis, double angle);
-    Figure *getVisibleFigure();
+    Figure *getVisibleFigure(double scale = 1);
     ~TriangleSurface();
 };
 

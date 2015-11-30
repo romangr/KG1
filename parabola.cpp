@@ -21,6 +21,21 @@ Parabola::Parabola(double x1, double y1, double z1, double x2, double y2, double
     Az1 = points->getElement(2, 2) - points->getElement(0, 2) - Az2;
 }
 
+Parabola::Parabola(Parabola &p)
+{
+    points = new Matrix();
+    *this->points = *p.points;
+    this->Ax0 = p.Ax0;
+    this->Ax2 = p.Ax2;
+    this->Ax1 = p.Ax1;
+    this->Ay0 = p.Ay0;
+    this->Ay2 = p.Ay2;
+    this->Ay1 = p.Ay1;
+    this->Az0 = p.Az0;
+    this->Az2 = p.Az2;
+    this->Az1 = p.Az1;
+}
+
 double Parabola::getX(double t)
 {
     return Ax0 + Ax1*t + Ax2*t*t;

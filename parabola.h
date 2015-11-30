@@ -12,6 +12,7 @@ private:
     double Az0, Az1, Az2;
 public:
     Parabola(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3);
+    Parabola(Parabola &p);
     double getX(double t);
     double getY(double t);
     double getZ(double t);

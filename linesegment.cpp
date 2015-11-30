@@ -32,16 +32,22 @@ LineSegment::LineSegment(double x1, double y1, double z1, double x2, double y2, 
 
 double LineSegment::getX(double t)
 {
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
     return this->coords.getElement(0,0) + this->coords.getElement(2,0)*t;
 }
 
 double LineSegment::getY(double t)
 {
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
     return this->coords.getElement(0,1) + this->coords.getElement(2,1)*t;
 }
 
 double LineSegment::getZ(double t)
 {
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
     return this->coords.getElement(0,2) + this->coords.getElement(2,2)*t;
 }
 
@@ -115,8 +121,6 @@ Matrix LineSegment::calculateIntersections(bool debug)
         if (e == -0) {e = 0;}
         if (e - b < 0.000001) {continue; if (debug) qDebug() << "continue0;";}
         if (!(b != e && e >= 0 && b >= 0)) {if (debug) {qDebug() << "continue;";}  continue;}
-        int beginInN = isInSegments(begin, end, b);
-        int endInN = isInSegments(begin, end, e);
         //проверка, не накроет ли этот отрезок другой целиком
         for (int j = 0; j < begin.size(); j++)
         {
@@ -148,6 +152,8 @@ Matrix LineSegment::calculateIntersections(bool debug)
             end.removeAt(toDelete.at(j));
         }
         if (debug) qDebug() << "deleting";
+        int beginInN = isInSegments(begin, end, b);
+        int endInN = isInSegments(begin, end, e);
         if (beginInN > -1)
         {
             if (endInN > -1)
@@ -192,6 +198,7 @@ Matrix LineSegment::calculateIntersections(bool debug)
             if (endInN > -1)
             {
                 if (debug) qDebug() << "конец в отрезке";
+                if (debug && endInN > (end.size()-1)) qDebug() << "stop it!";
                 e = end.at(endInN);
                 begin.removeAt(endInN);
                 end.removeAt(endInN);
@@ -219,7 +226,11 @@ Matrix LineSegment::calculateIntersections(bool debug)
             }
     }
 
-    if (begin.size() > 0)
+    for (int i = 0; i < begin.size(); i++)
+    {
+        result.addLine(begin.at(i), end.at(i), 0, 0);
+    }
+    /*if (begin.size() > 0)
     {
         result.addLine(begin.at(0), end.at(0), 0, 0);
         for (int i = 1; i < begin.size(); i++)
@@ -238,7 +249,7 @@ Matrix LineSegment::calculateIntersections(bool debug)
                 }
             }
         }
-    }
+    }*/
     if (debug) qDebug() << "return";
     return result;
 }

@@ -145,9 +145,10 @@ void TriangleSurface::turn(char axis, double angle)
     qDebug() << "edges count = " << this->lineSegments.size();
 }
 
-Figure *TriangleSurface::getVisibleFigure()
+Figure *TriangleSurface::getVisibleFigure(double scale)
 {
     Figure *f = new Figure();
+    f->setScale(scale);
     int count = 0;
     for (int i = 0; i < this->lineSegments.size(); i++)
     {
@@ -549,6 +550,9 @@ Figure *TriangleSurface::getVisibleFigure()
                 continue;
             }
             int figureSize = f->getSize();
+
+            // !!!!!!!!!!1
+            //похоже тут нужен frontviewscale, который сначала надо вытащить из старой фигуры
             f->addPoint(bx, by, bz);
             f->addPoint(ex, ey, ez);
             f->setEdge(figureSize+1, figureSize+2, true);

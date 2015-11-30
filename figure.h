@@ -15,7 +15,7 @@ private:
 public:
     Figure();
     Figure(Matrix& c);
-    //1=last, 2=before_last, default=current
+    //state 1=last, 2=before_last, default=current
     Matrix getFrontView(int state);
     void printMatrix();
     void printAdjacency();
@@ -23,6 +23,8 @@ public:
     void editPoint(int point, double x, double y, double z);
     double getCoord(int point, int coord);
     int getSize();
+    double getScale();
+    void setScale(double scale);
     void setEdge(int point1, int point2, bool state);
     void cutPoint(int point);
     bool edgeExist(int point1, int point2);

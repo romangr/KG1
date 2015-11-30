@@ -90,6 +90,16 @@ void Figure::transform(Matrix &transformMatrix)
     this->coords = newCoords;
 }
 
+double Figure::getScale()
+{
+    return frontViewScale;
+}
+
+void Figure::setScale(double scale)
+{
+    frontViewScale = scale;
+}
+
 void Figure::turn(char axis, double angle)
 {
     const double EPSILON = 0.000000000001;

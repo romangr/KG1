@@ -84,12 +84,9 @@ void MainWindow::turn_button_clicked()
     qDebug() << "1";
     this->ts->turn(axis, angle);
     //if (fig1 != NULL) delete fig1;
-    qDebug() << "2";
-    fig1 = ts->getVisibleFigure();
+    qDebug() << "2";    
+    fig1 = ts->getVisibleFigure(fig1->getScale());
     qDebug() << "3";
-
-    //пока что так #fixme
-    fig1->autoscale_basicXY(showWindow1);
 
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();

@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fig1 = new Figure();
+    ts = NULL;
     showWindow1 = new TShowWindow(0,fig1);
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
 }
@@ -52,11 +53,14 @@ void MainWindow::set_coord_clicked()
     k = this->ui->lineEdit_19->text().toInt();
 
     RuledParabols *rp = new RuledParabols(*p1,*p2);
+
+    if (ts) {delete ts;} //re-entrance
+
     ts = new TriangleSurface(*rp,k);
     delete fig1;
     delete rp;
-  //  delete p1; //А какого лешего у Parabola не определён конструктор копирования? У Curve тоже нету.
-  //  delete p2; //Оно по дефолту походу ссылку кидает. Мы же теряем указатели на p1, p2.
+    delete p1;
+    delete p2;
 
     fig1 = ts->getVisibleFigure();
 

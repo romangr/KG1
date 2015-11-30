@@ -63,7 +63,7 @@ void Figure::transform(Matrix &transformMatrix)
     if (transformMatrix.getHeight() != 4 || transformMatrix.getWidth() != 4) {qDebug() << "Transform matrix have to be 4x4"; return;}
     Matrix *newCoords = new Matrix();
     *newCoords = *(this->coords);
-
+    delete this->coords;
     *newCoords = *newCoords*transformMatrix;
 
     this->coords = newCoords;

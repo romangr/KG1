@@ -10,7 +10,7 @@ class TriangleSurface
 private:
     RuledSurface *surface;
     Figure *figure;
-    Figure oldF;
+    Figure *originalFigure;
     QVector<Triangle*> triangles;
     QVector<LineSegment*> lineSegments;
     void fillTriangles();

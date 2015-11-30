@@ -117,6 +117,15 @@
     <property name="text">
      <string>turn</string>
     </property>
+    <property name="autoRepeat">
+     <bool>false</bool>
+    </property>
+    <property name="autoRepeatDelay">
+     <number>300</number>
+    </property>
+    <property name="autoRepeatInterval">
+     <number>100</number>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
@@ -150,7 +159,7 @@
       <x>270</x>
       <y>50</y>
       <width>61</width>
-      <height>27</height>
+      <height>21</height>
      </rect>
     </property>
     <item>
@@ -462,7 +471,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

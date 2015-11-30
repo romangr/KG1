@@ -112,8 +112,8 @@ TriangleSurface::TriangleSurface(RuledSurface &r)
     {
         qDebug() << "Ошибка задания поверхности, указатель на нее нулевой";
     }
-    this->figure = this->surface->getFigure(N);
-  //  this->figure->turn(0,30);
+    this->originalFigure = this->surface->getFigure(N);
+    this->figure = this->originalFigure->getCopy();
     this->figure->roundCoords();
     this->fillTriangles();
     this->fillLineSegments();
@@ -129,7 +129,9 @@ TriangleSurface::TriangleSurface(RuledSurface &r, int N)
     {
         qDebug() << "Ошибка задания поверхности, указатель на нее нулевой";
     }
-    this->figure = this->surface->getFigure(N);
+    this->originalFigure = this->surface->getFigure(N);
+    this->figure = this->originalFigure->getCopy();
+    this->figure->roundCoords();
     this->fillTriangles();
     this->fillLineSegments();
     qDebug() << "edges count = " << this->lineSegments.size();
@@ -137,7 +139,10 @@ TriangleSurface::TriangleSurface(RuledSurface &r, int N)
 
 void TriangleSurface::turn(char axis, double angle)
 {
-    this->figure->turn(axis, angle);
+    this->originalFigure->turn(axis, angle);
+    if (figure != NULL) {delete figure;}
+    this->figure = originalFigure->getCopy();
+    this->figure->roundCoords();
     this->fillTriangles();
     this->fillLineSegments();
     qDebug() << "edges count = " << this->lineSegments.size();
@@ -567,5 +572,6 @@ TriangleSurface::~TriangleSurface()
         delete lineSegments[j];
     }
     delete figure;
+    delete originalFigure;
 }
 

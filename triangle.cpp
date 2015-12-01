@@ -4,6 +4,14 @@ Triangle::Triangle(Matrix &m, double a, double b, double c)
 {
     this->points = new Matrix(m);
     this->pointNumbers.addLine(a, b, c, 0);
+    this->normal = NULL;
+}
+
+Triangle::Triangle(Triangle &tri)
+{
+    *this->points = *tri.points;
+    *this->normal = *tri.normal;
+    this->pointNumbers = tri.pointNumbers;
 }
 
 bool Triangle::isUnderTriangle(double a, double b, double c)
@@ -153,7 +161,7 @@ double Triangle::getCoord(int x, int y)
 void Triangle::setNormal(int point1, int point2, int point3, int point4)
 {
     if (point1 > 2 || point2 > 2 || point3 > 2 || point4 > 2) {qDebug() << "Points must be from [0,2]"; return;}
-    //if (normal != NULL) { delete normal;} проверка не работает!
+    if (normal) { delete [] normal;}
     this->normal = new double[3];
     double Ax = (points->getElement(point2,0) - points->getElement(point1,0));
     double Ay = (points->getElement(point2,1) - points->getElement(point1,1));
@@ -175,6 +183,6 @@ double Triangle::getNormal(int i)
 Triangle::~Triangle()
 {
     delete points;
-    delete normal;
+    delete [] normal;
 }
 

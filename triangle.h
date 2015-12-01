@@ -13,6 +13,7 @@ private:
 
 public:
     Triangle(Matrix &m, double a, double b, double c);
+    Triangle(Triangle &tri);
     bool isUnderTriangle(double a, double b, double c); //за плоскостью
     bool isBehindTriangle(double z); //за треугольником, дальше вершин. НЕНАДО
     bool isInFrontOfTriangle(double z);

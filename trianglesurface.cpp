@@ -159,7 +159,7 @@ TriangleSurface::TriangleSurface(RuledSurface &r, int N)
 void TriangleSurface::turn(char axis, double angle)
 {
     this->originalFigure->turn(axis, angle);
-    if (figure != NULL) {delete figure;}
+    if (figure) {delete figure;}
     this->figure = originalFigure->getCopy();
     this->figure->roundCoords();
     this->fillTriangles();

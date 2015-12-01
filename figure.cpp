@@ -340,7 +340,7 @@ void Figure::draw(QPaintDevice *device)
             }
             if (this->getEdge(i, j) == 1)
             {
-                pen.setColor(Qt::green);
+                pen.setColor(Qt::blue);
                 painter.setPen(pen);
                 painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,QWHeight - m.getElement(j,1)+1-CentY);
             } else

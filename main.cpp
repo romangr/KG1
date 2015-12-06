@@ -14,11 +14,12 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     /*Matrix m;
-    m.addLine(0,0,0,0);
-    m.addLine(7,0,0,0);
+    m.addLine(0,0,-1,0);
+    m.addLine(7,0,-1,0);
     m.addLine(4,5,-1,0);
     Triangle *a1 = new Triangle(m, 0,0,0);
-    qDebug() << a1->isUnderTriangle(3, 4, -0.3);*/
+    qDebug() << a1->getZmax() << " " << a1->getZmin();*/
+    //qDebug() << a1->isUnderTriangle(3, 4, -0.3);
  /*   LineSegment *ls = new LineSegment(0,0,0,1,1,1);
     ls->addIntersection(0.9,0.95);
     ls->addIntersection(0,0.5);

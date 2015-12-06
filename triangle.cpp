@@ -153,6 +153,52 @@ bool Triangle::isEdge(LineSegment *ls)
     //return true;
 }
 
+double Triangle::getZmax()
+{
+    if (this->points->getElement(0,2) > this->points->getElement(1,2))
+    {
+        if (this->points->getElement(0,2) > this->points->getElement(2,2))
+        {
+            return this->points->getElement(0,2);
+        } else
+        {
+            return this->points->getElement(2,2);
+        }
+    } else
+    {
+        if (this->points->getElement(1,2) > this->points->getElement(2,2))
+        {
+            return this->points->getElement(1,2);
+        } else
+        {
+            return this->points->getElement(2,2);
+        }
+    }
+}
+
+double Triangle::getZmin()
+{
+    if (this->points->getElement(0,2) < this->points->getElement(1,2))
+    {
+        if (this->points->getElement(0,2) < this->points->getElement(2,2))
+        {
+            return this->points->getElement(0,2);
+        } else
+        {
+            return this->points->getElement(2,2);
+        }
+    } else
+    {
+        if (this->points->getElement(1,2) < this->points->getElement(2,2))
+        {
+            return this->points->getElement(1,2);
+        } else
+        {
+            return this->points->getElement(2,2);
+        }
+    }
+}
+
 double Triangle::getCoord(int x, int y)
 {
     return this->points->getElement(x, y);

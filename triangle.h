@@ -20,6 +20,8 @@ public:
     bool isInProjection(double a, double b);
     bool isApex(int pointNumber);
     bool isEdge(LineSegment *ls);
+    double getZmax();
+    double getZmin();
     double getCoord(int x, int y);
     void setNormal(int point1, int point2, int point3, int point4);
     double getNormal(int i);

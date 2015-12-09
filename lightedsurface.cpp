@@ -82,11 +82,179 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
      * то переходим на проверку со следующим элементом, иначе разрешаем противоречия.
      * Если они неразрешимы, то делим реугольник на части и рекурсивно запускаем функцию добавления.
      */
+    //QLinkedListIterator<Triangle*> it(sortedTriangles);
+    //it.toFront();
+    QLinkedList<Triangle*>::iterator it;
+    //if (!it.hasNext()) { qDebug() << "hasn't next element!"; return;}
+    Triangle *triangle_j;
+    bool isAdded = false;
+
+//    for (it.toFront(); it.hasNext(); triangle_j = it.next())
+    for (it = sortedTriangles.begin(); it != sortedTriangles.end(); ++it)
+    {
+        triangle_j = *it;
+        //triangle_j = triangle_j_it;
+        //triangle_j = (*triangle_j_it);
+        if (triangle->getZmax() < triangle_j->getZmin()) // Zmax < Zmin_j
+        {
+            sortedTriangles.insert(it, triangle);
+            isAdded = true;
+            break;
+        } else
+        {
+            if (triangle_j->getZmax() < triangle->getZmin()) //должен стоять дальше по списку, продолжаем поиск места;
+            {
+                continue;
+            } else
+            {
+                //необходимо разрешить противоречия
+                if (triangle->isToRightOrToLeft(triangle_j) || triangle->isAboveOrBelow(triangle_j)) //оболочки не пересекаются по координате X
+                {
+                    sortedTriangles.insert(it, triangle); //игнорируем противоречие
+                    isAdded = true;
+                    break; //не надо ли со следующими проверить?
+                } else
+                {
+                    //проверка, лежат ли треугольники один за плоскостью другого
+                    if (triangle->isUnderTriangle(triangle_j))
+                    {
+                        sortedTriangles.insert(it, triangle); //игнорируем противоречие
+                        isAdded = true;
+                        break;
+                    } else
+                    {
+                        if (triangle_j->isUnderTriangle(triangle))
+                        {
+                            //треугольник выше текущего, нужно искать место дальше
+                            continue;
+                        } else
+                        {
+                            //все плохо, надо искать пересечение
+                            Triangle *newTriangle1;
+                            Triangle *newTriangle2;
+                            Triangle *newTriangle3;
+                            QVector<int> n_intersections; //список сторон. пересекающих плоскость
+                            for (int j = 0; j < 2; j++)
+                            {
+                                if (triangle_j->doesIntersectPlane(triangle->getSide(j)))
+                                {
+                                    n_intersections.push_back(j);
+                                }
+                            } // по идее их всегда две
+                            //поиск точек пересечения
+                            QVector<double> t_intersections; //список точек пересечения плоскости
+                            for (int j = 0; j < n_intersections.size(); j++)
+                            {
+                                double t_intersect = triangle_j->getPlaneIntersectPoint(triangle->getSide(n_intersections[j]));
+                                t_intersections.push_back(t_intersect);
+                            }
+                            if (n_intersections[0] == 0)
+                            {
+                                LineSegment *side0 = triangle->getSide(0);
+                                double newX = side0->getX(t_intersections[0]);
+                                double newY = side0->getY(t_intersections[0]);
+                                double newZ = side0->getZ(t_intersections[0]);
+
+                                if (n_intersections[1] == 1)
+                                {
+                                    Matrix m1;
+                                    m1.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
+                                    m1.addLine(newX, newY, newZ, 0);
+                                    m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
+                                    newTriangle1 = new Triangle(m1, 0,0,0);
+
+                                    LineSegment *side1 = triangle->getSide(1);
+                                    double newX2 = side1->getX(t_intersections[1]);
+                                    double newY2 = side1->getY(t_intersections[1]);
+                                    double newZ2 = side1->getZ(t_intersections[1]);
+                                    Matrix m2;
+                                    m2.addLine(newX, newY, newZ, 0);
+                                    m2.addLine(newX2, newY2, newZ2, 0);
+                                    m2.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
+                                    newTriangle2 = new Triangle(m2, 0,0,0);
+
+                                    Matrix m3;
+                                    m3.addLine(newX, newY, newZ, 0);
+                                    m3.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
+                                    m3.addLine(newX2, newY2, newZ2, 0);
+                                    newTriangle3 = new Triangle(m3, 0,0,0);
+                                } else
+                                {
+                                    Matrix m1;
+                                    LineSegment *side2 = triangle->getSide(2);
+                                    double newX2 = side2->getX(t_intersections[1]);
+                                    double newY2 = side2->getY(t_intersections[1]);
+                                    double newZ2 = side2->getZ(t_intersections[1]);
+                                    m1.addLine(newX2, newY2, newZ2, 0);
+                                    m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
+                                    m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
+                                    newTriangle1 = new Triangle(m1, 0,0,0);
+
+                                    Matrix m2;
+                                    m2.addLine(newX, newY, newZ, 0);
+                                    m2.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
+                                    m2.addLine(newX2, newY2, newZ2, 0);
+                                    newTriangle2 = new Triangle(m2, 0,0,0);
+
+                                    Matrix m3;
+                                    m3.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
+                                    m3.addLine(newX, newY, newZ, 0);
+                                    m3.addLine(newX2, newY2, newZ2, 0);
+                                    newTriangle3 = new Triangle(m3, 0,0,0);
+                                }
+                            } else
+                            {
+                                LineSegment *side1 = triangle->getSide(1);
+                                double newX = side1->getX(t_intersections[0]);
+                                double newY = side1->getY(t_intersections[0]);
+                                double newZ = side1->getZ(t_intersections[0]);
+
+                                LineSegment *side2 = triangle->getSide(2);
+                                double newX2 = side2->getX(t_intersections[1]);
+                                double newY2 = side2->getY(t_intersections[1]);
+                                double newZ2 = side2->getZ(t_intersections[1]);
+
+                                Matrix m1;
+                                m1.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
+                                m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
+                                m1.addLine(newX, newY, newZ, 0);
+                                newTriangle1 = new Triangle(m1, 0,0,0);
+
+                                Matrix m2;
+                                m2.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
+                                m2.addLine(newX, newY, newZ, 0);
+                                m2.addLine(newX2, newY2, newZ2, 0);
+                                newTriangle2 = new Triangle(m2, 0,0,0);
+
+                                Matrix m3;
+                                m3.addLine(newX2, newY2, newZ2, 0);
+                                m3.addLine(newX, newY, newZ, 0);
+                                m3.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
+                                newTriangle3 = new Triangle(m3, 0,0,0);
+                            }
+
+                            //рекурсия типа
+                            addTriangleToSorted(newTriangle1);
+                            addTriangleToSorted(newTriangle2);
+                            addTriangleToSorted(newTriangle3);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (!isAdded)
+    {
+        sortedTriangles.push_back(triangle);
+    }
 }
 
 LightedSurface::LightedSurface()
 {
-
+    //this->triangles
+    this->figure = NULL;
+    this->originalFigure = NULL;
 }
 
 LightedSurface::LightedSurface(RuledSurface &r, int N)
@@ -107,7 +275,7 @@ LightedSurface::LightedSurface(RuledSurface &r, int N)
 
 LightedSurface::~LightedSurface()
 {
-    delete figure;
+    /*delete figure;
     delete originalFigure;
     while (triangles.size() > 0)
     {
@@ -116,8 +284,8 @@ LightedSurface::~LightedSurface()
     }
     while (sortedTriangles.size() > 0)
     {
-        delete sortedTriangles[0];
+        delete sortedTriangles.takeFirst();
         sortedTriangles.removeFirst();
-    }
+    }*/
 }
 

@@ -93,6 +93,20 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     {/*qDebug() << "last false";*/ return false;}
 }
 
+bool Triangle::isUnderTriangle(Triangle *triangle)
+{
+    bool isUnder = true;
+    for (int i = 0; i < 2; i++)
+    {
+        if (!this->isUnderTriangle(triangle->getCoord(i,0), triangle->getCoord(i,1), triangle->getCoord(i,2)))
+        {
+            isUnder = false;
+            break;
+        }
+    }
+    return isUnder;
+}
+
 bool Triangle::isBehindTriangle(double z)
 {
     if (z > this->points->getElement(0,2)) {return false;}
@@ -153,6 +167,33 @@ bool Triangle::isEdge(LineSegment *ls)
     //return true;
 }
 
+bool Triangle::doesIntersectPlane(LineSegment *lineSegment)
+{
+    bool isBeginningUnderPlane = this->isUnderTriangle(lineSegment->getCoord(0,0), lineSegment->getCoord(0,1), lineSegment->getCoord(0,2));
+    bool isEndUnderPlane = this->isUnderTriangle(lineSegment->getCoord(1,0), lineSegment->getCoord(1,1), lineSegment->getCoord(1,2));
+    if ((isBeginningUnderPlane && !isEndUnderPlane) || (!isBeginningUnderPlane && isEndUnderPlane))
+    {
+        return true;
+    }
+    return false;
+}
+
+LineSegment *Triangle::getSide(int i)
+{
+    LineSegment *lineSegment;
+    int side1;
+    int side2;
+    switch (i)
+    {
+    case 0: side1 = 0; side2 = 1; break;
+    case 1: side1 = 1; side2 = 2; break;
+    case 2: side1 = 0; side2 = 2; break;
+    }
+    lineSegment = new LineSegment(getCoord(side1,0), getCoord(side1,1), getCoord(side1,2),
+                                  getCoord(side2,0), getCoord(side2,1), getCoord(side2,2));
+    return lineSegment;
+}
+
 double Triangle::getZmax()
 {
     if (this->points->getElement(0,2) > this->points->getElement(1,2))
@@ -197,6 +238,156 @@ double Triangle::getZmin()
             return this->points->getElement(2,2);
         }
     }
+}
+
+double Triangle::getXmax()
+{
+    if (this->points->getElement(0,0) > this->points->getElement(1,0))
+    {
+        if (this->points->getElement(0,0) > this->points->getElement(2,0))
+        {
+            return this->points->getElement(0,0);
+        } else
+        {
+            return this->points->getElement(2,0);
+        }
+    } else
+    {
+        if (this->points->getElement(1,0) > this->points->getElement(2,0))
+        {
+            return this->points->getElement(1,0);
+        } else
+        {
+            return this->points->getElement(2,0);
+        }
+    }
+}
+
+double Triangle::getXmin()
+{
+    if (this->points->getElement(0,0) < this->points->getElement(1,0))
+    {
+        if (this->points->getElement(0,0) < this->points->getElement(2,0))
+        {
+            return this->points->getElement(0,0);
+        } else
+        {
+            return this->points->getElement(2,0);
+        }
+    } else
+    {
+        if (this->points->getElement(1,0) < this->points->getElement(2,0))
+        {
+            return this->points->getElement(1,0);
+        } else
+        {
+            return this->points->getElement(2,0);
+        }
+    }
+}
+
+double Triangle::getYmax()
+{
+    if (this->points->getElement(0,1) > this->points->getElement(1,1))
+    {
+        if (this->points->getElement(0,1) > this->points->getElement(2,1))
+        {
+            return this->points->getElement(0,1);
+        } else
+        {
+            return this->points->getElement(2,1);
+        }
+    } else
+    {
+        if (this->points->getElement(1,1) > this->points->getElement(2,1))
+        {
+            return this->points->getElement(1,1);
+        } else
+        {
+            return this->points->getElement(2,1);
+        }
+    }
+}
+
+double Triangle::getYmin()
+{
+    if (this->points->getElement(0,1) < this->points->getElement(1,1))
+    {
+        if (this->points->getElement(0,1) < this->points->getElement(2,1))
+        {
+            return this->points->getElement(0,1);
+        } else
+        {
+            return this->points->getElement(2,1);
+        }
+    } else
+    {
+        if (this->points->getElement(1,1) < this->points->getElement(2,1))
+        {
+            return this->points->getElement(1,1);
+        } else
+        {
+            return this->points->getElement(2,1);
+        }
+    }
+}
+
+double Triangle::getPlaneIntersectPoint(LineSegment *lineSegment)
+{
+    Triangle *currentTr = this;
+    LineSegment *currentLS = lineSegment;
+    double x1 = currentTr->getCoord(0,0); double x2 = currentTr->getCoord(1,0); double x3 = currentTr->getCoord(2, 0);
+    double y1 = currentTr->getCoord(0,1); double y2 = currentTr->getCoord(1,1); double y3 = currentTr->getCoord(2, 1);
+    double z1 = currentTr->getCoord(0,2); double z2 = currentTr->getCoord(1,2); double z3 = currentTr->getCoord(2, 2);
+
+    double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);
+    double B = z1*(x2 - x3) + z2*(x3 - x1) + z3*(x1 - x2);
+    double C = x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2);
+    double D = x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1);
+    D = -D;
+    double testFunctionBeginning = A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D;
+    double testFunctionEnd = A*currentLS->getCoord(1,0) + B*currentLS->getCoord(1,1) + C*currentLS->getCoord(1,2) + D;
+    double t_intersect;
+    if (testFunctionBeginning * testFunctionEnd < 0)
+    {
+        t_intersect = -(A*currentLS->getCoord(0,0) + B*currentLS->getCoord(0,1) + C*currentLS->getCoord(0,2) + D)/
+            (A*currentLS->getCoord(2,0) + B*currentLS->getCoord(2,1) + C*currentLS->getCoord(2,2));
+    } else
+    {
+        t_intersect = -1;
+    }
+    return t_intersect;
+}
+
+bool Triangle::isToRightOrToLeft(Triangle *triangle)
+{
+    /*bool isToRight = false;
+    bool isToLeft = false;*/
+
+    if (this->getXmax() < triangle->getXmin())
+    {
+        return true;
+    }
+
+    if (this->getXmin() > triangle->getXmax())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Triangle::isAboveOrBelow(Triangle *triangle)
+{
+    if (this->getYmax() < triangle->getYmin())
+    {
+        return true;
+    }
+
+    if (this->getYmin() > triangle->getYmax())
+    {
+        return true;
+    }
+    return false;
 }
 
 double Triangle::getCoord(int x, int y)

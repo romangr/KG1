@@ -6,8 +6,9 @@
 #include <math.h>
 #include "triangle.h"
 #include "linesegment.h"
-
+#include "lightedsurface.h"
 using namespace std;
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -32,5 +33,33 @@ int main(int argc, char *argv[])
     Figure *f = trs->getVisibleFigure();
     f->printMatrix();
     f->printAdjacency();*/
+
+    Matrix m;
+    m.addLine(0,0,-1,0);
+    m.addLine(7,0,-1,0);
+    m.addLine(4,5,-1,0);
+    Triangle *a1 = new Triangle(m, 0,0,0);
+    Matrix m2;
+    m2.addLine(10,0,-1,0);
+    m2.addLine(15,0,-1,0);
+    m2.addLine(14,5,-1,0);
+    Triangle *a3 = new Triangle(m2, 0,0,0);
+
+    LightedSurface lightedSurface;
+    lightedSurface.addTriangleToSorted(a1);
+    lightedSurface.addTriangleToSorted(a3);
+
+    //qDebug() << a2->getCoord(1,0);
+    QLinkedListIterator<Triangle*> it(lightedSurface.sortedTriangles);
+
+    while (it.hasNext())
+    {
+        Triangle *a2 = it.next();
+        qDebug() << "x = " << a2->getCoord(0,0) << "y = " << a2->getCoord(0,1) << "z = " << a2->getCoord(0,2);
+        qDebug() << "x = " << a2->getCoord(1,0) << "y = " << a2->getCoord(1,1) << "z = " << a2->getCoord(1,2);
+        qDebug() << "x = " << a2->getCoord(2,0) << "y = " << a2->getCoord(2,1) << "z = " << a2->getCoord(2,2);
+        qDebug() << "";
+    }
+
     return a.exec();
 }

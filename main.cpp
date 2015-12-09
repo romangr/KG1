@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     f->printAdjacency();*/
 
 
-    Matrix m;
+    /*Matrix m;
     m.addLine(-3,0,0,0);
     m.addLine(0,3,0,0);
     m.addLine(3,0,0,0);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         qDebug() << "x = " << a2->getCoord(1,0) << "y = " << a2->getCoord(1,1) << "z = " << a2->getCoord(1,2);
         qDebug() << "x = " << a2->getCoord(2,0) << "y = " << a2->getCoord(2,1) << "z = " << a2->getCoord(2,2);
         qDebug() << "";
-    }
+    }*/
 
     /*Matrix m;
     m.addLine(-3,0,0,0);

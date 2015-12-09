@@ -78,7 +78,7 @@ int LightedSurface::getPlaneSide(Triangle *triangle)
 void LightedSurface::addTriangleToSorted(Triangle *triangle)
 {
     bool debug = false;
-    qDebug() << "LightedSurface::addTriangleToSorted";
+    if (debug) qDebug() << "LightedSurface::addTriangleToSorted";
     /*
      * Добавляем с учетом условия Z(j)_max <= Z(j+1)_min, проверяем обратное условие, если оно выполняется,
      * то переходим на проверку со следующим элементом, иначе разрешаем противоречия.
@@ -99,7 +99,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
         //triangle_j = (*triangle_j_it);
         if (triangle->getZmax() < triangle_j->getZmin()) // Zmax < Zmin_j
         {
-            qDebug() << "Zmax < Zmin_j";
+            if (debug) qDebug() << "Zmax < Zmin_j";
             sortedTriangles.insert(it, triangle);
             isAdded = true;
             break;
@@ -107,7 +107,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
         {
             if (triangle_j->getZmax() < triangle->getZmin()) //должен стоять дальше по списку, продолжаем поиск места;
             {
-                qDebug() << "должен стоять дальше по списку, продолжаем поиск места";
+                if (debug) qDebug() << "должен стоять дальше по списку, продолжаем поиск места";
                 continue;
             } else
             {
@@ -116,28 +116,28 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                 {
                     sortedTriangles.insert(it, triangle); //игнорируем противоречие
                     isAdded = true;
-                    qDebug() << "игнорируем противоречие";
+                    if (debug) qDebug() << "игнорируем противоречие";
                     break; //не надо ли со следующими проверить?
                 } else
                 {
-                    qDebug() << "проверка, лежат ли треугольники один за плоскостью другого";
+                    if (debug) qDebug() << "проверка, лежат ли треугольники один за плоскостью другого";
                     //проверка, лежат ли треугольники один за плоскостью другого
                     if (triangle->isUnderTrianglePlane(triangle_j))
                     {
                         sortedTriangles.insert(it, triangle); //игнорируем противоречие
                         isAdded = true;
-                        qDebug() << "лежит за плоскостью";
+                        if (debug) qDebug() << "лежит за плоскостью";
                         break;
                     } else
                     {
                         if (triangle_j->isUnderTrianglePlane(triangle))
                         {
-                            qDebug() << "треугольник выше текущего, нужно искать место дальше";
+                            if (debug) qDebug() << "треугольник выше текущего, нужно искать место дальше";
                             //треугольник выше текущего, нужно искать место дальше
                             continue;
                         } else
                         {
-                            qDebug() << "все плохо, надо искать пересечение";
+                            if (debug) qDebug() << "все плохо, надо искать пересечение";
                             //все плохо, надо искать пересечение
                             Triangle *newTriangle1;
                             Triangle *newTriangle2;
@@ -147,11 +147,11 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                             {
                                 if (triangle_j->doesIntersectPlane(triangle->getSide(j)))
                                 {
-                                    qDebug() << triangle->getSide(j)->getCoord(0,0) << " " << triangle->getSide(j)->getCoord(0,1);
+                                    if (debug) qDebug() << triangle->getSide(j)->getCoord(0,0) << " " << triangle->getSide(j)->getCoord(0,1);
                                     n_intersections.push_back(j);
                                 }
                             } // по идее их всегда две (ну почти всегда)
-                            qDebug() << "n_intersections.size()" << n_intersections.size();
+                            if (debug) qDebug() << "n_intersections.size()" << n_intersections.size();
                             //поиск точек пересечения
                             if (n_intersections.size() == 0)
                             {
@@ -170,7 +170,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     isAdded = true;
                                     return;
                                 }
-                                qDebug() << n_intersections[j] << " " << t_intersect;
+                                if (debug) qDebug() << n_intersections[j] << " " << t_intersect;
 
                             }
                             //return; //debug;

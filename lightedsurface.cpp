@@ -77,6 +77,7 @@ int LightedSurface::getPlaneSide(Triangle *triangle)
 
 void LightedSurface::addTriangleToSorted(Triangle *triangle)
 {
+    qDebug() << "LightedSurface::addTriangleToSorted";
     /*
      * Добавляем с учетом условия Z(j)_max <= Z(j+1)_min, проверяем обратное условие, если оно выполняется,
      * то переходим на проверку со следующим элементом, иначе разрешаем противоречия.
@@ -141,21 +142,29 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                             Triangle *newTriangle2;
                             Triangle *newTriangle3;
                             QVector<int> n_intersections; //список сторон. пересекающих плоскость
-                            for (int j = 0; j < 2; j++)
+                            for (int j = 0; j < 3; j++)
                             {
                                 if (triangle_j->doesIntersectPlane(triangle->getSide(j)))
                                 {
+                                    qDebug() << triangle->getSide(j)->getCoord(0,0) << " " << triangle->getSide(j)->getCoord(0,1);
                                     n_intersections.push_back(j);
                                 }
-                            } // по идее их всегда две
+                            } // по идее их всегда две (ну почти всегда)
                             qDebug() << "n_intersections.size()" << n_intersections.size();
                             //поиск точек пересечения
+                            if (n_intersections.size() == 0)
+                            {
+                                sortedTriangles.insert(it, triangle); //игнорируем противоречие
+                                isAdded = true;
+                                break;
+                            }
                             QVector<double> t_intersections; //список точек пересечения плоскости
                             for (int j = 0; j < n_intersections.size(); j++)
                             {
                                 double t_intersect = triangle_j->getPlaneIntersectPoint(triangle->getSide(n_intersections[j]));
                                 t_intersections.push_back(t_intersect);
-                                qDebug() << t_intersect;
+                                //if (t_intersect == -1) {return;}
+                                qDebug() << n_intersections[j] << " " << t_intersect;
 
                             }
                             //return; //debug;

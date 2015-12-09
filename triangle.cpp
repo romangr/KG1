@@ -127,8 +127,9 @@ bool Triangle::isUnderTrianglePlane(double a, double b, double c)
 bool Triangle::isUnderTrianglePlane(Triangle *triangle)
 {
     bool isUnder = true;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 3; i++)
     {
+        //qDebug() << "i = " << i;
         if (!this->isUnderTrianglePlane(triangle->getCoord(i,0), triangle->getCoord(i,1), triangle->getCoord(i,2)))
         {
             //qDebug() << triangle->getCoord(i,0) << " " << triangle->getCoord(i,1) << " " << triangle->getCoord(i,2);
@@ -203,6 +204,8 @@ bool Triangle::doesIntersectPlane(LineSegment *lineSegment)
 {
     bool isBeginningUnderPlane = this->isUnderTrianglePlane(lineSegment->getCoord(0,0), lineSegment->getCoord(0,1), lineSegment->getCoord(0,2));
     bool isEndUnderPlane = this->isUnderTrianglePlane(lineSegment->getCoord(1,0), lineSegment->getCoord(1,1), lineSegment->getCoord(1,2));
+    /*qDebug() << "isBeginningUnderPlane = " << isBeginningUnderPlane;
+    qDebug() << "isEndUnderPlane = " << isEndUnderPlane;*/
     if ((isBeginningUnderPlane && !isEndUnderPlane) || (!isBeginningUnderPlane && isEndUnderPlane))
     {
         return true;

@@ -93,13 +93,45 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
     {/*qDebug() << "last false";*/ return false;}
 }
 
-bool Triangle::isUnderTriangle(Triangle *triangle)
+bool Triangle::isUnderTrianglePlane(double a, double b, double c)
+{
+    const double EPSILON = 0.01;
+    /*if (!((c < points->getElement(0,2)) && (c < points->getElement(1,2)) && (c < points->getElement(2,2)))) {
+        return false;
+    }*/
+    double s1;
+    double s;
+
+    double x1 = points->getElement(0,0); double x2 = points->getElement(1,0); double x3 = points->getElement(2, 0);
+    double y1 = points->getElement(0,1); double y2 = points->getElement(1,1); double y3 = points->getElement(2, 1);
+    double z1 = points->getElement(0,2); double z2 = points->getElement(1,2); double z3 = points->getElement(2, 2);
+    //уравнение плоскости треугольника
+    /*A = y1 (z2 - z3) + y2 (z3 - z1) + y3 (z1 - z2)
+    B = z1 (x2 - x3) + z2 (x3 - x1) + z3 (x1 - x2)
+    C = x1 (y2 - y3) + x2 (y3 - y1) + x3 (y1 - y2)
+    - D = x1 (y2 z3 - y3 z2) + x2 (y3 z1 - y1 z3) + x3 (y1 z2 - y2 z1)*/
+    double A = y1*(z2 - z3) + y2*(z3 - z1) + y3*(z1 - z2);
+    double B = z1*(x2 - x3) + z2*(x3 - x1) + z3*(x1 - x2);
+    double C = x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2);
+    double D = x1*(y2*z3 - y3*z2) + x2*(y3*z1 - y1*z3) + x3*(y1*z2 - y2*z1);
+    D = -D;
+
+    s = A*a + B*b + C*c + D;
+    if (fabs(s) < EPSILON*0.01) {/*qDebug() << "s < EPSILON*0.01";*/ return false;};
+    s1 = C*10000 + D;
+
+    if (s * s1 < 0) {/*qDebug() << "s*s1 > 0";*/ return true;}
+    return false;
+}
+
+bool Triangle::isUnderTrianglePlane(Triangle *triangle)
 {
     bool isUnder = true;
     for (int i = 0; i < 2; i++)
     {
-        if (!this->isUnderTriangle(triangle->getCoord(i,0), triangle->getCoord(i,1), triangle->getCoord(i,2)))
+        if (!this->isUnderTrianglePlane(triangle->getCoord(i,0), triangle->getCoord(i,1), triangle->getCoord(i,2)))
         {
+            //qDebug() << triangle->getCoord(i,0) << " " << triangle->getCoord(i,1) << " " << triangle->getCoord(i,2);
             isUnder = false;
             break;
         }
@@ -169,8 +201,8 @@ bool Triangle::isEdge(LineSegment *ls)
 
 bool Triangle::doesIntersectPlane(LineSegment *lineSegment)
 {
-    bool isBeginningUnderPlane = this->isUnderTriangle(lineSegment->getCoord(0,0), lineSegment->getCoord(0,1), lineSegment->getCoord(0,2));
-    bool isEndUnderPlane = this->isUnderTriangle(lineSegment->getCoord(1,0), lineSegment->getCoord(1,1), lineSegment->getCoord(1,2));
+    bool isBeginningUnderPlane = this->isUnderTrianglePlane(lineSegment->getCoord(0,0), lineSegment->getCoord(0,1), lineSegment->getCoord(0,2));
+    bool isEndUnderPlane = this->isUnderTrianglePlane(lineSegment->getCoord(1,0), lineSegment->getCoord(1,1), lineSegment->getCoord(1,2));
     if ((isBeginningUnderPlane && !isEndUnderPlane) || (!isBeginningUnderPlane && isEndUnderPlane))
     {
         return true;

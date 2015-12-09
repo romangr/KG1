@@ -97,6 +97,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
         //triangle_j = (*triangle_j_it);
         if (triangle->getZmax() < triangle_j->getZmin()) // Zmax < Zmin_j
         {
+            qDebug() << "Zmax < Zmin_j";
             sortedTriangles.insert(it, triangle);
             isAdded = true;
             break;
@@ -104,6 +105,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
         {
             if (triangle_j->getZmax() < triangle->getZmin()) //должен стоять дальше по списку, продолжаем поиск места;
             {
+                qDebug() << "должен стоять дальше по списку, продолжаем поиск места";
                 continue;
             } else
             {
@@ -112,23 +114,28 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                 {
                     sortedTriangles.insert(it, triangle); //игнорируем противоречие
                     isAdded = true;
+                    qDebug() << "игнорируем противоречие";
                     break; //не надо ли со следующими проверить?
                 } else
                 {
+                    qDebug() << "проверка, лежат ли треугольники один за плоскостью другого";
                     //проверка, лежат ли треугольники один за плоскостью другого
-                    if (triangle->isUnderTriangle(triangle_j))
+                    if (triangle->isUnderTrianglePlane(triangle_j))
                     {
                         sortedTriangles.insert(it, triangle); //игнорируем противоречие
                         isAdded = true;
+                        qDebug() << "лежит за плоскостью";
                         break;
                     } else
                     {
-                        if (triangle_j->isUnderTriangle(triangle))
+                        if (triangle_j->isUnderTrianglePlane(triangle))
                         {
+                            qDebug() << "треугольник выше текущего, нужно искать место дальше";
                             //треугольник выше текущего, нужно искать место дальше
                             continue;
                         } else
                         {
+                            qDebug() << "все плохо, надо искать пересечение";
                             //все плохо, надо искать пересечение
                             Triangle *newTriangle1;
                             Triangle *newTriangle2;
@@ -141,13 +148,17 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     n_intersections.push_back(j);
                                 }
                             } // по идее их всегда две
+                            qDebug() << "n_intersections.size()" << n_intersections.size();
                             //поиск точек пересечения
                             QVector<double> t_intersections; //список точек пересечения плоскости
                             for (int j = 0; j < n_intersections.size(); j++)
                             {
                                 double t_intersect = triangle_j->getPlaneIntersectPoint(triangle->getSide(n_intersections[j]));
                                 t_intersections.push_back(t_intersect);
+                                qDebug() << t_intersect;
+
                             }
+                            //return; //debug;
                             if (n_intersections[0] == 0)
                             {
                                 LineSegment *side0 = triangle->getSide(0);

@@ -14,8 +14,9 @@ private:
 public:
     Triangle(Matrix &m, double a, double b, double c);
     Triangle(Triangle &tri);
-    bool isUnderTriangle(double a, double b, double c); //за плоскостью
-    bool isUnderTriangle(Triangle *triangle);
+    bool isUnderTriangle(double a, double b, double c); //за плоскостью и в проекции треугольника
+    bool isUnderTrianglePlane(double a, double b, double c);
+    bool isUnderTrianglePlane(Triangle *triangle);
     bool isBehindTriangle(double z); //за треугольником, дальше вершин. НЕНАДО
     bool isInFrontOfTriangle(double z);
     bool isInProjection(double a, double b);

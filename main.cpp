@@ -34,20 +34,23 @@ int main(int argc, char *argv[])
     f->printMatrix();
     f->printAdjacency();*/
 
+    /*
     Matrix m;
-    m.addLine(0,0,-1,0);
-    m.addLine(7,0,-1,0);
-    m.addLine(4,5,-1,0);
+    m.addLine(-3,0,0,0);
+    m.addLine(0,3,0,0);
+    m.addLine(3,0,0,0);
     Triangle *a1 = new Triangle(m, 0,0,0);
     Matrix m2;
-    m2.addLine(10,0,-1,0);
-    m2.addLine(15,0,-1,0);
-    m2.addLine(14,5,-1,0);
+    m2.addLine(-2,-2,-1,0);
+    m2.addLine(0,1,1,0);
+    m2.addLine(2,2,-1,0);
     Triangle *a3 = new Triangle(m2, 0,0,0);
 
+
     LightedSurface lightedSurface;
-    lightedSurface.addTriangleToSorted(a1);
     lightedSurface.addTriangleToSorted(a3);
+    lightedSurface.addTriangleToSorted(a1);
+
 
     //qDebug() << a2->getCoord(1,0);
     QLinkedListIterator<Triangle*> it(lightedSurface.sortedTriangles);
@@ -59,7 +62,23 @@ int main(int argc, char *argv[])
         qDebug() << "x = " << a2->getCoord(1,0) << "y = " << a2->getCoord(1,1) << "z = " << a2->getCoord(1,2);
         qDebug() << "x = " << a2->getCoord(2,0) << "y = " << a2->getCoord(2,1) << "z = " << a2->getCoord(2,2);
         qDebug() << "";
-    }
+    }*/
 
+    /*Matrix m;
+    m.addLine(-3,0,0,0);
+    m.addLine(0,3,0,0);
+    m.addLine(3,0,0,0);
+    Triangle *a1 = new Triangle(m, 0,0,0);
+    Matrix m2;
+    m2.addLine(-1.5,1.5,0,0);
+    m2.addLine(0,2.5,-1,0);
+    m2.addLine(1.5,1.5,0,0);
+    Triangle *a3 = new Triangle(m2, 0,0,0);
+
+    qDebug() << a1->isUnderTrianglePlane(a3);
+    LineSegment *ls = a3->getSide(0);
+    qDebug() << "x = " << ls->getCoord(0,0) << "y = " << ls->getCoord(0,1) << "z = " << ls->getCoord(0,2);
+    qDebug() << "x = " << ls->getCoord(1,0) << "y = " << ls->getCoord(1,1) << "z = " << ls->getCoord(1,2);
+    qDebug() << a1->doesIntersectPlane(ls);*/
     return a.exec();
 }

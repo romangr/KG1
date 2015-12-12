@@ -28,10 +28,10 @@ public:
     void turn(char axis, double angle);
     void autoscale_basicXY(QPaintDevice *device);
     void autoscale_parabols(QPaintDevice *device,int k);
-    void draw(QPaintDevice *device);
+    virtual void draw(QPaintDevice *device);
     void roundCoords();
     Figure *getCopy();
-    ~Figure();
+    virtual ~Figure();
 
     //отдельный класс?
     void setEdge(int point1, int point2, int side);

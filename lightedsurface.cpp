@@ -56,6 +56,8 @@ void LightedSurface::fillTriangles()
             triangles.push_back(tr);
         }
     }
+
+    pointsCount = (N+1)*(N+1) - 1;
 }
 
 int LightedSurface::getPlaneSide(Triangle *triangle)
@@ -111,6 +113,21 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                 continue;
             } else
             {
+                //есть ли общее ребро?
+                if (triangle_j->hasMutualEdge(triangle))
+                {
+                    if (triangle->getZmin() < triangle_j->getZmin())
+                    {
+                        if (debug) qDebug() << "mutual edge triangle added before";
+                        sortedTriangles.insert(it, triangle);
+                        isAdded = true;
+                        break;
+                    } else
+                    {
+                        if (debug) qDebug() << "mutual edge triangle continued";
+                        continue;
+                    }
+                }
                 //необходимо разрешить противоречия
                 if (triangle->isToRightOrToLeft(triangle_j) || triangle->isAboveOrBelow(triangle_j)) //оболочки не пересекаются по координате X
                 {
@@ -187,7 +204,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m1.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                     m1.addLine(newX, newY, newZ, 0);
                                     m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
-                                    newTriangle1 = new Triangle(m1, 0,0,0);
+                                    newTriangle1 = new Triangle(m1, triangle->pointNumbers.getElement(0,0), ++pointsCount, triangle->pointNumbers.getElement(0,2));
 
                                     LineSegment *side1 = triangle->getSide(1);
                                     double newX2 = side1->getX(t_intersections[1]);
@@ -197,13 +214,13 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m2.addLine(newX, newY, newZ, 0);
                                     m2.addLine(newX2, newY2, newZ2, 0);
                                     m2.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
-                                    newTriangle2 = new Triangle(m2, 0,0,0);
+                                    newTriangle2 = new Triangle(m2, pointsCount, ++pointsCount, triangle->pointNumbers.getElement(0,2));
 
                                     Matrix m3;
                                     m3.addLine(newX, newY, newZ, 0);
                                     m3.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m3.addLine(newX2, newY2, newZ2, 0);
-                                    newTriangle3 = new Triangle(m3, 0,0,0);
+                                    newTriangle3 = new Triangle(m3, pointsCount-1,triangle->pointNumbers.getElement(0,1), pointsCount);
                                 } else
                                 {
                                     Matrix m1;
@@ -214,19 +231,19 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m1.addLine(newX2, newY2, newZ2, 0);
                                     m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
-                                    newTriangle1 = new Triangle(m1, 0,0,0);
+                                    newTriangle1 = new Triangle(m1, ++pointsCount, triangle->pointNumbers.getElement(0,1), triangle->pointNumbers.getElement(0,2));
 
                                     Matrix m2;
                                     m2.addLine(newX, newY, newZ, 0);
                                     m2.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m2.addLine(newX2, newY2, newZ2, 0);
-                                    newTriangle2 = new Triangle(m2, 0,0,0);
+                                    newTriangle2 = new Triangle(m2, ++pointsCount, triangle->pointNumbers.getElement(0,1), pointsCount-1);
 
                                     Matrix m3;
                                     m3.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                     m3.addLine(newX, newY, newZ, 0);
                                     m3.addLine(newX2, newY2, newZ2, 0);
-                                    newTriangle3 = new Triangle(m3, 0,0,0);
+                                    newTriangle3 = new Triangle(m3, triangle->pointNumbers.getElement(0,0), pointsCount, pointsCount-1);
                                 }
                             } else
                             {
@@ -244,19 +261,19 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                 m1.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                 m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                 m1.addLine(newX, newY, newZ, 0);
-                                newTriangle1 = new Triangle(m1, 0,0,0);
+                                newTriangle1 = new Triangle(m1, triangle->pointNumbers.getElement(0,0), triangle->pointNumbers.getElement(0,1), ++pointsCount);
 
                                 Matrix m2;
                                 m2.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                 m2.addLine(newX, newY, newZ, 0);
                                 m2.addLine(newX2, newY2, newZ2, 0);
-                                newTriangle2 = new Triangle(m2, 0,0,0);
+                                newTriangle2 = new Triangle(m2, triangle->pointNumbers.getElement(0,0), pointsCount, ++pointsCount);
 
                                 Matrix m3;
                                 m3.addLine(newX2, newY2, newZ2, 0);
                                 m3.addLine(newX, newY, newZ, 0);
                                 m3.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
-                                newTriangle3 = new Triangle(m3, 0,0,0);
+                                newTriangle3 = new Triangle(m3, pointsCount, pointsCount-1, triangle->pointNumbers.getElement(0,2));
                             }
 
                             //рекурсия типа
@@ -296,6 +313,49 @@ LightedSurface::LightedSurface(RuledSurface &r, int N)
     //this->figure->roundCoords();
     this->fillTriangles();
     qDebug() << "triangles count = " << this->triangles.size();
+}
+
+Figure *LightedSurface::getFigure()
+{
+
+    Figure *f = new Figure();
+    for (int i = 0; i < triangles.size(); i++)
+    {
+        this->addTriangleToSorted(triangles[i]);
+    }
+    //qDebug() << "lighted figure";
+    QLinkedListIterator<Triangle*> it(this->sortedTriangles);
+    //it.toFront();
+    //int j = 0;
+    while (it.hasNext()/* && j < sortedTriangles.size()*/)
+    {
+        Triangle *currentTr = it.next();
+        int figureSize = f->getSize();
+        f->addPoint(currentTr->getCoord(0,0), currentTr->getCoord(0,1), currentTr->getCoord(0,2));
+        f->addPoint(currentTr->getCoord(1,0), currentTr->getCoord(1,1), currentTr->getCoord(1,2));
+        f->setEdge(figureSize+1, figureSize+2, 1);
+        f->addPoint(currentTr->getCoord(2,0), currentTr->getCoord(2,1), currentTr->getCoord(2,2));
+        f->setEdge(figureSize+1, figureSize+3, 1);
+        f->setEdge(figureSize+2, figureSize+3, 1);
+        //j++;
+    }
+    return f;
+}
+
+TriangleFigure *LightedSurface::getLightedFigure()
+{
+    TriangleFigure *f = new TriangleFigure();
+    for (int i = 0; i < triangles.size(); i++)
+    {
+        this->addTriangleToSorted(triangles[i]);
+    }
+    QLinkedListIterator<Triangle*> it(this->sortedTriangles);
+    while (it.hasNext())
+    {
+        Triangle *currentTr = it.next();
+        f->addTriangle(currentTr);
+    }
+    return f;
 }
 
 

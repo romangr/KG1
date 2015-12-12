@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     fig1 = new Figure();
     ts = NULL;
+    ls = NULL;
     showWindow1 = new TShowWindow(0,fig1);
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
 }
@@ -56,13 +57,15 @@ void MainWindow::set_coord_clicked()
 
     if (ts) {delete ts;} //re-entrance
 
-    ts = new TriangleSurface(*rp,k);
+    //ts = new TriangleSurface(*rp,k);
+    ls = new LightedSurface(*rp,k);
     delete fig1;
     delete rp;
     delete p1;
     delete p2;
 
-    fig1 = ts->getVisibleFigure();
+    //fig1 = ts->getVisibleFigure();
+    fig1 = ls->getLightedFigure();
 
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();   

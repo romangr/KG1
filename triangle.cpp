@@ -9,6 +9,8 @@ Triangle::Triangle(Matrix &m, double a, double b, double c)
 
 Triangle::Triangle(Triangle &tri)
 {
+    this->points = new Matrix();
+    this->normal = new double[3];
     *this->points = *tri.points;
     *this->normal = *tri.normal;
     this->pointNumbers = tri.pointNumbers;
@@ -207,6 +209,26 @@ bool Triangle::doesIntersectPlane(LineSegment *lineSegment)
     /*qDebug() << "isBeginningUnderPlane = " << isBeginningUnderPlane;
     qDebug() << "isEndUnderPlane = " << isEndUnderPlane;*/
     if ((isBeginningUnderPlane && !isEndUnderPlane) || (!isBeginningUnderPlane && isEndUnderPlane))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Triangle::hasMutualEdge(Triangle *triangle)
+{
+    int mutualPoits = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            if (this->pointNumbers.getElement(0,i) == triangle->pointNumbers.getElement(0,j))
+            {
+                mutualPoits++;
+            }
+        }
+    }
+    if (mutualPoits >= 2)
     {
         return true;
     }

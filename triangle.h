@@ -23,6 +23,7 @@ public:
     bool isApex(int pointNumber);
     bool isEdge(LineSegment *ls);
     bool doesIntersectPlane(LineSegment *lineSegment);
+    bool hasMutualEdge(Triangle *triangle);
     LineSegment *getSide(int i);
     double getZmax();
     double getZmin();

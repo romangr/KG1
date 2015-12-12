@@ -2,6 +2,7 @@
 #define LIGHTEDSURFACE_H
 #include "triangle.h"
 #include "ruledsurface.h"
+#include "trianglefigure.h"
 #include <QLinkedList>
 
 class LightedSurface
@@ -15,6 +16,7 @@ private:
     void fillTriangles();
     int getPlaneSide(Triangle *triangle);
     int N;
+    int pointsCount; // 0...
     //void addTriangleToSorted(Triangle *triangle);
     //bool debug;
 public:
@@ -22,6 +24,8 @@ public:
     QLinkedList<Triangle*> sortedTriangles;
     LightedSurface();
     LightedSurface(RuledSurface &r, int N);
+    Figure *getFigure();
+    TriangleFigure *getLightedFigure();
     ~LightedSurface();
 };
 

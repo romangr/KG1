@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
     m.addLine(-3,0,0,0);
     m.addLine(0,3,0,0);
     m.addLine(3,0,0,0);
-    Triangle *a1 = new Triangle(m, 0,0,0);
+    Triangle *a1 = new Triangle(m, 0,1,2);
     Matrix m2;
     m2.addLine(-2,-2,-1,0);
     m2.addLine(0,1,1,0);
     m2.addLine(2,2,-1,0);
-    Triangle *a3 = new Triangle(m2, 0,0,0);
+    Triangle *a3 = new Triangle(m2, 3,4,5);
     qDebug() << a3->isUnderTrianglePlane(a1);
 
     LightedSurface lightedSurface;

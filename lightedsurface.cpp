@@ -30,6 +30,7 @@ void LightedSurface::fillTriangles()
 
             Triangle *tr = new Triangle(abc, i*(N+1) + j, (i+1)*(N+1) + j, i*(N+1) + j + 1);
             tr->setNormal(2, 0, 1, 0);
+            //qDebug() << tr->getNormal(0) << " " << tr->getNormal(1) << " " << tr->getNormal(2);
 
             triangles.push_back(tr);
 
@@ -205,6 +206,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m1.addLine(newX, newY, newZ, 0);
                                     m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
                                     newTriangle1 = new Triangle(m1, triangle->pointNumbers.getElement(0,0), ++pointsCount, triangle->pointNumbers.getElement(0,2));
+                                    newTriangle1->setNormal(triangle);
 
                                     LineSegment *side1 = triangle->getSide(1);
                                     double newX2 = side1->getX(t_intersections[1]);
@@ -215,12 +217,14 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m2.addLine(newX2, newY2, newZ2, 0);
                                     m2.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
                                     newTriangle2 = new Triangle(m2, pointsCount, ++pointsCount, triangle->pointNumbers.getElement(0,2));
+                                    newTriangle2->setNormal(triangle);
 
                                     Matrix m3;
                                     m3.addLine(newX, newY, newZ, 0);
                                     m3.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m3.addLine(newX2, newY2, newZ2, 0);
                                     newTriangle3 = new Triangle(m3, pointsCount-1,triangle->pointNumbers.getElement(0,1), pointsCount);
+                                    newTriangle3->setNormal(triangle);
                                 } else
                                 {
                                     Matrix m1;
@@ -232,18 +236,21 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                     m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
                                     newTriangle1 = new Triangle(m1, ++pointsCount, triangle->pointNumbers.getElement(0,1), triangle->pointNumbers.getElement(0,2));
+                                    newTriangle1->setNormal(triangle);
 
                                     Matrix m2;
                                     m2.addLine(newX, newY, newZ, 0);
                                     m2.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m2.addLine(newX2, newY2, newZ2, 0);
                                     newTriangle2 = new Triangle(m2, ++pointsCount, triangle->pointNumbers.getElement(0,1), pointsCount-1);
+                                    newTriangle2->setNormal(triangle);
 
                                     Matrix m3;
                                     m3.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                     m3.addLine(newX, newY, newZ, 0);
                                     m3.addLine(newX2, newY2, newZ2, 0);
                                     newTriangle3 = new Triangle(m3, triangle->pointNumbers.getElement(0,0), pointsCount, pointsCount-1);
+                                    newTriangle3->setNormal(triangle);
                                 }
                             } else
                             {
@@ -262,18 +269,21 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                                 m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                 m1.addLine(newX, newY, newZ, 0);
                                 newTriangle1 = new Triangle(m1, triangle->pointNumbers.getElement(0,0), triangle->pointNumbers.getElement(0,1), ++pointsCount);
+                                newTriangle1->setNormal(triangle);
 
                                 Matrix m2;
                                 m2.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
                                 m2.addLine(newX, newY, newZ, 0);
                                 m2.addLine(newX2, newY2, newZ2, 0);
                                 newTriangle2 = new Triangle(m2, triangle->pointNumbers.getElement(0,0), pointsCount, ++pointsCount);
+                                newTriangle2->setNormal(triangle);
 
                                 Matrix m3;
                                 m3.addLine(newX2, newY2, newZ2, 0);
                                 m3.addLine(newX, newY, newZ, 0);
                                 m3.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
                                 newTriangle3 = new Triangle(m3, pointsCount, pointsCount-1, triangle->pointNumbers.getElement(0,2));
+                                newTriangle3->setNormal(triangle);
                             }
 
                             //рекурсия типа

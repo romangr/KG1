@@ -8,6 +8,8 @@ class TriangleFigure : public Figure
 {
 private:
     QVector<Triangle*> triangles;
+    int getPlaneSide(Triangle *triangle);
+    double maxCoord;
 public:
     TriangleFigure();
     void addTriangle(Triangle* tr);

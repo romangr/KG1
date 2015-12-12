@@ -12,7 +12,10 @@ Triangle::Triangle(Triangle &tri)
     this->points = new Matrix();
     this->normal = new double[3];
     *this->points = *tri.points;
-    *this->normal = *tri.normal;
+    for (int i = 0; i < 3; i++)
+    {
+        this->normal[i] = tri.getNormal(i);
+    }
     this->pointNumbers = tri.pointNumbers;
 }
 
@@ -468,8 +471,19 @@ void Triangle::setNormal(int point1, int point2, int point3, int point4)
     this->normal[2] = Ax*By - Ay*Bx;
 }
 
+void Triangle::setNormal(Triangle *tr)
+{
+    if (this->normal) {delete normal;}
+    this->normal = new double[3];
+    for (int i = 0; i < 3; i++)
+    {
+        this->normal[i] = tr->getNormal(i);
+    }
+}
+
 double Triangle::getNormal(int i)
 {
+    if (!normal) {qDebug() << "Normal is not setted"; return 0;}
     if (i > 2) { qDebug() << "Index must be from [0,2]"; return 0;}
     return this->normal[i];
 }

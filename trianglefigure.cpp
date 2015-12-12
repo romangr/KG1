@@ -40,7 +40,12 @@ void TriangleFigure::draw(QPaintDevice *device)
         };
         //painter.drawLine(m.getElement(i,0)+CentX,QWHeight - m.getElement(i,1)+1-CentY,m.getElement(j,0)+CentX,
         //  QWHeight - m.getElement(j,1)+1-CentY);
-        painter.drawPolygon(points, 3);
+       QBrush brush;
+       //brush.setColor(Qt::blue);
+       //brush.setStyle(Qt::SolidLine);
+       //painter.setBrush(brush);
+       painter.setBrush(Qt::green);
+       painter.drawPolygon(points, 3, Qt::WindingFill);
     }
 }
 

@@ -419,10 +419,10 @@ TriangleFigure *LightedSurface::getLightedFigure()
         cosA = pow(cosA, 3);
         double r = sqrt(pow(illuminant[0]-currentTr->getCoord(0,0), 2) +
                 pow(illuminant[0]-currentTr->getCoord(0,1), 2) + pow(illuminant[0]-currentTr->getCoord(0,2), 2));
-        qDebug() << "r = " << r;
+        //qDebug() << "r = " << r;
         r = 1;
         double iS = intense*kA + (intense * (kD*cosT + kS*cosA))/pow(r,2);
-        qDebug() << iS;
+        //qDebug() << iS;
         //расвет освещенности
         currentTr->setBrightness(iS);
         f->addTriangle(currentTr);

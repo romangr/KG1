@@ -103,7 +103,7 @@ void TriangleFigure::draw(QPaintDevice *device)
         if (getPlaneSide(currentTr) == 1)
         {
             QColor color;
-            qDebug() << "/255" << currentTr->getBrightness();///255.0;
+            //qDebug() << "/255" << currentTr->getBrightness();///255.0;
             color.setRgbF(0, 0, currentTr->getBrightness()/255.0);
             pen.setColor(color);
             painter.setPen(pen);

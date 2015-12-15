@@ -13,6 +13,7 @@ private:
 public:
     TriangleFigure();
     void addTriangle(Triangle* tr);
+    void turn(char axis, double angle);
     void draw(QPaintDevice *device);
     ~TriangleFigure();
 };

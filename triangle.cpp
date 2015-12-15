@@ -394,6 +394,13 @@ double Triangle::getYmin()
     }
 }
 
+void Triangle::editPoint(int i, double x, double y, double z)
+{
+    this->points->setElement(i, 0, x);
+    this->points->setElement(i, 1, y);
+    this->points->setElement(i, 2, z);
+}
+
 double Triangle::getPlaneIntersectPoint(LineSegment *lineSegment)
 {
     Triangle *currentTr = this;

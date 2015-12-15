@@ -75,14 +75,17 @@ void MainWindow::turn_button_clicked()
 {
     int axis = this->ui->comboBox->currentIndex();
     double angle = this->ui->lineEdit_25->text().toDouble();
-    this->ts->turn(axis, angle);
-    double scale;
+    //this->ts->turn(axis, angle);
+    this->ls->turn(axis, angle);
+    //double scale;
+    //fig1->turn(axis, angle);
     if (fig1 != NULL)
     {
-        scale = fig1->getScale();
+        //scale = fig1->getScale();
         delete fig1;
-    }    
-    fig1 = ts->getVisibleFigure(scale);
+    }
+    //fig1 = ts->getVisibleFigure(scale);
+    fig1 = ls->getLightedFigure();
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();
 }

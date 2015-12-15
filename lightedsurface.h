@@ -25,6 +25,7 @@ public:
     QLinkedList<Triangle*> sortedTriangles;
     LightedSurface();
     LightedSurface(RuledSurface &r, int N);
+    void turn(char axis, double angle);
     Figure *getFigure();
     TriangleFigure *getLightedFigure();
     ~LightedSurface();

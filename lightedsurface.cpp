@@ -328,6 +328,23 @@ LightedSurface::LightedSurface(RuledSurface &r, int N)
     qDebug() << "triangles count = " << this->triangles.size();
 }
 
+void LightedSurface::turn(char axis, double angle)
+{
+    this->figure->turn(axis, angle);
+    while (triangles.size() > 0)
+    {
+        delete triangles[0];
+        triangles.removeFirst();
+    }
+    sortedTriangles.clear();
+    /*while (sortedTriangles.size() > 0)
+    {
+        delete sortedTriangles.takeFirst();
+        sortedTriangles.removeFirst();
+    }*/
+    this->fillTriangles();
+}
+
 Figure *LightedSurface::getFigure()
 {
 

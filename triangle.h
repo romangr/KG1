@@ -32,6 +32,7 @@ public:
     double getXmin();
     double getYmax();
     double getYmin();
+    void editPoint(int i, double x, double y, double z);
     double getPlaneIntersectPoint(LineSegment *lineSegment);
     bool isToRightOrToLeft(Triangle *triangle);
     bool isAboveOrBelow(Triangle *triangle);

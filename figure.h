@@ -25,7 +25,7 @@ public:
     void cutPoint(int point);
     bool edgeExist(int point1, int point2);
     void transform(Matrix &transformMatrix);
-    void turn(char axis, double angle);
+    virtual void turn(char axis, double angle);
     void autoscale_basicXY(QPaintDevice *device);
     void autoscale_parabols(QPaintDevice *device,int k);
     virtual void draw(QPaintDevice *device);

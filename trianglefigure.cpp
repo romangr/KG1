@@ -31,6 +31,57 @@ void TriangleFigure::addTriangle(Triangle *tr)
     this->triangles.append(newTriangle);
 }
 
+void TriangleFigure::turn(char axis, double angle)
+{
+/*    const double EPSILON = 0.000000000001;
+    Matrix transformMatrix;
+    const double PI = acos(-1);
+    angle = angle * PI / 180;
+    double sinA = sin(angle);
+    double cosA = cos(angle);
+    if (fabs(sinA) < EPSILON) sinA = 0;
+    if (fabs(cosA) < EPSILON) cosA = 0;
+
+    if (axis == 0) //x
+    {
+        transformMatrix.addLine(1.0,    0,     0, 0);
+        transformMatrix.addLine(0, cosA, -sinA, 0);
+        transformMatrix.addLine(0, sinA,  cosA, 0);
+        transformMatrix.addLine(0,    0,     0, 1.0);
+    }
+
+    if (axis == 1) //y
+    {
+        transformMatrix.addLine( cosA, 0, sinA, 0);
+        transformMatrix.addLine(    0, 1.0,    0, 0);
+        transformMatrix.addLine(-sinA, 0, cosA, 0);
+        transformMatrix.addLine(    0, 0,    0, 1.0);
+    }
+
+    if (axis == 2) //z
+    {
+        transformMatrix.addLine(cosA, -sinA, 0, 0);
+        transformMatrix.addLine(sinA,  cosA, 0, 0);
+        transformMatrix.addLine(0,        0, 1.0, 0);
+        transformMatrix.addLine(0,        0, 0, 1.0);
+    }*/
+
+    for (int i = 0; i < triangles.size(); i++)
+    {
+        Figure triangle;
+        Triangle *currentTr = triangles[i];
+        triangle.addPoint(currentTr->getCoord(0,0), currentTr->getCoord(0,1), currentTr->getCoord(0,2));
+        triangle.addPoint(currentTr->getCoord(1,0), currentTr->getCoord(1,1), currentTr->getCoord(1,2));
+        triangle.addPoint(currentTr->getCoord(2,0), currentTr->getCoord(2,1), currentTr->getCoord(2,2));
+        triangle.turn(axis, angle);
+        for (int j = 0; j < 3; j++)
+        {
+            currentTr->editPoint(j, triangle.getCoord(j,0), triangle.getCoord(j,1), triangle.getCoord(j,2));
+        }
+    }
+
+}
+
 void TriangleFigure::draw(QPaintDevice *device)
 {
     QPainter painter(device);

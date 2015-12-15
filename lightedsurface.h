@@ -17,6 +17,7 @@ private:
     int getPlaneSide(Triangle *triangle);
     int N;
     int pointsCount; // 0...
+    double illuminant[3];
     //void addTriangleToSorted(Triangle *triangle);
     //bool debug;
 public:

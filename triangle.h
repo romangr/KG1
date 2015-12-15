@@ -10,6 +10,7 @@ class Triangle
 private:
     Matrix *points;
     double *normal;
+    double brightness;
 
 public:
     Triangle(Matrix &m, double a, double b, double c);
@@ -37,6 +38,8 @@ public:
     double getCoord(int x, int y);
     void setNormal(int point1, int point2, int point3, int point4);
     void setNormal(Triangle *tr);
+    void setBrightness(double brightness);
+    double getBrightness();
     double getNormal(int i);
     Matrix pointNumbers;
     ~Triangle();

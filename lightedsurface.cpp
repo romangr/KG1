@@ -322,6 +322,9 @@ LightedSurface::LightedSurface(RuledSurface &r, int N)
     this->figure = this->originalFigure->getCopy();
     //this->figure->roundCoords();
     this->fillTriangles();
+    this->illuminant[0] = -500;
+    this->illuminant[1] = 100;
+    this->illuminant[2] = 400;
     qDebug() << "triangles count = " << this->triangles.size();
 }
 
@@ -363,6 +366,48 @@ TriangleFigure *LightedSurface::getLightedFigure()
     while (it.hasNext())
     {
         Triangle *currentTr = it.next();
+        //расчет освещенности
+        //перенос ЛСК
+        double lx = illuminant[0]-currentTr->getCoord(0,0);
+        double ly = illuminant[1]-currentTr->getCoord(0,1);
+        double lz = illuminant[2]-currentTr->getCoord(0,1);
+        Figure l;
+        l.addPoint(lx, ly, lz);
+        Matrix parallelTransfer;
+        parallelTransfer.addLine(1, 0, 0, 0);
+        parallelTransfer.addLine(0, 1, 0, 0);
+        parallelTransfer.addLine(0, 0, 1, 0);
+        parallelTransfer.addLine(-currentTr->getCoord(0,0), -currentTr->getCoord(0,1), -currentTr->getCoord(0,2), 1);
+        l.transform(parallelTransfer);
+        double norma = sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(2), 2));
+        double alpha = acos(currentTr->getNormal(2) / norma);
+        norma *= sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(1), 2) + pow(currentTr->getNormal(2), 2));
+        double gamma = acos((pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(2), 2)) / norma);
+        l.turn(1, -alpha);
+        l.turn(0, -gamma);
+        l.editPoint(1, -l.getCoord(0,0), -l.getCoord(0,1), l.getCoord(0,2));
+        l.turn(0, gamma);
+        l.turn(1, alpha);
+        parallelTransfer.deleteLine(3);
+        parallelTransfer.addLine(currentTr->getCoord(0,0), currentTr->getCoord(0,1), currentTr->getCoord(0,2), 1);
+        l.transform(parallelTransfer);
+        double kA = 0.35;
+        double kS = 0.6;
+        double kD = 0.1;
+        double intense = 255;
+        norma = sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(1), 2) + pow(currentTr->getNormal(2), 2));
+        double cosT = (currentTr->getNormal(0)*lx + currentTr->getNormal(1)*ly + currentTr->getNormal(2)*lz) /
+                (norma * sqrt(pow(lx, 2) + pow(ly, 2) + pow(lz, 2)));
+        double cosA = (l.getCoord(0,2))/(sqrt(pow(lx, 2) + pow(ly, 2) + pow(lz, 2)));
+        cosA = pow(cosA, 3);
+        double r = sqrt(pow(illuminant[0]-currentTr->getCoord(0,0), 2) +
+                pow(illuminant[0]-currentTr->getCoord(0,1), 2) + pow(illuminant[0]-currentTr->getCoord(0,2), 2));
+        qDebug() << "r = " << r;
+        r = 1;
+        double iS = intense*kA + (intense * (kD*cosT + kS*cosA))/pow(r,2);
+        qDebug() << iS;
+        //расвет освещенности
+        currentTr->setBrightness(iS);
         f->addTriangle(currentTr);
     }
     return f;

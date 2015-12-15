@@ -5,6 +5,7 @@ Triangle::Triangle(Matrix &m, double a, double b, double c)
     this->points = new Matrix(m);
     this->pointNumbers.addLine(a, b, c, 0);
     this->normal = NULL;
+    this->brightness = 100;
 }
 
 Triangle::Triangle(Triangle &tri)
@@ -16,6 +17,7 @@ Triangle::Triangle(Triangle &tri)
     {
         this->normal[i] = tri.getNormal(i);
     }
+    this->brightness = tri.getBrightness();
     this->pointNumbers = tri.pointNumbers;
 }
 
@@ -479,6 +481,16 @@ void Triangle::setNormal(Triangle *tr)
     {
         this->normal[i] = tr->getNormal(i);
     }
+}
+
+void Triangle::setBrightness(double brightness)
+{
+    this->brightness = brightness;
+}
+
+double Triangle::getBrightness()
+{
+    return this->brightness;
 }
 
 double Triangle::getNormal(int i)

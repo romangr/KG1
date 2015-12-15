@@ -51,14 +51,19 @@ void TriangleFigure::draw(QPaintDevice *device)
         Triangle *currentTr = triangles[i];
         if (getPlaneSide(currentTr) == 1)
         {
-            pen.setColor(Qt::blue);
+            QColor color;
+            qDebug() << "/255" << currentTr->getBrightness();///255.0;
+            color.setRgbF(0, 0, currentTr->getBrightness()/255.0);
+            pen.setColor(color);
             painter.setPen(pen);
-            painter.setBrush(Qt::blue);
+            painter.setBrush(color);
         } else
         {
-            pen.setColor(Qt::red);
+            QColor color;
+            color.setRgbF(currentTr->getBrightness()/255.0, 0, 0);
+            pen.setColor(color);
             painter.setPen(pen);
-            painter.setBrush(Qt::red);
+            painter.setBrush(color);
         }
         const QPointF points[3] = {
             QPointF(currentTr->getCoord(0,0)/scale+CentX, QWHeight - currentTr->getCoord(0,1)/scale+1-CentY),

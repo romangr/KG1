@@ -21,7 +21,7 @@ private:
     //void addTriangleToSorted(Triangle *triangle);
     //bool debug;
 public:
-    void addTriangleToSorted(Triangle *triangle); //временно public
+    void addTriangleToSorted(Triangle *triangle, bool debug = false); //временно public
     QLinkedList<Triangle*> sortedTriangles;
     LightedSurface();
     LightedSurface(RuledSurface &r, int N);

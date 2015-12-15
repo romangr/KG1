@@ -102,7 +102,7 @@ bool Triangle::isUnderTriangle(double a, double b, double c)
 
 bool Triangle::isUnderTrianglePlane(double a, double b, double c)
 {
-    const double EPSILON = 0.01;
+    const double EPSILON = 10;
     /*if (!((c < points->getElement(0,2)) && (c < points->getElement(1,2)) && (c < points->getElement(2,2)))) {
         return false;
     }*/
@@ -124,7 +124,7 @@ bool Triangle::isUnderTrianglePlane(double a, double b, double c)
     D = -D;
 
     s = A*a + B*b + C*c + D;
-    if (fabs(s) < EPSILON*0.01) {/*qDebug() << "s < EPSILON*0.01";*/ return false;};
+    if (fabs(s) < EPSILON*0.01) {qDebug() << "s < EPSILON*0.01"; return true;};
     s1 = C*10000 + D;
 
     if (s * s1 < 0) {/*qDebug() << "s*s1 > 0";*/ return true;}

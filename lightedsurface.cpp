@@ -78,9 +78,9 @@ int LightedSurface::getPlaneSide(Triangle *triangle)
     }
 }
 
-void LightedSurface::addTriangleToSorted(Triangle *triangle)
+void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
 {
-    bool debug = false;
+    //bool debug = false;
     if (debug) qDebug() << "LightedSurface::addTriangleToSorted";
     /*
      * Добавляем с учетом условия Z(j)_max <= Z(j+1)_min, проверяем обратное условие, если оно выполняется,
@@ -182,7 +182,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                             {
                                 double t_intersect = triangle_j->getPlaneIntersectPoint(triangle->getSide(n_intersections[j]));
                                 t_intersections.push_back(t_intersect);
-                                if (t_intersect == -1)
+                                if (t_intersect == -1 || fabs(t_intersect < 0.0001))
                                 {
                                     sortedTriangles.insert(it, triangle); //игнорируем противоречие
                                     isAdded = true;
@@ -287,9 +287,9 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle)
                             }
 
                             //рекурсия типа
-                            addTriangleToSorted(newTriangle1);
-                            addTriangleToSorted(newTriangle2);
-                            addTriangleToSorted(newTriangle3);
+                            addTriangleToSorted(newTriangle1, true);
+                            addTriangleToSorted(newTriangle2, true);
+                            addTriangleToSorted(newTriangle3, true);
                             break;
                         }
                     }

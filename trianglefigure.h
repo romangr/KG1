@@ -13,6 +13,7 @@ private:
     double maxBrightness;
 public:
     TriangleFigure();
+    TriangleFigure(TriangleFigure &tf);
     void addTriangle(Triangle* tr);
     void turn(char axis, double angle);
     void draw(QPaintDevice *device);

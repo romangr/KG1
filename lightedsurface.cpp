@@ -468,17 +468,21 @@ TriangleFigure *LightedSurface::getLightedFigure()
 
 LightedSurface::~LightedSurface()
 {
-    /*delete figure;
+    delete figure;
     delete originalFigure;
-    while (triangles.size() > 0)
+    int trSize = sortedTriangles.size();
+    for (int i = 0; i < trSize; i++)
+    {
+        Triangle *currentTr = sortedTriangles.takeFirst();
+        triangles.removeAll(currentTr);
+        delete currentTr;
+        sortedTriangles.removeFirst();
+    }
+    trSize = triangles.size();
+    for (int i = 0; i < trSize; i++)
     {
         delete triangles[0];
         triangles.removeFirst();
     }
-    while (sortedTriangles.size() > 0)
-    {
-        delete sortedTriangles.takeFirst();
-        sortedTriangles.removeFirst();
-    }*/
 }
 

@@ -409,6 +409,7 @@ TriangleFigure *LightedSurface::getLightedFigure()
         m.addLine(triangle.getCoord(2,0), triangle.getCoord(2,1), triangle.getCoord(2,2), 0);
         Triangle *shadowTriangle = new Triangle(m, 0,0,0);
         shadowTriangle->setBrightness(0);
+        shadowTriangle->setNormal(currentTr);
         f->addTriangle(shadowTriangle);
         delete shadowTriangle;
     }

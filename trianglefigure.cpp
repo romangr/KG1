@@ -3,6 +3,7 @@
 TriangleFigure::TriangleFigure()
 {
     maxCoord = 0;
+    maxBrightness = 0;
 }
 
 int TriangleFigure::getPlaneSide(Triangle *triangle)
@@ -12,7 +13,7 @@ int TriangleFigure::getPlaneSide(Triangle *triangle)
     /*double norma = sqrt(triangle->getNormal(0)*triangle->getNormal(0) + triangle->getNormal(1)*triangle->getNormal(1)+
                         triangle->getNormal(2)*triangle->getNormal(2));*/
     double cosA = (triangle->getNormal(2) * Nz);// / (norma * 10.0);
-    if (fabs(cosA) < 0.00000001) {qDebug() << "null"; return 1;}
+    if (fabs(cosA) < 0.00000001) {/*qDebug() << "null";*/ return 1;}
     if (cosA < 0)
     {
         return 2;
@@ -28,6 +29,7 @@ void TriangleFigure::addTriangle(Triangle *tr)
     if (newTriangle->getXmax() > maxCoord) {maxCoord = newTriangle->getXmax();}
     if (newTriangle->getYmax() > maxCoord) {maxCoord = newTriangle->getYmax();}
     if (newTriangle->getZmax() > maxCoord) {maxCoord = newTriangle->getZmax();}
+    if (newTriangle->getBrightness() > maxBrightness) {maxBrightness = newTriangle->getBrightness();}
     this->triangles.append(newTriangle);
 }
 
@@ -104,14 +106,14 @@ void TriangleFigure::draw(QPaintDevice *device)
         {
             QColor color;
             //qDebug() << "/255" << currentTr->getBrightness();///255.0;
-            color.setRgbF(0, 0, currentTr->getBrightness()/255.0);
+            color.setRgbF(0, 0, currentTr->getBrightness()/(maxBrightness+15.0));
             pen.setColor(color);
             painter.setPen(pen);
             painter.setBrush(color);
         } else
         {
             QColor color;
-            color.setRgbF(currentTr->getBrightness()/255.0, 0, 0);
+            color.setRgbF(currentTr->getBrightness()/(maxBrightness+15.0), 0, 0);
             pen.setColor(color);
             painter.setPen(pen);
             painter.setBrush(color);

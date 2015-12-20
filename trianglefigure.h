@@ -10,6 +10,7 @@ private:
     QVector<Triangle*> triangles;
     int getPlaneSide(Triangle *triangle);
     double maxCoord;
+    double maxBrightness;
 public:
     TriangleFigure();
     void addTriangle(Triangle* tr);

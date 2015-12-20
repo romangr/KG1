@@ -124,7 +124,7 @@ bool Triangle::isUnderTrianglePlane(double a, double b, double c)
     D = -D;
 
     s = A*a + B*b + C*c + D;
-    if (fabs(s) < EPSILON*0.01) {qDebug() << "s < EPSILON*0.01"; return true;};
+    if (fabs(s) < EPSILON*0.01) {/*qDebug() << "s < EPSILON*0.01";*/ return true;};
     s1 = C*10000 + D;
 
     if (s * s1 < 0) {/*qDebug() << "s*s1 > 0";*/ return true;}

@@ -374,12 +374,46 @@ Figure *LightedSurface::getFigure()
 
 TriangleFigure *LightedSurface::getLightedFigure()
 {
+    double PI = 3.1415;
     TriangleFigure *f = new TriangleFigure();
     for (int i = 0; i < triangles.size(); i++)
     {
         this->addTriangleToSorted(triangles[i]);
     }
+
+    QVectorIterator<Triangle*> it1(this->triangles);
+    while (it1.hasNext())
+    {   //angle = angle * PI / 180;
+        Triangle *currentTr = it1.next();
+        double lx = illuminant[0];//-currentTr->getCoord(0,0);
+        double ly = illuminant[1];//-currentTr->getCoord(0,1);
+        double lz = illuminant[2];//-currentTr->getCoord(0,1);
+        double l_norma = sqrt(pow(lx, 2) + pow(ly, 2) + pow(lz, 2));
+        double lp_norma = sqrt(pow(lx, 2) + pow(lz, 2));
+        double alpha = acos(lz/lp_norma)*180/PI;
+        double gamma = acos((pow(lx, 2) + pow(lz, 2))/(l_norma*lp_norma))*180/PI;
+        Figure triangle;
+        triangle.addPoint(currentTr->getCoord(0,0), currentTr->getCoord(0,1), currentTr->getCoord(0,2));
+        triangle.addPoint(currentTr->getCoord(1,0), currentTr->getCoord(1,1), currentTr->getCoord(1,2));
+        triangle.addPoint(currentTr->getCoord(2,0), currentTr->getCoord(2,1), currentTr->getCoord(2,2));
+        triangle.turn(1, -alpha);
+        triangle.turn(0, -gamma);
+        triangle.editPoint(1, triangle.getCoord(0,1), triangle.getCoord(0,2), -500);
+        triangle.editPoint(2, triangle.getCoord(1,1), triangle.getCoord(1,2), -500);
+        triangle.editPoint(3, triangle.getCoord(2,1), triangle.getCoord(2,2), -500);
+        triangle.turn(0, gamma);
+        triangle.turn(1, alpha);
+        Matrix m;
+        m.addLine(triangle.getCoord(0,0), triangle.getCoord(0,1), triangle.getCoord(0,2), 0);
+        m.addLine(triangle.getCoord(1,0), triangle.getCoord(1,1), triangle.getCoord(1,2), 0);
+        m.addLine(triangle.getCoord(2,0), triangle.getCoord(2,1), triangle.getCoord(2,2), 0);
+        Triangle *shadowTriangle = new Triangle(m, 0,0,0);
+        shadowTriangle->setBrightness(0);
+        f->addTriangle(shadowTriangle);
+        delete shadowTriangle;
+    }
     QLinkedListIterator<Triangle*> it(this->sortedTriangles);
+    it.toFront();
     while (it.hasNext())
     {
         Triangle *currentTr = it.next();
@@ -397,9 +431,9 @@ TriangleFigure *LightedSurface::getLightedFigure()
         parallelTransfer.addLine(-currentTr->getCoord(0,0), -currentTr->getCoord(0,1), -currentTr->getCoord(0,2), 1);
         l.transform(parallelTransfer);
         double norma = sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(2), 2));
-        double alpha = acos(currentTr->getNormal(2) / norma);
+        double alpha = acos(currentTr->getNormal(2) / norma)*180/PI;
         norma *= sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(1), 2) + pow(currentTr->getNormal(2), 2));
-        double gamma = acos((pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(2), 2)) / norma);
+        double gamma = acos((pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(2), 2)) / norma)*180/PI;
         l.turn(1, -alpha);
         l.turn(0, -gamma);
         l.editPoint(1, -l.getCoord(0,0), -l.getCoord(0,1), l.getCoord(0,2));
@@ -411,7 +445,7 @@ TriangleFigure *LightedSurface::getLightedFigure()
         double kA = 0.35;
         double kS = 0.6;
         double kD = 0.1;
-        double intense = 255;
+        double intense = 300;
         norma = sqrt(pow(currentTr->getNormal(0), 2) + pow(currentTr->getNormal(1), 2) + pow(currentTr->getNormal(2), 2));
         double cosT = (currentTr->getNormal(0)*lx + currentTr->getNormal(1)*ly + currentTr->getNormal(2)*lz) /
                 (norma * sqrt(pow(lx, 2) + pow(ly, 2) + pow(lz, 2)));

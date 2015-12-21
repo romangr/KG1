@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete fig1;
     delete ts;
+    delete ls;
     delete showWindow1;
 }
 

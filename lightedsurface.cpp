@@ -482,7 +482,7 @@ LightedSurface::~LightedSurface()
 {
     delete figure;
     delete originalFigure;
-    //int trSize = sortedTriangles.size();
+
     for (int i = 0; i < sortedTriangles.size(); i++)
     {
         Triangle *currentTr = sortedTriangles.takeFirst();
@@ -490,11 +490,12 @@ LightedSurface::~LightedSurface()
         delete currentTr;
         sortedTriangles.removeFirst();
     }
-    //trSize = triangles.size();
-    for (int i = 0; i < triangles.size(); i++)
+
+    while (triangles.size() > 0)
     {
         delete triangles[0];
         triangles.removeFirst();
     }
+
 }
 

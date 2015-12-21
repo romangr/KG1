@@ -55,7 +55,8 @@ void MainWindow::set_coord_clicked()
 
     RuledParabols *rp = new RuledParabols(*p1,*p2);
 
-    if (ts) {delete ts;} //re-entrance
+    //if (ts) {delete ts;} //re-entrance
+    if (ls) {delete ls;} //re-entrance
 
     //ts = new TriangleSurface(*rp,k);
     ls = new LightedSurface(*rp,k);

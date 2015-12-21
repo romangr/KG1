@@ -161,13 +161,16 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                             Triangle *newTriangle2;
                             Triangle *newTriangle3;
                             QVector<int> n_intersections; //список сторон. пересекающих плоскость
+                            LineSegment *ls_OLOLO = NULL;
                             for (int j = 0; j < 3; j++)
                             {
-                                if (triangle_j->doesIntersectPlane(triangle->getSide(j)))
+                                ls_OLOLO = triangle->getSide(j);
+                                if (triangle_j->doesIntersectPlane(ls_OLOLO))
                                 {
-                                    if (debug) qDebug() << triangle->getSide(j)->getCoord(0,0) << " " << triangle->getSide(j)->getCoord(0,1);
+                                    if (debug) qDebug() << ls_OLOLO->getCoord(0,0) << " " << ls_OLOLO->getCoord(0,1);
                                     n_intersections.push_back(j);
                                 }
+                                delete ls_OLOLO;
                             } // по идее их всегда две (ну почти всегда)
                             if (debug) qDebug() << "n_intersections.size()" << n_intersections.size();
                             //поиск точек пересечения
@@ -180,7 +183,9 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                             QVector<double> t_intersections; //список точек пересечения плоскости
                             for (int j = 0; j < n_intersections.size(); j++)
                             {
-                                double t_intersect = triangle_j->getPlaneIntersectPoint(triangle->getSide(n_intersections[j]));
+                                ls_OLOLO = triangle->getSide(n_intersections[j]);
+                                double t_intersect = triangle_j->getPlaneIntersectPoint(ls_OLOLO);
+                                delete ls_OLOLO;
                                 t_intersections.push_back(t_intersect);
                                 if (t_intersect == -1 || fabs(t_intersect < 0.0001))
                                 {
@@ -198,6 +203,7 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                                 double newX = side0->getX(t_intersections[0]);
                                 double newY = side0->getY(t_intersections[0]);
                                 double newZ = side0->getZ(t_intersections[0]);
+                                delete side0;
 
                                 if (n_intersections[1] == 1)
                                 {
@@ -212,6 +218,8 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                                     double newX2 = side1->getX(t_intersections[1]);
                                     double newY2 = side1->getY(t_intersections[1]);
                                     double newZ2 = side1->getZ(t_intersections[1]);
+                                    delete side1;
+
                                     Matrix m2;
                                     m2.addLine(newX, newY, newZ, 0);
                                     m2.addLine(newX2, newY2, newZ2, 0);
@@ -232,6 +240,8 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                                     double newX2 = side2->getX(t_intersections[1]);
                                     double newY2 = side2->getY(t_intersections[1]);
                                     double newZ2 = side2->getZ(t_intersections[1]);
+                                    delete side2;
+
                                     m1.addLine(newX2, newY2, newZ2, 0);
                                     m1.addLine(triangle->getCoord(1,0), triangle->getCoord(1,1), triangle->getCoord(1,2), 0);
                                     m1.addLine(triangle->getCoord(2,0), triangle->getCoord(2,1), triangle->getCoord(2,2), 0);
@@ -258,11 +268,13 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                                 double newX = side1->getX(t_intersections[0]);
                                 double newY = side1->getY(t_intersections[0]);
                                 double newZ = side1->getZ(t_intersections[0]);
+                                delete side1;
 
                                 LineSegment *side2 = triangle->getSide(2);
                                 double newX2 = side2->getX(t_intersections[1]);
                                 double newY2 = side2->getY(t_intersections[1]);
                                 double newZ2 = side2->getZ(t_intersections[1]);
+                                delete side2;
 
                                 Matrix m1;
                                 m1.addLine(triangle->getCoord(0,0), triangle->getCoord(0,1), triangle->getCoord(0,2), 0);
@@ -470,16 +482,16 @@ LightedSurface::~LightedSurface()
 {
     delete figure;
     delete originalFigure;
-    int trSize = sortedTriangles.size();
-    for (int i = 0; i < trSize; i++)
+    //int trSize = sortedTriangles.size();
+    for (int i = 0; i < sortedTriangles.size(); i++)
     {
         Triangle *currentTr = sortedTriangles.takeFirst();
         triangles.removeAll(currentTr);
         delete currentTr;
         sortedTriangles.removeFirst();
     }
-    trSize = triangles.size();
-    for (int i = 0; i < trSize; i++)
+    //trSize = triangles.size();
+    for (int i = 0; i < triangles.size(); i++)
     {
         delete triangles[0];
         triangles.removeFirst();

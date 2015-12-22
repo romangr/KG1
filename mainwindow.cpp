@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     fig1 = new Figure();
-    ts = NULL;
     ls = NULL;
     showWindow1 = new TShowWindow(0,fig1);
     showWindow1->setGeometry(this->x()+50,this->y(),400,300);
@@ -17,7 +16,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete fig1;
-    delete ts;
     delete ls;
     delete showWindow1;
 }
@@ -56,17 +54,14 @@ void MainWindow::set_coord_clicked()
 
     RuledParabols *rp = new RuledParabols(*p1,*p2);
 
-    //if (ts) {delete ts;} //re-entrance
     if (ls) {delete ls;} //re-entrance
 
-    //ts = new TriangleSurface(*rp,k);
     ls = new LightedSurface(*rp,k);
     delete fig1;
     delete rp;
     delete p1;
     delete p2;
 
-    //fig1 = ts->getVisibleFigure();
     fig1 = ls->getLightedFigure();
 
     showWindow1->setFigure(fig1);
@@ -77,16 +72,13 @@ void MainWindow::turn_button_clicked()
 {
     int axis = this->ui->comboBox->currentIndex();
     double angle = this->ui->lineEdit_25->text().toDouble();
-    //this->ts->turn(axis, angle);
     this->ls->turn(axis, angle);
     //double scale;
-    //fig1->turn(axis, angle);
     if (fig1 != NULL)
     {
         //scale = fig1->getScale();
         delete fig1;
     }
-    //fig1 = ts->getVisibleFigure(scale);
     fig1 = ls->getLightedFigure();
     showWindow1->setFigure(fig1);
     showWindow1->activateWindow();

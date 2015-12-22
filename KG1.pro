@@ -21,7 +21,6 @@ SOURCES += main.cpp\
     ruledparabols.cpp \
     ruledsurface.cpp \
     curve.cpp \
-    trianglesurface.cpp \
     triangle.cpp \
     linesegment.cpp \
     sidedfigure.cpp \
@@ -36,7 +35,6 @@ HEADERS  += mainwindow.h \
     ruledparabols.h \
     ruledsurface.h \
     curve.h \
-    trianglesurface.h \
     triangle.h \
     linesegment.h \
     sidedfigure.h \

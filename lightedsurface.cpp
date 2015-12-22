@@ -403,16 +403,18 @@ TriangleFigure *LightedSurface::getLightedFigure()
         double l_norma = sqrt(pow(lx, 2) + pow(ly, 2) + pow(lz, 2));
         double lp_norma = sqrt(pow(lx, 2) + pow(lz, 2));
         double alpha = acos(lz/lp_norma)*180/PI;
+        if (illuminant[0] > 0) {alpha = - alpha;}
         double gamma = acos((pow(lx, 2) + pow(lz, 2))/(l_norma*lp_norma))*180/PI;
+        if (illuminant[2] < 0) {gamma = - gamma;}
         Figure triangle;
         triangle.addPoint(currentTr->getCoord(0,0), currentTr->getCoord(0,1), currentTr->getCoord(0,2));
         triangle.addPoint(currentTr->getCoord(1,0), currentTr->getCoord(1,1), currentTr->getCoord(1,2));
         triangle.addPoint(currentTr->getCoord(2,0), currentTr->getCoord(2,1), currentTr->getCoord(2,2));
         triangle.turn(1, -alpha);
         triangle.turn(0, -gamma);
-        triangle.editPoint(1, triangle.getCoord(0,1), triangle.getCoord(0,2), -500);
-        triangle.editPoint(2, triangle.getCoord(1,1), triangle.getCoord(1,2), -500);
-        triangle.editPoint(3, triangle.getCoord(2,1), triangle.getCoord(2,2), -500);
+        triangle.editPoint(1, triangle.getCoord(0,0), triangle.getCoord(0,1), -500);
+        triangle.editPoint(2, triangle.getCoord(1,0), triangle.getCoord(1,1), -500);
+        triangle.editPoint(3, triangle.getCoord(2,0), triangle.getCoord(2,1), -500);
         triangle.turn(0, gamma);
         triangle.turn(1, alpha);
         Matrix m;

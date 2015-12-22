@@ -299,9 +299,9 @@ void LightedSurface::addTriangleToSorted(Triangle *triangle, bool debug)
                             }
 
                             //рекурсия типа
-                            addTriangleToSorted(newTriangle1, true);
-                            addTriangleToSorted(newTriangle2, true);
-                            addTriangleToSorted(newTriangle3, true);
+                            addTriangleToSorted(newTriangle1, false);
+                            addTriangleToSorted(newTriangle2, false);
+                            addTriangleToSorted(newTriangle3, false);
                             break;
                         }
                     }
@@ -482,13 +482,12 @@ LightedSurface::~LightedSurface()
 {
     delete figure;
     delete originalFigure;
-
-    for (int i = 0; i < sortedTriangles.size(); i++)
+    int trSize = sortedTriangles.size();
+    for (int i = 0; i < trSize; i++)
     {
         Triangle *currentTr = sortedTriangles.takeFirst();
         triangles.removeAll(currentTr);
         delete currentTr;
-        sortedTriangles.removeFirst();
     }
 
     while (triangles.size() > 0)

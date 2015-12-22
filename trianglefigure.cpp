@@ -72,7 +72,7 @@ void TriangleFigure::draw(QPaintDevice *device)
     painter.setPen(pen);
     painter.drawLine(0,CentY,QWWidth,CentY);
     painter.drawLine(CentX,0,CentX,QWHeight);
-    qDebug() << "triangles to draw: " << triangles.size() << " max absolute brightness = " << maxBrightness;
+    //qDebug() << "triangles to draw: " << triangles.size() << " max absolute brightness = " << maxBrightness;
     for (int i = 0; i < triangles.size(); i++)
     {
         Triangle *currentTr = triangles[i];

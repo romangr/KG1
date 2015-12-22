@@ -492,6 +492,7 @@ void Triangle::setNormal(Triangle *tr)
 
 void Triangle::setBrightness(double brightness)
 {
+    if (brightness < 0) {this->brightness = 0; return;}
     this->brightness = brightness;
 }
 
